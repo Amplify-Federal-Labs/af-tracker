@@ -12,6 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci
+      - name: Create Firebase config
+        run: |
+          echo "${{ secrets.FIREBASE_CONFIG_JSON }}" | base64 -d > firebaseConfig.json
+      - run: npm run test --run
       - run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
