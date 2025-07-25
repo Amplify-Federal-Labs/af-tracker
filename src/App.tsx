@@ -1,34 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useAuth } from './auth/AuthContext'
+import { AuthProvider } from './auth/AuthProvider'
+import { SignIn } from './auth/SignIn'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const AppContent = () => {
+  const { user, loading, signOut } = useAuth()
+
+  if (loading) {
+    return (
+      <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <p>Loading...</p>
+      </div>
+    )
+  }
+
+  if (!user) {
+    return <SignIn />
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div style={{ textAlign: 'center', padding: '2rem' }}>
+      <h1>AF Tracker</h1>
+      <p>Welcome, {user.email}</p>
+      <button
+        onClick={signOut}
+        style={{
+          padding: '0.75rem 1.5rem',
+          backgroundColor: '#dc3545',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          marginTop: '1rem'
+        }}
+      >
+        Sign Out
+      </button>
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   )
 }
 
