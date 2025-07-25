@@ -3,7 +3,7 @@ import '@testing-library/jest-dom'
 // Mock Firebase Auth
 const mockAuth = {
   currentUser: null,
-  onAuthStateChanged: vi.fn((callback) => {
+  onAuthStateChanged: vi.fn((callback: (user: unknown) => void) => {
     // Only call callback if it's actually a function
     if (typeof callback === 'function') {
       setTimeout(() => callback(null), 0)
