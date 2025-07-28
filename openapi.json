@@ -1,0 +1,109 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Firebase Vite API",
+    "description": "API for managing projects",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/api/projects": {
+      "get": {
+        "summary": "Get all projects",
+        "description": "Returns a list of all projects",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Project"
+                  }
+                },
+                "example": [
+                  {
+                    "id": 1,
+                    "name": "E-commerce Platform",
+                    "description": "A modern e-commerce platform built with React and Node.js",
+                    "createdAt": "2024-01-15T10:30:00Z"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Task Management App",
+                    "description": "A collaborative task management application with real-time updates",
+                    "createdAt": "2024-02-20T14:45:00Z"
+                  },
+                  {
+                    "id": 3,
+                    "name": "Weather Dashboard",
+                    "description": "A weather monitoring dashboard with location-based forecasts",
+                    "createdAt": "2024-03-10T09:15:00Z"
+                  }
+                ]
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Project": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the project",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the project",
+            "example": "E-commerce Platform"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the project",
+            "example": "A modern e-commerce platform built with React and Node.js"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Project creation timestamp",
+            "example": "2024-01-15T10:30:00Z"
+          }
+        }
+      }
+    }
+  }
+}
