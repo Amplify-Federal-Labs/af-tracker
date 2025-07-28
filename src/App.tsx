@@ -2,6 +2,8 @@ import { useAuth } from './auth/AuthContext'
 import { AuthProvider } from './auth/AuthProvider'
 import { SignIn } from './auth/SignIn'
 import './App.css'
+import { Button, Container, Typography } from '@mui/material'
+import Dashboard from './features/dashboard';
 
 const AppContent = () => {
   const { user, loading, signOut } = useAuth()
@@ -20,30 +22,27 @@ const AppContent = () => {
 
   return (
     <div style={{ textAlign: 'center', padding: '2rem' }}>
-      <h1>AF Tracker</h1>
-      <p>Welcome, {user.email}</p>
-      <button
+      <Typography variant='h1'>AF Tracker</Typography>
+      <Typography variant='body1'>Welcome, {user.email}</Typography>
+      <Button
+        color='secondary'
+        variant='contained'
         onClick={signOut}
-        style={{
-          padding: '0.75rem 1.5rem',
-          backgroundColor: '#dc3545',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          marginTop: '1rem'
-        }}
       >
         Sign Out
-      </button>
+      </Button>
+      <Dashboard />
     </div>
+
   )
 }
 
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <Container maxWidth="sm">
+        <AppContent />
+      </Container>
     </AuthProvider>
   )
 }
