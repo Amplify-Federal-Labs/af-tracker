@@ -18,7 +18,7 @@ const List = ({ projects }: ListPropType) => {
             >
             {
                 projects.map((project) => {
-                    return <ProjectCard project={project} />
+                    return <ProjectCard key={project.id} project={project} />
                 })
             }
         </Box>        

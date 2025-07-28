@@ -3,7 +3,7 @@ import { AuthProvider } from './auth/AuthProvider'
 import { SignIn } from './auth/SignIn'
 import './App.css'
 import { Button, Container, Typography } from '@mui/material'
-import Dashboard from './features/dashboard';
+import Dashboard from './features/dashboard/Index';
 
 const AppContent = () => {
   const { user, loading, signOut } = useAuth()
