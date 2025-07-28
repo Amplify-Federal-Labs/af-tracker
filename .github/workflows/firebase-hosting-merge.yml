@@ -9,12 +9,12 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.54.1-noble
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
         run: npm ci
-      - name: Install Playwright
-        run: npx playwright install
       - name: Restore Firebase config
         run: |
           echo "${{ secrets.FIREBASE_CONFIG_JSON }}" | base64 -d > firebaseConfig.json
