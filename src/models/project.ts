@@ -5,4 +5,9 @@ interface Project {
     createdAt: Date;
 }
 
-export type { Project };
+interface CreateProjectRequest {
+    name: string;
+    description: string;
+}
+
+export type { Project, CreateProjectRequest };

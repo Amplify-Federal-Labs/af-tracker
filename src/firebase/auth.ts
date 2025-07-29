@@ -7,7 +7,7 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
-import { firebaseAuth } from './firebaseConfig';
+import { auth } from './firebaseConfig';
 
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
@@ -15,8 +15,8 @@ const githubProvider = new GithubAuthProvider();
 // Sign in with Google functionality
 export const signInWithGoogle = async () => {
   try {
-    return setPersistence(firebaseAuth, browserSessionPersistence).then(async () => {
-      const result = await signInWithPopup(firebaseAuth, googleProvider);
+    return setPersistence(auth, browserSessionPersistence).then(async () => {
+      const result = await signInWithPopup(auth, googleProvider);
       return {
         success: true,
         user: result.user,
@@ -35,8 +35,8 @@ export const signInWithGoogle = async () => {
 // Sign in with GitHub functionality
 export const signInWithGithub = async () => {
   try {
-    return setPersistence(firebaseAuth, browserSessionPersistence).then(async () => {
-      const result = await signInWithPopup(firebaseAuth, githubProvider);
+    return setPersistence(auth, browserSessionPersistence).then(async () => {
+      const result = await signInWithPopup(auth, githubProvider);
       return {
         success: true,
         user: result.user,
@@ -55,8 +55,8 @@ export const signInWithGithub = async () => {
 // Sign in with email and password
 export async function signInWithCredentials(email: string, password: string) {
   try {
-    return setPersistence(firebaseAuth, browserSessionPersistence).then(async () => {
-      const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
+    return setPersistence(auth, browserSessionPersistence).then(async () => {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       return {
         success: true,
         user: userCredential.user,
@@ -75,7 +75,7 @@ export async function signInWithCredentials(email: string, password: string) {
 // Sign out functionality
 export const firebaseSignOut = async () => {
   try {
-    await signOut(firebaseAuth);
+    await signOut(auth);
     return { success: true };
   } catch (error: any) {
     return {
@@ -87,5 +87,5 @@ export const firebaseSignOut = async () => {
 
 // Auth state observer
 export const onAuthStateChanged = (callback: (user: any) => void) => {
-  return firebaseAuth.onAuthStateChanged(callback);
+  return auth.onAuthStateChanged(callback);
 };
