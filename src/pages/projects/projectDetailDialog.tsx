@@ -6,7 +6,7 @@ interface ProjectDetailDialogProps {
     description: string;
     open: boolean;
     onSave: (name: string, description: string) => void;
-    onClose: () => void;
+    onCancel: () => void;
 }
 
 const ProjectDetailDialog = (props: ProjectDetailDialogProps) => {
@@ -17,14 +17,12 @@ const ProjectDetailDialog = (props: ProjectDetailDialogProps) => {
         props.onSave(name, description);
     }
 
-    const handleClose = () => {
-        setName(props.name);
-        setDescription(props.description);
-        props.onClose();
+    const handleCancel = () => {
+        props.onCancel();
     }
 
     return (
-        <Dialog onClose={handleClose} open={props.open} maxWidth="sm" fullWidth>
+        <Dialog onClose={handleCancel} open={props.open} maxWidth="sm" fullWidth>
             <DialogTitle>Enter Project Detail</DialogTitle>
             <DialogContent>
                 <Stack spacing={2} sx={{ mt: 1 }}>
@@ -49,7 +47,7 @@ const ProjectDetailDialog = (props: ProjectDetailDialogProps) => {
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleCancel}>Cancel</Button>
                 <Button 
                     variant="contained"
                     onClick={handleSave}
