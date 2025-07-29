@@ -1,6 +1,4 @@
 'use client';
-import * as React from 'react';
-import Alert from '@mui/material/Alert';
 import LinearProgress from '@mui/material/LinearProgress';
 import { SignInPage } from '@toolpad/core/SignInPage';
 import { Navigate, useNavigate } from 'react-router';
@@ -24,7 +22,7 @@ export default function SignIn() {
     <SignInPage
       providers={[{ id: 'google', name: 'Google' }, { id: 'credentials', name: 'Credentials' }]}
       signIn={async (provider, formData, callbackUrl) => {
-        let result;
+        let result: { success: boolean; user?: { displayName?: string | null; email?: string | null; photoURL?: string | null; } | null; error?: string | null } | undefined;
         try {
           if (provider.id === 'google') {
             result = await signInWithGoogle();

@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { Project } from "../../models/project"
+import type { Project } from "../../models/project";
 import ProjectCard from "./projectCard";
 
 interface ProjectListProps {

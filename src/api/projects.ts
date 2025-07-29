@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Project, CreateProjectRequest } from "../models/project";
+import type { Project, CreateProjectRequest } from "../models/project";
 import { auth } from "../firebase/firebaseConfig";
 
 const api = axios.create();
@@ -26,7 +26,7 @@ const addProject = async (project: CreateProjectRequest): Promise<Project> => {
 }
 
 const getFunctionUrl = (fnName: string) => {
-  const backendUrlTemplate: string = (import.meta as any).env?.VITE_BACKEND_BASE_URL_TEMPLATE 
+  const backendUrlTemplate: string = import.meta.env.VITE_BACKEND_BASE_URL_TEMPLATE 
     || 'http://127.0.0.1:5001/af-tracker-716c0/us-central1/<<>>';
   return backendUrlTemplate.replace("<<>>", fnName)
 }

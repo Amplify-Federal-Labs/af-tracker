@@ -23,11 +23,11 @@ export const signInWithGoogle = async () => {
         error: null,
       };
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       user: null,
-      error: error.message,
+      error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 };
@@ -43,11 +43,11 @@ export const signInWithGithub = async () => {
         error: null,
       };
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       user: null,
-      error: error.message,
+      error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 };
@@ -63,11 +63,11 @@ export async function signInWithCredentials(email: string, password: string) {
         error: null,
       };
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       user: null,
-      error: error.message || 'Failed to sign in with email/password',
+      error: error instanceof Error ? error.message : 'Failed to sign in with email/password',
     };
   }
 }
@@ -77,15 +77,15 @@ export const firebaseSignOut = async () => {
   try {
     await signOut(auth);
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
-      error: error.message,
+      error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 };
 
 // Auth state observer
-export const onAuthStateChanged = (callback: (user: any) => void) => {
+export const onAuthStateChanged = (callback: (user: unknown) => void) => {
   return auth.onAuthStateChanged(callback);
 };
