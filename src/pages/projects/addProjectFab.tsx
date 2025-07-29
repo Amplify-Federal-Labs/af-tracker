@@ -1,4 +1,4 @@
-import { SxProps } from '@mui/system';
+import type { SxProps } from '@mui/system';
 import { Fab } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 

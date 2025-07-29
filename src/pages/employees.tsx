@@ -1,9 +1,7 @@
-import * as React from 'react';
-
-
 import { useParams } from 'react-router';
 import { Crud } from '@toolpad/core/Crud';
-import { employeesDataSource, Employee, employeesCache } from '../data/employees';
+import { employeesDataSource, employeesCache } from '../data/employees';
+import type { Employee } from '../data/employees';
 
 
 export default function EmployeesCrudPage() {

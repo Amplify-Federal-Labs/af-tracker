@@ -1,4 +1,5 @@
-import { FirebaseOptions, initializeApp } from 'firebase/app';
+import { initializeApp } from 'firebase/app';
+import type { FirebaseOptions } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import * as firebaseConfigJson from "../../firebaseConfig.json"
 

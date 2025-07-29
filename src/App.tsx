@@ -58,9 +58,9 @@ export default function App() {
       if (user) {
         setSession({
           user: {
-            name: user.name || '',
+            name: user.displayName || '',
             email: user.email || '',
-            image: user.image || '',
+            image: user.photoURL || '',
           },
         });
       } else {

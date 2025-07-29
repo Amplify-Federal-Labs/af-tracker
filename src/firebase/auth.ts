@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  type User,
 } from 'firebase/auth';
 import { auth } from './firebaseConfig';
 
@@ -86,6 +87,6 @@ export const firebaseSignOut = async () => {
 };
 
 // Auth state observer
-export const onAuthStateChanged = (callback: (user: unknown) => void) => {
+export const onAuthStateChanged = (callback: (user: User | null) => void) => {
   return auth.onAuthStateChanged(callback);
 };
