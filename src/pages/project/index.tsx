@@ -37,7 +37,7 @@ const ProjectContainer = () => {
   }
 
   return (
-    <PageContainer title={`Project ${projectId}`}>
+    <PageContainer title={`Project ${data.name}`}>
       <ProjectView
         done={data.done}
         backlog={data.backlog}

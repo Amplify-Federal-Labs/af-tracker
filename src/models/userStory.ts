@@ -42,6 +42,8 @@ interface UserStory {
 }
 
 interface UserStoriesInProject {
+    id: string,
+    name: string,
     done: UserStory[];
     backlog: UserStory[];
     icebox: UserStory[]
