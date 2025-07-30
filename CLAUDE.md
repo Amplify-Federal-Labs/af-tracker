@@ -6,6 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **Development server**: `npm run dev` - Starts Vite development server
 - **Preview build**: `npm run preview` - Preview production build locally
+- **Testing**: `npm test` - Run unit tests with Vitest
 - **Linting**: `eslint src/` - Run ESLint on source files
 - **Type checking**: `tsc --noEmit` - TypeScript type checking without emitting files
 
@@ -21,6 +22,7 @@ This is a React + TypeScript application built with Vite, featuring Firebase aut
 - **Routing**: React Router v7
 - **HTTP Client**: Axios
 - **Validation**: Zod
+- **Testing**: Vitest + React Testing Library + Mock Service Worker
 
 ### Project Structure
 ```
@@ -29,11 +31,31 @@ src/
 ├── main.tsx             # App entry point with routing setup
 ├── SessionContext.ts    # Authentication session context
 ├── api/                 # API layer with Axios client
+│   ├── index.ts         # Main API functions (projects)
+│   ├── stories.ts       # User story API functions
+│   └── utils.ts         # API utilities
 ├── data/                # Static/mock data
 ├── firebase/            # Firebase configuration and auth utilities
 ├── layouts/             # Dashboard layout components
 ├── models/              # TypeScript interfaces and types
+│   ├── project.ts       # Project interface definitions
+│   ├── userStory.ts     # User story interface definitions
+│   └── user.ts          # User interface definitions
 └── pages/               # Route components (dashboard, projects, employees, signin)
+    ├── project/         # Project detail pages
+    │   ├── index.tsx           # ProjectContainer component
+    │   ├── index.test.tsx      # ProjectContainer unit tests
+    │   ├── project.tsx         # ProjectView component
+    │   ├── backlog.tsx         # Backlog column component
+    │   ├── done.tsx            # Done column component
+    │   └── icebox.tsx          # Icebox column component
+    └── projects/        # Project list pages
+        ├── index.tsx           # ProjectListContainer component
+        ├── index.test.tsx      # ProjectListContainer unit tests
+        ├── projectList.tsx     # Project grid display
+        ├── projectCard.tsx     # Individual project cards
+        ├── projectDetailDialog.tsx # Add/edit project form
+        └── addProjectFab.tsx   # Floating action button
 ```
 
 ### Key Architecture Patterns
@@ -48,7 +70,9 @@ src/
 - Backend URL configured via `VITE_BACKEND_BASE_URL_TEMPLATE` with Firebase Functions support
 - React Query for server state management, caching, and optimistic updates
 - OpenAPI specification available for API documentation
-- API functions: `getProjects()`, `addProject(CreateProjectRequest)`
+- API functions: 
+  - Projects: `getProjects()`, `addProject(CreateProjectRequest)`
+  - User Stories: `getUserStoriesInProject(projectId)`, `addUserStoryToProject(projectId, request)`
 
 **Dashboard Structure**:
 - Uses Toolpad Core for consistent dashboard layout and navigation
@@ -82,3 +106,48 @@ src/
 - **Add Project**: FAB button opens modal dialog for project creation
 - **Project Details**: Form validation with required name and description fields
 - **Real-time Updates**: React Query automatically refreshes project list after additions
+- **User Story Management**: Project detail view with Done/Backlog/Icebox columns
+- **Story Creation**: Add new user stories to projects with type, title, and description
+
+### Testing Strategy
+
+- **Unit Tests**: Comprehensive test coverage using Vitest + React Testing Library
+- **Component Testing**: Isolated testing with mocked dependencies
+- **API Mocking**: Vi.mock for API functions and external dependencies
+- **Router Testing**: BrowserRouter wrapping for components using React Router hooks
+- **Query Client Testing**: React Query setup with retry disabled for predictable testing
+- **Test Coverage**:
+  - `src/pages/projects/index.test.tsx`: ProjectListContainer (4 tests)
+  - `src/pages/project/index.test.tsx`: ProjectContainer (8 tests)
+
+### Data Models
+
+**Project**:
+```typescript
+interface Project {
+    id: string;
+    name: string;
+    description: string;
+    createdAt: Date;
+}
+```
+
+**User Story**:
+```typescript
+interface UserStory {
+    id: string;
+    projectId: string;
+    type: "feature" | "design" | "bug" | "chore" | "release";
+    title: string;
+    requester: User;
+    owners: User[];
+    points?: number;
+    state: "unscheduled" | "unstarted" | "started" | "finished" | "accepted" | "rejected";
+    blockers: Impediment[];
+    description: string;
+    labels: string[];
+    tasks: Task[];
+    createdAt: Date;
+    createdBy: User;
+}
+```

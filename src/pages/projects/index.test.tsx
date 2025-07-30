@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createRoutesStub } from "react-router";
+import { BrowserRouter } from 'react-router';
 import ProjectListContainer from './index';
 import * as api from '../../api';
 
@@ -26,9 +28,11 @@ describe('ProjectListContainer', () => {
 
   const renderWithQueryClient = (component: React.ReactElement) => {
     return render(
-      <QueryClientProvider client={queryClient}>
-        {component}
-      </QueryClientProvider>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          {component}
+        </QueryClientProvider>
+      </BrowserRouter>
     );
   };
 
@@ -36,13 +40,13 @@ describe('ProjectListContainer', () => {
     // Arrange
     const mockProjects = [
       {
-        id: 1,
+        id: '1',
         name: 'Project 1',
         description: 'Description 1',
         createdAt: new Date('2024-01-01'),
       },
       {
-        id: 2,
+        id: '2',
         name: 'Project 2',
         description: 'Description 2',
         createdAt: new Date('2024-01-02'),

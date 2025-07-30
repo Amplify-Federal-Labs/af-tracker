@@ -4,22 +4,19 @@ import ProjectView from "./project";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { addUserStoryToProject, getUserStoriesInProject } from "../../api/stories";
 import type { CreateStoryRequest } from "../../models/userStory";
+import { v4 } from "uuid";
 
 const ProjectContainer = () => {
   const params = useParams();
-  const projectId = params.projectId;
+  const projectId = params.projectId || v4();
 
   const queryClient = useQueryClient();
   
   // Queries
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['projects', projectId],
-    queryFn: () => getUserStoriesInProject(projectId!),
+    queryFn: () => getUserStoriesInProject(projectId),
   });
-
-  if (!projectId) {
-    return <span>Project Id required.</span>;
-  }
 
   if (isPending) {
     return <span>Loading...</span>;
