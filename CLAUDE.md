@@ -31,9 +31,9 @@ src/
 ├── main.tsx             # App entry point with routing setup
 ├── SessionContext.ts    # Authentication session context
 ├── api/                 # API layer with Axios client
-│   ├── index.ts         # Main API functions (projects)
-│   ├── stories.ts       # User story API functions
-│   └── utils.ts         # API utilities
+│   ├── index.ts         # API exports
+│   ├── projects.ts      # Project API functions (getProjects, addProject, getProjectById)
+│   └── stories.ts       # User story API functions (getUserStoriesInProject, addUserStoryToProject)
 ├── data/                # Static/mock data
 ├── firebase/            # Firebase configuration and auth utilities
 ├── layouts/             # Dashboard layout components
@@ -67,11 +67,11 @@ src/
 
 **API Integration**:
 - Centralized Axios client in `src/api/` with Firebase Authentication headers
-- Backend URL configured via `VITE_BACKEND_BASE_URL_TEMPLATE` with Firebase Functions support
+- Backend URL configured via `VITE_BACKEND_BASE_URL` environment variable with default fallback
 - React Query for server state management, caching, and optimistic updates
-- OpenAPI specification available for API documentation
+- RESTful API endpoints with proper HTTP methods
 - API functions: 
-  - Projects: `getProjects()`, `addProject(CreateProjectRequest)`
+  - Projects: `getProjects()`, `addProject(CreateProjectRequest)`, `getProjectById(projectId)`
   - User Stories: `getUserStoriesInProject(projectId)`, `addUserStoryToProject(projectId, request)`
 
 **Dashboard Structure**:
@@ -92,13 +92,13 @@ src/
 
 ### Development Notes
 
-- Backend uses Firebase Functions with authenticated API calls
+- Backend uses RESTful API with authenticated calls
 - Firebase project configuration required in `firebaseConfig.json`
 - Uses React 19 with StrictMode enabled
 - TypeScript strict mode configuration
 - Material-UI theming system integration
 - Environment variables:
-  - `VITE_BACKEND_BASE_URL_TEMPLATE`: Firebase Functions URL template pattern
+  - `VITE_BACKEND_BASE_URL`: Backend API base URL (defaults to local Firebase Functions if not set)
 
 ### Project Management Features
 
@@ -118,7 +118,7 @@ src/
 - **Query Client Testing**: React Query setup with retry disabled for predictable testing
 - **Test Coverage**:
   - `src/pages/projects/index.test.tsx`: ProjectListContainer (4 tests)
-  - `src/pages/project/index.test.tsx`: ProjectContainer (8 tests)
+  - `src/pages/project/index.test.tsx`: ProjectContainer (7 tests)
 
 ### Data Models
 

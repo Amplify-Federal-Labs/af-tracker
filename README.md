@@ -47,7 +47,7 @@ npm install
    - Add your Firebase configuration to `firebaseConfig.json`
    - Set up environment variables in `.env`:
      ```
-     VITE_BACKEND_BASE_URL_TEMPLATE=https://us-central1-<your-project-id>.cloudfunctions.net/<<>>
+     VITE_BACKEND_BASE_URL=https://us-central1-<your-project-id>.cloudfunctions.net/api
      ```
 
 4. Start the development server:
@@ -75,9 +75,9 @@ src/
 ├── main.tsx             # App entry point with routing
 ├── SessionContext.ts    # Authentication context
 ├── api/                 # API layer with Firebase integration
-│   ├── index.ts         # Main API functions (projects)
-│   ├── stories.ts       # User story API functions
-│   └── utils.ts         # API utilities
+│   ├── index.ts         # API exports
+│   ├── projects.ts      # Project API functions (getProjects, addProject, getProjectById)
+│   └── stories.ts       # User story API functions (getUserStoriesInProject, addUserStoryToProject)
 ├── firebase/            # Firebase configuration
 │   ├── auth.ts          # Auth utilities
 │   └── firebaseConfig.ts # Firebase initialization
@@ -93,7 +93,7 @@ src/
     ├── signin.tsx       # Authentication page
     ├── project/         # Project detail pages
     │   ├── index.tsx           # ProjectContainer component
-    │   ├── index.test.tsx      # ProjectContainer unit tests (8 tests)
+    │   ├── index.test.tsx      # ProjectContainer unit tests (7 tests)
     │   ├── project.tsx         # ProjectView component
     │   ├── backlog.tsx         # Backlog column component
     │   ├── done.tsx            # Done column component
@@ -127,21 +127,24 @@ src/
 - User context available throughout the application
 
 #### API Integration
-- Centralized API client with Firebase Authentication headers
+- Centralized Axios client with Firebase Authentication headers
+- RESTful API endpoints with proper HTTP methods
 - React Query for caching, background updates, and error handling
 - TypeScript interfaces for type-safe API responses
+- Environment-based configuration with local development defaults
 
 ## Backend Requirements
 
-The application expects Firebase Functions with the following endpoints:
+The application expects a RESTful API with the following endpoints:
 
 **Project Management:**
-- `getProjects` - Returns array of Project objects
-- `addProject` - Creates new project, expects CreateProjectRequest
+- `GET /projects` - Returns array of Project objects
+- `POST /projects` - Creates new project, expects CreateProjectRequest
+- `GET /projects/{projectId}` - Returns specific Project object
 
 **User Story Management:**
-- `getUserStoriesInProject` - Returns UserStoriesInProject object with Done/Backlog/Icebox arrays
-- `addUserStoryToProject` - Creates new user story, expects CreateStoryRequest
+- `GET /projects/{projectId}/stories` - Returns UserStoriesInProject object with Done/Backlog/Icebox arrays
+- `POST /projects/{projectId}/stories` - Creates new user story, expects CreateStoryRequest
 
 ### Data Models
 
@@ -219,7 +222,7 @@ npm test -- --coverage
   - Empty state handling
   - Project list interactions
 
-- **ProjectContainer** (`src/pages/project/index.test.tsx`): 8 comprehensive tests
+- **ProjectContainer** (`src/pages/project/index.test.tsx`): 7 comprehensive tests
   - Missing project ID validation
   - Loading and error states
   - User story data loading and display
@@ -238,8 +241,9 @@ npm test -- --coverage
 
 This application is designed to work with:
 - **Frontend**: Vercel, Netlify, or any static hosting
-- **Backend**: Firebase Functions
+- **Backend**: Firebase Functions or any REST API server
 - **Database**: Firebase Firestore (recommended)
+- **Environment**: Configure `VITE_BACKEND_BASE_URL` to point to your production API
 
 ## Contributing
 
