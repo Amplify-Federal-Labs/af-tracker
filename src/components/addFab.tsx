@@ -2,11 +2,11 @@ import type { SxProps } from '@mui/system';
 import { Fab } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 
-interface AddProjectFabProps {
+interface AddFabProps {
     onClick: () => void;
 }
 
-const AddProjectFab = ({onClick}: AddProjectFabProps) => {
+const AddProjectFab = ({onClick}: AddFabProps) => {
     const fabStyle = {
         position: 'absolute',
         bottom: 32,

@@ -1,9 +1,10 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
+import { reactRouterDevTools } from 'react-router-devtools';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), reactRouterDevTools()],
   test: {
     globals: true,
     environment: 'jsdom',

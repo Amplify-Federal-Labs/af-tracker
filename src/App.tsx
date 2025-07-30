@@ -1,33 +1,33 @@
-import * as React from 'react';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PersonIcon from '@mui/icons-material/Person';
-import FolderIcon from '@mui/icons-material/Folder';
-import { Outlet } from 'react-router';
-import { ReactRouterAppProvider } from '@toolpad/core/react-router';
-import type { Navigation, Authentication } from '@toolpad/core/AppProvider';
-import { firebaseSignOut, onAuthStateChanged } from './firebase/auth';
-import SessionContext, { type Session } from './SessionContext';
+import * as React from "react";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PersonIcon from "@mui/icons-material/Person";
+import FolderIcon from "@mui/icons-material/Folder";
+import { Outlet } from "react-router";
+import { ReactRouterAppProvider } from "@toolpad/core/react-router";
+import type { Navigation, Authentication } from "@toolpad/core/AppProvider";
+import { firebaseSignOut, onAuthStateChanged } from "./firebase/auth";
+import SessionContext, { type Session } from "./SessionContext";
 
 const NAVIGATION: Navigation = [
   {
-    kind: 'header',
-    title: 'Main items',
+    kind: "header",
+    title: "Main items",
   },
   {
-    title: 'Dashboard',
+    title: "Dashboard",
     icon: <DashboardIcon />,
   },
   {
-    segment: 'projects',
-    title: 'Projects',
+    segment: "projects",
+    title: "Projects",
     icon: <FolderIcon />,
-    pattern: 'projects{/:projectId}*',
+    pattern: "projects{/:projectId}*",
   },
   {
-    segment: 'employees',
-    title: 'Employees',
+    segment: "employees",
+    title: "Employees",
     icon: <PersonIcon />,
-    pattern: 'employees{/:employeeId}*',
+    pattern: "employees{/:employeeId}*",
   },
 ];
 
@@ -35,7 +35,7 @@ const BRANDING = {
   title: "AF Tracker",
 };
 
-const AUTHENTICATION: Authentication = {    
+const AUTHENTICATION: Authentication = {
   signIn: () => {},
   signOut: firebaseSignOut,
 };
@@ -50,7 +50,7 @@ export default function App() {
       setSession,
       loading,
     }),
-    [session, loading],
+    [session, loading]
   );
 
   React.useEffect(() => {
@@ -58,9 +58,9 @@ export default function App() {
       if (user) {
         setSession({
           user: {
-            name: user.displayName || '',
-            email: user.email || '',
-            image: user.photoURL || '',
+            name: user.displayName || "",
+            email: user.email || "",
+            image: user.photoURL || "",
           },
         });
       } else {
