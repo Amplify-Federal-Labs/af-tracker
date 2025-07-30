@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createRoutesStub } from "react-router";
 import { BrowserRouter } from 'react-router';
 import ProjectListContainer from './index';
 import * as api from '../../api';
