@@ -1,13 +1,14 @@
 import axios from "axios";
 import type { Project, CreateProjectRequest } from "../models/project";
 import { auth } from "../firebase/firebaseConfig";
-import { getFunctionUrl } from "./utils";
 
-const api = axios.create();
+const api = axios.create({
+  baseURL: import.meta.env.VITE_BACKEND_BASE_URL || 'http://127.0.0.1:5001/af-tracker-716c0/us-central1/api'
+});
 
 const getProjects = async (): Promise<Project[]> => {
   const idToken = await auth.currentUser?.getIdToken();
-  const response = await api.get<Project[]>(getFunctionUrl('getProjects'), {
+  const response = await api.get<Project[]>('/projects', {
     headers: {
       Authorization: `Bearer ${idToken}`
     }
@@ -17,7 +18,7 @@ const getProjects = async (): Promise<Project[]> => {
 
 const addProject = async (project: CreateProjectRequest): Promise<Project> => {
   const idToken = await auth.currentUser?.getIdToken();
-  const response = await api.post<Project>(getFunctionUrl('addProject'), project, {
+  const response = await api.post<Project>('/projects', project, {
     headers: {
       Authorization: `Bearer ${idToken}`
     }
@@ -28,7 +29,7 @@ const addProject = async (project: CreateProjectRequest): Promise<Project> => {
 
 const getProjectById = async (projectId: string): Promise<Project> => {
   const idToken = await auth.currentUser?.getIdToken();
-  const response = await api.get<Project>(`${getFunctionUrl('getProject')}?projectId=${projectId}`, {
+  const response = await api.get<Project>(`/projects/${projectId}`, {
     headers: {
       Authorization: `Bearer ${idToken}`
     }
