@@ -123,7 +123,7 @@ describe("PointSelect", () => {
       const unspecifiedOption = screen.getByText("Unspecified");
       await user.click(unspecifiedOption);
 
-      expect(mockOnChange).toHaveBeenCalledWith(null);
+      expect(mockOnChange).toHaveBeenCalledWith(undefined);
     });
 
     it('should call onChange with 0 when "0 point" is selected', async () => {
@@ -224,7 +224,7 @@ describe("PointSelect", () => {
       const unspecifiedOption = screen.getByText("Unspecified");
       await user.click(unspecifiedOption);
 
-      expect(mockOnChange).toHaveBeenCalledWith(null);
+      expect(mockOnChange).toHaveBeenCalledWith(undefined);
     });
 
     it("should change from 1 to 3", async () => {

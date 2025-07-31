@@ -3,50 +3,61 @@ import { fn } from "storybook/test";
 import { useState } from "react";
 import { Box, Paper, Typography } from "@mui/material";
 import Tasks from "../../pages/project/components/tasks";
+import type { Task } from "../../models/userStory";
+
+// Helper function to create Task objects from strings
+const createTasksFromStrings = (taskStrings: string[]): Task[] => {
+  return taskStrings.map((description, index) => ({
+    description,
+    isCompleted: index % 3 === 1, // Make every 3rd task completed for variety
+    completedDate: index % 3 === 1 ? new Date() : undefined,
+  }));
+};
 
 // Wrapper component to demonstrate controlled behavior
 const TasksWrapper = ({
   initialTasks = [],
   onAdd,
   onUpdate,
-  onResolve,
+  onComplete,
   onDelete,
 }: {
   initialTasks?: string[];
-  onAdd: (task: string) => void;
-  onUpdate: (index: number, task: string) => void;
-  onResolve: (index: number) => void;
+  onAdd: (task: Task) => void;
+  onUpdate: (index: number, task: Task) => void;
+  onComplete: (index: number) => void;
   onDelete: (index: number) => void;
 }) => {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState<Task[]>(createTasksFromStrings(initialTasks));
 
-  const handleAdd = (task: string) => {
-    if (task.trim()) {
-      const newTasks = [...tasks, task.trim()];
-      setTasks(newTasks);
-      onAdd(task);
-    }
+  const handleAdd = (task: Task) => {
+    const newTasks = [...tasks, task];
+    setTasks(newTasks);
+    onAdd(task);
   };
 
-  const handleUpdate = (index: number, updatedTask: string) => {
-    if (updatedTask.trim()) {
-      const newTasks = [...tasks];
-      newTasks[index] = updatedTask.trim();
-      setTasks(newTasks);
-      onUpdate(index, updatedTask);
-    }
+  const handleUpdate = (index: number, updatedTask: Task) => {
+    const newTasks = [...tasks];
+    newTasks[index] = updatedTask;
+    setTasks(newTasks);
+    onUpdate(index, updatedTask);
+  };
+
+  const handleComplete = (index: number) => {
+    const newTasks = [...tasks];
+    newTasks[index] = {
+      ...newTasks[index],
+      isCompleted: true,
+      completedDate: new Date(),
+    };
+    setTasks(newTasks);
+    onComplete(index);
   };
 
   const handleDelete = (index: number) => {
     const newTasks = tasks.filter((_, i) => i !== index);
     setTasks(newTasks);
     onDelete(index);
-  };
-
-  const handleResolve = (index: number) => {
-    // For this demo, resolving removes the task
-    handleDelete(index);
-    onResolve(index);
   };
 
   return (
@@ -57,17 +68,17 @@ const TasksWrapper = ({
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           Click on any task to edit it, or click "Add task" to create new ones. 
-          Use the delete button to remove tasks.
+          Check the checkbox to mark tasks as complete. Use the delete button to remove tasks.
         </Typography>
         <Tasks
           tasks={tasks}
           onAdd={handleAdd}
           onUpdate={handleUpdate}
-          onResolve={handleResolve}
+          onComplete={handleComplete}
           onDelete={handleDelete}
         />
         <Typography variant="caption" display="block" sx={{ mt: 2, color: "text.secondary" }}>
-          Total tasks: {tasks.length}
+          Total tasks: {tasks.length} | Completed: {tasks.filter(t => t.isCompleted).length}
         </Typography>
       </Paper>
     </Box>
@@ -83,19 +94,19 @@ const meta = {
     docs: {
       description: {
         component:
-          "A task management component that allows users to add, edit, and delete tasks. Each task can be clicked to enter edit mode, and new tasks can be added using the 'Add task' button.",
+          "A task management component that allows users to add, edit, complete, and delete tasks. Each task can be clicked to enter edit mode, checked to mark as complete, and new tasks can be added using the 'Add task' button.",
       },
     },
   },
   args: {
     onAdd: fn(),
     onUpdate: fn(),
-    onResolve: fn(),
+    onComplete: fn(),
     onDelete: fn(),
   },
   argTypes: {
     initialTasks: {
-      description: "Initial list of tasks to display",
+      description: "Initial list of task descriptions to display",
       control: "object",
     },
     onAdd: {
@@ -106,9 +117,9 @@ const meta = {
       description: "Callback function called when a task is updated",
       action: "task-updated",
     },
-    onResolve: {
-      description: "Callback function called when a task is resolved",
-      action: "task-resolved",
+    onComplete: {
+      description: "Callback function called when a task is marked as complete",
+      action: "task-completed",
     },
     onDelete: {
       description: "Callback function called when a task is deleted",
@@ -126,7 +137,7 @@ export const Default: Story = {
     initialTasks: [],
     onAdd: fn(),
     onUpdate: fn(),
-    onResolve: fn(),
+    onComplete: fn(),
     onDelete: fn(),
   },
   parameters: {
@@ -149,7 +160,7 @@ export const WithTasks: Story = {
     ],
     onAdd: fn(),
     onUpdate: fn(),
-    onResolve: fn(),
+    onComplete: fn(),
     onDelete: fn(),
   },
   parameters: {
@@ -168,7 +179,7 @@ export const SingleTask: Story = {
     initialTasks: ["Complete project setup"],
     onAdd: fn(),
     onUpdate: fn(),
-    onResolve: fn(),
+    onComplete: fn(),
     onDelete: fn(),
   },
   parameters: {
@@ -203,7 +214,7 @@ export const ManyTasks: Story = {
     ],
     onAdd: fn(),
     onUpdate: fn(),
-    onResolve: fn(),
+    onComplete: fn(),
     onDelete: fn(),
   },
   parameters: {
@@ -228,7 +239,7 @@ export const VariedTaskLengths: Story = {
     ],
     onAdd: fn(),
     onUpdate: fn(),
-    onResolve: fn(),
+    onComplete: fn(),
     onDelete: fn(),
   },
   parameters: {
@@ -254,7 +265,7 @@ export const DevelopmentTasks: Story = {
     ],
     onAdd: fn(),
     onUpdate: fn(),
-    onResolve: fn(),
+    onComplete: fn(),
     onDelete: fn(),
   },
   parameters: {
@@ -280,7 +291,7 @@ export const TasksWithSpecialContent: Story = {
     ],
     onAdd: fn(),
     onUpdate: fn(),
-    onResolve: fn(),
+    onComplete: fn(),
     onDelete: fn(),
   },
   parameters: {
@@ -296,15 +307,15 @@ export const TasksWithSpecialContent: Story = {
 // Interactive story for testing
 export const Interactive: Story = {
   args: {
-    initialTasks: ["Click me to edit", "Delete me with the trash icon"],
-    onAdd: (task: string) => {
+    initialTasks: ["Click me to edit", "Check the box to complete me", "Delete me with the trash icon"],
+    onAdd: (task: Task) => {
       console.log("Task added:", task);
     },
-    onUpdate: (index: number, task: string) => {
+    onUpdate: (index: number, task: Task) => {
       console.log("Task updated:", { index, task });
     },
-    onResolve: (index: number) => {
-      console.log("Task resolved:", index);
+    onComplete: (index: number) => {
+      console.log("Task completed:", index);
     },
     onDelete: (index: number) => {
       console.log("Task deleted:", index);
@@ -314,7 +325,7 @@ export const Interactive: Story = {
     docs: {
       description: {
         story:
-          "Interactive version for testing all task operations. All interactions are logged to the browser console. Try adding, editing, and deleting tasks.",
+          "Interactive version for testing all task operations. All interactions are logged to the browser console. Try adding, editing, completing, and deleting tasks.",
       },
     },
   },
@@ -326,7 +337,7 @@ export const EdgeCaseEmptyTasks: Story = {
     initialTasks: ["Valid task", "", "Another valid task"],
     onAdd: fn(),
     onUpdate: fn(),
-    onResolve: fn(),
+    onComplete: fn(),
     onDelete: fn(),
   },
   parameters: {
