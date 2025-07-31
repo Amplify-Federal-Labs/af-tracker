@@ -5,7 +5,6 @@ import type { Impediment } from '../../models/userStory';
 
 // Helper function to create mock Impediment
 const createMockImpediment = (overrides: Partial<Impediment> = {}): Impediment => ({
-  id: 1,
   description: 'Waiting for API dependency to be resolved',
   isResolved: false,
   resolvedDate: undefined,
@@ -13,7 +12,7 @@ const createMockImpediment = (overrides: Partial<Impediment> = {}): Impediment =
 });
 
 const meta = {
-  title: 'Project/Blockers',
+  title: 'Project/Components/Blockers',
   component: Blockers,
   tags: ['autodocs'],
   parameters: {
@@ -76,7 +75,6 @@ export const SingleBlocker: Story = {
   args: {
     blockers: [
       createMockImpediment({
-        id: 1,
         description: 'Waiting for third-party API integration to be completed',
         isResolved: false,
       }),
@@ -96,18 +94,15 @@ export const MultipleBlockers: Story = {
   args: {
     blockers: [
       createMockImpediment({
-        id: 1,
         description: 'Server infrastructure upgrade required before deployment',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 2,
         description: 'Database migration completed successfully',
         isResolved: true,
         resolvedDate: new Date('2024-01-18T14:30:00Z'),
       }),
       createMockImpediment({
-        id: 3,
         description: 'Waiting for legal approval on terms of service changes',
         isResolved: false,
       }),
@@ -127,22 +122,18 @@ export const AllUnresolvedBlockers: Story = {
   args: {
     blockers: [
       createMockImpediment({
-        id: 1,
         description: 'CRITICAL: Production database connection failing intermittently',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 2,
         description: 'Need additional developer resources to complete complex feature',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 3,
         description: 'UX design approval needed for new user onboarding flow',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 4,
         description: 'QA environment setup required for automated testing',
         isResolved: false,
       }),
@@ -162,19 +153,16 @@ export const AllResolvedBlockers: Story = {
   args: {
     blockers: [
       createMockImpediment({
-        id: 1,
         description: 'Security vulnerability patch applied and tested',
         isResolved: true,
         resolvedDate: new Date('2024-01-20T10:15:00Z'),
       }),
       createMockImpediment({
-        id: 2,
         description: 'API rate limiting implementation completed',
         isResolved: true,
         resolvedDate: new Date('2024-01-19T16:45:00Z'),
       }),
       createMockImpediment({
-        id: 3,
         description: 'Third-party service integration verified',
         isResolved: true,
         resolvedDate: new Date('2024-01-18T09:30:00Z'),
@@ -195,12 +183,10 @@ export const LongDescriptionBlockers: Story = {
   args: {
     blockers: [
       createMockImpediment({
-        id: 1,
         description: 'This is a very long blocker description that demonstrates how the component handles extensive text content. The blocker involves multiple dependencies, complex integrations, and requires coordination between different teams to resolve. It may take several weeks to fully address all the underlying issues and dependencies.',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 2,
         description: 'Another long blocker description that tests the layout and text wrapping behavior of the component when dealing with complex, multi-sentence descriptions that provide detailed context about the impediment.',
         isResolved: false,
       }),
@@ -220,28 +206,23 @@ export const DifferentBlockerTypes: Story = {
   args: {
     blockers: [
       createMockImpediment({
-        id: 1,
         description: 'Technical: Server performance optimization needed',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 2,
         description: 'External: Waiting for vendor API documentation',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 3,
         description: 'Resource: Need UX designer for mockup review',
         isResolved: true,
         resolvedDate: new Date('2024-01-17T14:20:00Z'),
       }),
       createMockImpediment({
-        id: 4,
         description: 'Process: Legal compliance review in progress',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 5,
         description: 'Infrastructure: Load balancer configuration completed',
         isResolved: true,
         resolvedDate: new Date('2024-01-16T11:00:00Z'),
@@ -262,18 +243,15 @@ export const RecentActivityBlockers: Story = {
   args: {
     blockers: [
       createMockImpediment({
-        id: 1,
         description: 'Just resolved: Authentication service restored',
         isResolved: true,
         resolvedDate: new Date(), // Today
       }),
       createMockImpediment({
-        id: 2,
         description: 'New blocker: Payment gateway integration failing',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 3,
         description: 'Recently resolved: Database backup completed',
         isResolved: true,
         resolvedDate: new Date(Date.now() - 24 * 60 * 60 * 1000), // Yesterday
@@ -294,17 +272,14 @@ export const HighPriorityBlockers: Story = {
   args: {
     blockers: [
       createMockImpediment({
-        id: 1,
         description: 'URGENT: Security breach - immediate patch required',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 2,
         description: 'CRITICAL: Payment processing down for 2+ hours',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 3,
         description: 'HIGH: User data migration must complete before release',
         isResolved: false,
       }),
@@ -324,7 +299,6 @@ export const ManyBlockers: Story = {
   args: {
     blockers: Array.from({ length: 8 }, (_, i) =>
       createMockImpediment({
-        id: i + 1,
         description: `Blocker #${i + 1}: ${
           [
             'Database connection pool exhausted',
@@ -356,12 +330,10 @@ export const Interactive: Story = {
   args: {
     blockers: [
       createMockImpediment({
-        id: 1,
         description: 'Interactive blocker - try editing, resolving, or deleting',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 2,
         description: 'Another interactive blocker for testing',
         isResolved: false,
       }),
@@ -381,23 +353,19 @@ export const WorkflowStatesExample: Story = {
   args: {
     blockers: [
       createMockImpediment({
-        id: 1,
         description: 'New blocker: Just identified during planning',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 2,
         description: 'In progress: Working with external team to resolve',
         isResolved: false,
       }),
       createMockImpediment({
-        id: 3,
         description: 'Recently resolved: Dependencies updated successfully',
         isResolved: true,
         resolvedDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
       }),
       createMockImpediment({
-        id: 4,
         description: 'Older resolution: Infrastructure upgrade completed',
         isResolved: true,
         resolvedDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 1 week ago

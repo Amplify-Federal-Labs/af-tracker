@@ -1,12 +1,18 @@
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import type { Impediment, StoryState, StoryType, UserStory } from "../../models/userStory";
+import type {
+  Impediment,
+  StoryState,
+  StoryType,
+  UserStory,
+} from "../../models/userStory";
 import StoryTypeSelect from "./components/storyTypeSelect";
 import type { User } from "../../models/user";
 import Owners from "./components/owners";
 import PointsSelect from "./components/pointsSelect";
 import StateSelect from "./components/stateSelect";
 import Blockers from "./components/blockers";
+import Description from "./components/description";
 
 interface UserStoryFormProps {
   story: UserStory;
@@ -39,57 +45,64 @@ const UserStoryForm = (props: UserStoryFormProps) => {
 
   const handlePointChange = (points?: number) => {
     setStory({
-        ...story,
-        points
-    })
+      ...story,
+      points,
+    });
   };
 
   const handleStateChange = (state: StoryState) => {
     setStory({
-        ...story,
-        state
+      ...story,
+      state,
     });
-  }
+  };
 
   const handleAddBlocker = (blocker: Impediment) => {
     const updatedBlockers = story.blockers.concat([blocker]);
     setStory({
-        ...story,
-        blockers: updatedBlockers
-    })
-  }
+      ...story,
+      blockers: updatedBlockers,
+    });
+  };
 
   const handleUpdateBlocker = (indexToUpdate: number, blocker: Impediment) => {
     setStory({
-        ...story,
-        blockers: story.blockers.map((x, index) => {
-            if (index == indexToUpdate) {
-                x = blocker;
-            }
-            return x;
-        })
+      ...story,
+      blockers: story.blockers.map((x, index) => {
+        if (index == indexToUpdate) {
+          x = blocker;
+        }
+        return x;
+      }),
     });
-  }
+  };
 
   const handleResolveBlocker = (indexToResolve: number) => {
     setStory({
-        ...story,
-        blockers: story.blockers.map((x, index) => {
-            if (index == indexToResolve) {
-                x.isResolved = true;
-                x.resolvedDate = new Date();
-            }
-            return x;
-        })
+      ...story,
+      blockers: story.blockers.map((x, index) => {
+        if (index == indexToResolve) {
+          x.isResolved = true;
+          x.resolvedDate = new Date();
+        }
+        return x;
+      }),
     });
-  }
+  };
 
   const handleDeleteBlocker = (indexToRemove: number) => {
     setStory({
-        ...story,
-        blockers: story.blockers.filter((_, index) => index != indexToRemove)
+      ...story,
+      blockers: story.blockers.filter((_, index) => index != indexToRemove),
     });
-  }
+  };
+
+  const handleDescriptionChange = (description: string) => {
+    setStory({
+      ...story,
+      description,
+    });
+  };
 
   return (
     <Grid container spacing={2}>
@@ -147,22 +160,29 @@ const UserStoryForm = (props: UserStoryFormProps) => {
         <Typography variant="h6">State</Typography>
       </Grid>
       <Grid size={3}>
-        <StateSelect
-            state={story.state}
-            onChange={handleStateChange}
-        />
+        <StateSelect state={story.state} onChange={handleStateChange} />
       </Grid>
 
       <Grid size={12}>
         <Typography variant="h6">Blockers</Typography>
       </Grid>
       <Grid size={12}>
-        <Blockers 
-            blockers={story.blockers}
-            onAdd={handleAddBlocker}
-            onUpdate={handleUpdateBlocker}
-            onResolve={handleResolveBlocker}
-            onDelete={handleDeleteBlocker}
+        <Blockers
+          blockers={story.blockers}
+          onAdd={handleAddBlocker}
+          onUpdate={handleUpdateBlocker}
+          onResolve={handleResolveBlocker}
+          onDelete={handleDeleteBlocker}
+        />
+      </Grid>
+
+      <Grid size={12}>
+        <Typography variant="h6">Description</Typography>
+      </Grid>
+      <Grid size={12}>
+        <Description
+          text={story.description}
+          onChange={handleDescriptionChange}
         />
       </Grid>
     </Grid>

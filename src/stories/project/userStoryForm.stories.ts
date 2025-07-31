@@ -46,7 +46,7 @@ const createMockUserStory = (overrides: Partial<UserStory> = {}): UserStory => (
 });
 
 const meta = {
-  title: 'Project/UserStoryForm',
+  title: 'Project/Components/UserStoryForm',
   component: UserStoryForm,
   tags: ['autodocs'],
   parameters: {

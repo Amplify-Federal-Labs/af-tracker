@@ -39,6 +39,7 @@ const Write = (props: WriteProps) => {
         fullWidth
         multiline
         helperText="Add a description"
+        rows={5}
       />
       <Box sx={{ alignSelf: "flex-start" }}>
         <IconButton onClick={handleDocumentClick}>

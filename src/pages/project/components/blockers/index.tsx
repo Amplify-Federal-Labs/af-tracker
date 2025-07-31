@@ -10,7 +10,13 @@ interface BlockersProps {
   onDelete: (index: number) => void;
 }
 
-const Blockers = ({ blockers, onAdd, onUpdate, onResolve, onDelete }: BlockersProps) => {
+const Blockers = ({
+  blockers,
+  onAdd,
+  onUpdate,
+  onResolve,
+  onDelete,
+}: BlockersProps) => {
   return (
     <>
       {blockers.map((blocker, index) => (

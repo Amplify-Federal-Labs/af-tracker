@@ -5,7 +5,6 @@ import type { Impediment } from '../../models/userStory';
 
 // Helper function to create mock Impediment
 const createMockImpediment = (overrides: Partial<Impediment> = {}): Impediment => ({
-  id: 1,
   description: 'Waiting for API dependency to be resolved',
   isResolved: false,
   resolvedDate: undefined,
@@ -13,7 +12,7 @@ const createMockImpediment = (overrides: Partial<Impediment> = {}): Impediment =
 });
 
 const meta = {
-  title: 'Project/Blocker',
+  title: 'Project/Components/Blocker',
   component: Blocker,
   tags: ['autodocs'],
   parameters: {
@@ -25,6 +24,7 @@ const meta = {
     },
   },
   args: {
+    index: 0,
     onUpdate: fn(),
     onResolve: fn(),
     onDelete: fn(),
