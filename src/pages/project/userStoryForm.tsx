@@ -1,14 +1,17 @@
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import type { StoryType, UserStory } from "../../models/userStory";
+import type { Impediment, StoryState, StoryType, UserStory } from "../../models/userStory";
 import StoryTypeSelect from "./components/storyTypeSelect";
 import type { User } from "../../models/user";
 import Owners from "./components/owners";
+import PointsSelect from "./components/pointsSelect";
+import StateSelect from "./components/stateSelect";
+import Blockers from "./components/blockers";
 
 interface UserStoryFormProps {
   story: UserStory;
   onSave: (story: UserStory) => void;
-  users: User[]
+  users: User[];
 }
 
 const UserStoryForm = (props: UserStoryFormProps) => {
@@ -29,9 +32,50 @@ const UserStoryForm = (props: UserStoryFormProps) => {
 
   const handleChangeOwners = (owners: User[]) => {
     setStory({
-        ...story,
-        owners
+      ...story,
+      owners,
     });
+  };
+
+  const handlePointChange = (points?: number) => {
+    setStory({
+        ...story,
+        points
+    })
+  };
+
+  const handleStateChange = (state: StoryState) => {
+    setStory({
+        ...story,
+        state
+    });
+  }
+
+  const handleAddBlocker = (blocker: Impediment) => {
+    const updatedBlockers = story.blockers.concat([blocker]);
+    setStory({
+        ...story,
+        blockers: updatedBlockers
+    })
+  }
+
+  const handleUpdateBlocker = (index: number, blocker: Impediment) => {
+    story.blockers[index] = blocker;
+
+    setStory(story);
+  }
+
+  const handleResolveBlocker = (index: number) => {
+    story.blockers[index].isResolved = true;
+    story.blockers[index].resolvedDate = new Date();
+
+    setStory(story);
+  }
+
+  const handleDeleteBlocker = (index: number) => {
+    story.blockers.slice(index, 1);
+
+    setStory(story);
   }
 
   return (
@@ -62,6 +106,7 @@ const UserStoryForm = (props: UserStoryFormProps) => {
           Save
         </Button>
       </Grid>
+
       <Grid size={3}>
         <Typography variant="h6">Requester</Typography>
       </Grid>
@@ -73,9 +118,38 @@ const UserStoryForm = (props: UserStoryFormProps) => {
       </Grid>
       <Grid size={3}>
         <Owners
-            owners={story.owners}
-            users={props.users}
-            onChange={handleChangeOwners}
+          owners={story.owners}
+          users={props.users}
+          onChange={handleChangeOwners}
+        />
+      </Grid>
+
+      <Grid size={3}>
+        <Typography variant="h6">Points</Typography>
+      </Grid>
+      <Grid size={3}>
+        <PointsSelect points={story.points} onChange={handlePointChange} />
+      </Grid>
+      <Grid size={3}>
+        <Typography variant="h6">State</Typography>
+      </Grid>
+      <Grid size={3}>
+        <StateSelect
+            state={story.state}
+            onChange={handleStateChange}
+        />
+      </Grid>
+
+      <Grid size={12}>
+        <Typography variant="h6">Blockers</Typography>
+      </Grid>
+      <Grid size={12}>
+        <Blockers 
+            blockers={story.blockers}
+            onAdd={handleAddBlocker}
+            onUpdate={handleUpdateBlocker}
+            onResolve={handleResolveBlocker}
+            onDelete={handleDeleteBlocker}
         />
       </Grid>
     </Grid>

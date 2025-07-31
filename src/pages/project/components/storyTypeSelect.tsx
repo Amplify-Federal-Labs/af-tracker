@@ -6,6 +6,7 @@ import {
   FormHelperText,
   ListItemIcon,
   ListItemText,
+  Stack,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
 import {
@@ -96,13 +97,12 @@ const StoryTypeSelect = ({
       >
         {STORY_TYPE_OPTIONS.map((option) => (
           <MenuItem key={option.value} value={option.value}>
-            <ListItemIcon sx={{ minWidth: 40 }}>
-              {option.icon}
-            </ListItemIcon>
-            <ListItemText
-              primary={option.label}
-              secondary={option.description}
-            />
+            <Stack direction="row">
+                <ListItemIcon sx={{ minWidth: 40 }}>
+                {option.icon}
+                </ListItemIcon>
+                <ListItemText primary={option.label} />
+            </Stack>
           </MenuItem>
         ))}
       </Select>
