@@ -19,15 +19,20 @@ import Tasks from "./components/tasks"
 
 interface UserStoryFormProps {
   story: UserStory;
-  onSave: (story: UserStory) => void;
   users: User[];
   labels: string[];
+  onCancel: () => void;
+  onSave: (story: UserStory) => void;
   onAddNewLabel: (label: string) => void;
 }
 
 const UserStoryForm = (props: UserStoryFormProps) => {
   const [story, setStory] = useState(props.story);
   const [labels, setLabels] = useState(props.labels);
+
+  const handleSave = () => {
+    props.onSave(story);
+  }
 
   const handleTypeChange = (type: StoryType) => {
     setStory({
@@ -182,13 +187,13 @@ const UserStoryForm = (props: UserStoryFormProps) => {
         />
       </Grid>
       <Grid size={2}>
-        <Button color="secondary" variant="outlined">
-          Close
+        <Button color="secondary" variant="outlined" onClick={props.onCancel}>
+          Cancel
         </Button>
       </Grid>
       <Grid size={8} />
       <Grid size={2}>
-        <Button color="primary" variant="contained">
+        <Button color="primary" variant="contained" onClick={handleSave}>
           Save
         </Button>
       </Grid>
