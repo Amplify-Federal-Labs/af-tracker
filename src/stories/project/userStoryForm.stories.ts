@@ -58,8 +58,10 @@ const meta = {
     },
   },
   args: {
+    labels: ["bug", "feature", "enhancement", "documentation"],
     users: [mockUser, mockRequester],
     onSave: fn(),
+    onAddNewLabel: fn()
   },
   argTypes: {
     story: {

@@ -13,15 +13,19 @@ import PointsSelect from "./components/pointsSelect";
 import StateSelect from "./components/stateSelect";
 import Blockers from "./components/blockers";
 import Description from "./components/description";
+import LabelSelect from "./components/labelSelect";
 
 interface UserStoryFormProps {
   story: UserStory;
   onSave: (story: UserStory) => void;
   users: User[];
+  labels: string[];
+  onAddNewLabel: (label: string) => void;
 }
 
 const UserStoryForm = (props: UserStoryFormProps) => {
   const [story, setStory] = useState(props.story);
+  const [labels, setLabels] = useState(props.labels);
 
   const handleTypeChange = (type: StoryType) => {
     setStory({
@@ -104,6 +108,20 @@ const UserStoryForm = (props: UserStoryFormProps) => {
     });
   };
 
+  const handleAddNewLabel = (newLabel: string) => {
+    const newLabels = [...labels, newLabel];
+    setLabels(newLabels);
+
+    props.onAddNewLabel(newLabel);
+  };
+
+  const handleLabelsChange = (labels: string[]) => {
+    setStory({
+      ...story,
+      labels,
+    });
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid size={4}>
@@ -183,6 +201,18 @@ const UserStoryForm = (props: UserStoryFormProps) => {
         <Description
           text={story.description}
           onChange={handleDescriptionChange}
+        />
+      </Grid>
+
+      <Grid size={12}>
+        <Typography variant="h6">Labels</Typography>
+      </Grid>
+      <Grid size={12}>
+        <LabelSelect
+          availableLabels={props.labels}
+          selectedLabels={story.labels}
+          onAddNewLabel={handleAddNewLabel}
+          onChange={handleLabelsChange}
         />
       </Grid>
     </Grid>
