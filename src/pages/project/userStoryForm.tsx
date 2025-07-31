@@ -4,6 +4,7 @@ import type {
   Impediment,
   StoryState,
   StoryType,
+  Task,
   UserStory,
 } from "../../models/userStory";
 import StoryTypeSelect from "./components/storyTypeSelect";
@@ -14,6 +15,7 @@ import StateSelect from "./components/stateSelect";
 import Blockers from "./components/blockers";
 import Description from "./components/description";
 import LabelSelect from "./components/labelSelect";
+import Tasks from "./components/tasks"
 
 interface UserStoryFormProps {
   story: UserStory;
@@ -122,6 +124,46 @@ const UserStoryForm = (props: UserStoryFormProps) => {
     });
   };
 
+  const handleAddTask = (task: Task) => {
+    const updatedTasks = story.tasks.concat([task]);
+    setStory({
+      ...story,
+      tasks: updatedTasks,
+    });
+  };
+
+  const handleUpdateTask = (indexToUpdate: number, task: Task) => {
+    setStory({
+      ...story,
+      tasks: story.tasks.map((x, index) => {
+        if (index == indexToUpdate) {
+          x = task;
+        }
+        return x;
+      }),
+    });
+  };
+
+  const handleCompleteTask = (indexToResolve: number) => {
+    setStory({
+      ...story,
+      tasks: story.tasks.map((x, index) => {
+        if (index == indexToResolve) {
+          x.isCompleted = true;
+          x.completedDate = new Date();
+        }
+        return x;
+      }),
+    });
+  };
+
+  const handleDeleteTask = (indexToRemove: number) => {
+    setStory({
+      ...story,
+      tasks: story.tasks.filter((_, index) => index != indexToRemove),
+    });
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid size={4}>
@@ -213,6 +255,19 @@ const UserStoryForm = (props: UserStoryFormProps) => {
           selectedLabels={story.labels}
           onAddNewLabel={handleAddNewLabel}
           onChange={handleLabelsChange}
+        />
+      </Grid>
+
+      <Grid size={12}>
+        <Typography variant="h6">Tasks</Typography>
+      </Grid>
+      <Grid size={12}>
+        <Tasks
+          tasks={story.tasks}
+          onAdd={handleAddTask}
+          onDelete={handleDeleteTask}
+          onUpdate={handleUpdateTask}
+          onComplete={handleCompleteTask}
         />
       </Grid>
     </Grid>
