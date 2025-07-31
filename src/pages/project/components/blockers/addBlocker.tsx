@@ -19,6 +19,7 @@ const AddBlocker = ({ onAdd }: AddBlockerProps) => {
 
     onAdd(blocker);
     setEditMode(false);
+    setDescription("");
   };
 
   if (editMode) {

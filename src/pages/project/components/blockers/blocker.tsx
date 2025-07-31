@@ -19,7 +19,13 @@ interface BlockerProps {
   onDelete: (index: number) => void;
 }
 
-const Blocker = ({ index, blocker, onUpdate, onResolve, onDelete }: BlockerProps) => {
+const Blocker = ({
+  index,
+  blocker,
+  onUpdate,
+  onResolve,
+  onDelete,
+}: BlockerProps) => {
   const [editMode, setEditMode] = useState(false);
   const [description, setDescription] = useState(blocker.description);
 
@@ -77,7 +83,11 @@ const Blocker = ({ index, blocker, onUpdate, onResolve, onDelete }: BlockerProps
         </ButtonBase>
       </Grid>
       <Grid size={1}>
-        <IconButton aria-label="resolve" onClick={() => onResolve(index)}>
+        <IconButton
+          disabled={blocker.isResolved}
+          aria-label="resolve"
+          onClick={() => onResolve(index)}
+        >
           <CheckIcon />
         </IconButton>
       </Grid>

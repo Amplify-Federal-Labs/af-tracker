@@ -59,23 +59,36 @@ const UserStoryForm = (props: UserStoryFormProps) => {
     })
   }
 
-  const handleUpdateBlocker = (index: number, blocker: Impediment) => {
-    story.blockers[index] = blocker;
-
-    setStory(story);
+  const handleUpdateBlocker = (indexToUpdate: number, blocker: Impediment) => {
+    setStory({
+        ...story,
+        blockers: story.blockers.map((x, index) => {
+            if (index == indexToUpdate) {
+                x = blocker;
+            }
+            return x;
+        })
+    });
   }
 
-  const handleResolveBlocker = (index: number) => {
-    story.blockers[index].isResolved = true;
-    story.blockers[index].resolvedDate = new Date();
-
-    setStory(story);
+  const handleResolveBlocker = (indexToResolve: number) => {
+    setStory({
+        ...story,
+        blockers: story.blockers.map((x, index) => {
+            if (index == indexToResolve) {
+                x.isResolved = true;
+                x.resolvedDate = new Date();
+            }
+            return x;
+        })
+    });
   }
 
-  const handleDeleteBlocker = (index: number) => {
-    story.blockers.slice(index, 1);
-
-    setStory(story);
+  const handleDeleteBlocker = (indexToRemove: number) => {
+    setStory({
+        ...story,
+        blockers: story.blockers.filter((_, index) => index != indexToRemove)
+    });
   }
 
   return (
