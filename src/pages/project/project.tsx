@@ -1,4 +1,4 @@
-import { Button, Stack } from "@mui/material";
+import { FormControlLabel, Stack, Switch } from "@mui/material";
 import { useState } from "react";
 import Done from "./done";
 import Backlog from "./backlog";
@@ -12,7 +12,12 @@ interface ProjectViewProps {
   onAddStory: (story: CreateStoryRequest) => void;
 }
 
-const ProjectView = ({ done, backlog, icebox, onAddStory }: ProjectViewProps) => {
+const ProjectView = ({
+  done,
+  backlog,
+  icebox,
+  onAddStory,
+}: ProjectViewProps) => {
   const [showDone, setShowDone] = useState(true);
   const [showBacklog, setShowBacklog] = useState(true);
   const [showIcebox, setShowIcebox] = useState(true);
@@ -20,24 +25,33 @@ const ProjectView = ({ done, backlog, icebox, onAddStory }: ProjectViewProps) =>
   return (
     <Stack>
       <Stack direction={"row"}>
-        <Button
-          color={showDone ? "primary" : "secondary"}
-          onClick={() => setShowDone(!showDone)}
-        >
-          Done
-        </Button>
-        <Button
-          color={showBacklog ? "primary" : "secondary"}
-          onClick={() => setShowBacklog(!showBacklog)}
-        >
-          Backlog
-        </Button>
-        <Button
-          color={showIcebox ? "primary" : "secondary"}
-          onClick={() => setShowIcebox(!showIcebox)}
-        >
-          Icebox
-        </Button>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={showDone}
+              onChange={(event) => setShowDone(event.target.checked)}
+            />
+          }
+          label="Done"
+        />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={showBacklog}
+              onChange={(event) => setShowBacklog(event.target.checked)}
+            />
+          }
+          label="Backlog"
+        />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={showIcebox}
+              onChange={(event) => setShowIcebox(event.target.checked)}
+            />
+          }
+          label="Icebox"
+        />
       </Stack>
       <Stack
         spacing={2}
