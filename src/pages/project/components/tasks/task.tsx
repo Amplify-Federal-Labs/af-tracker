@@ -79,13 +79,14 @@ const TaskView = ({
     <Grid container spacing={2}>
       <Grid size={1}>
         <Checkbox
+          checked={task.isCompleted}
           disabled={task.isCompleted}
           aria-label="complete"
           onChange={() => onComplete(index)}
         />
       </Grid>
       <Grid size={10}>
-        <ButtonBase onClick={handleClick}>
+        <ButtonBase onClick={handleClick} disabled={task.isCompleted}>
           <Typography variant="body1">{task.description}</Typography>
         </ButtonBase>
       </Grid>

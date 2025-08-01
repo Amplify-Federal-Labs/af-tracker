@@ -60,7 +60,9 @@ const AddTask = ({ onAdd }: AddTaskProps) => {
     <Grid container spacing={2}>
       <Grid size={12}>
         <ButtonBase onClick={handleEdit}>
-          <Typography variant="body1">Add task</Typography>
+          <Typography variant="body1" color="secondary">
+            Add task
+          </Typography>
         </ButtonBase>
       </Grid>
     </Grid>

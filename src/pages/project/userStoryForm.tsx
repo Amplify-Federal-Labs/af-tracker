@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField } from "@mui/material";
 import { useState } from "react";
 import type {
   Impediment,
@@ -9,13 +9,12 @@ import type {
 } from "../../models/userStory";
 import StoryTypeSelect from "./components/storyTypeSelect";
 import type { User } from "../../models/user";
-import Owners from "./components/owners";
-import PointsSelect from "./components/pointsSelect";
-import StateSelect from "./components/stateSelect";
+import UserStoryDetails from "./components/userStoryDetails";
 import Blockers from "./components/blockers";
 import Description from "./components/description";
 import LabelSelect from "./components/labelSelect";
-import Tasks from "./components/tasks"
+import Tasks from "./components/tasks";
+import FormSection from "../../components/formSection";
 
 interface UserStoryFormProps {
   story: UserStory;
@@ -32,7 +31,7 @@ const UserStoryForm = (props: UserStoryFormProps) => {
 
   const handleSave = () => {
     props.onSave(story);
-  }
+  };
 
   const handleTypeChange = (type: StoryType) => {
     setStory({
@@ -198,82 +197,60 @@ const UserStoryForm = (props: UserStoryFormProps) => {
         </Button>
       </Grid>
 
-      <Grid size={3}>
-        <Typography variant="h6">Requester</Typography>
-      </Grid>
-      <Grid size={3}>
-        <Typography variant="body1">{story.requester.name}</Typography>
-      </Grid>
-      <Grid size={3}>
-        <Typography variant="h6">Owners</Typography>
-      </Grid>
-      <Grid size={3}>
-        <Owners
-          owners={story.owners}
-          users={props.users}
-          onChange={handleChangeOwners}
-        />
-      </Grid>
-
-      <Grid size={3}>
-        <Typography variant="h6">Points</Typography>
-      </Grid>
-      <Grid size={3}>
-        <PointsSelect points={story.points} onChange={handlePointChange} />
-      </Grid>
-      <Grid size={3}>
-        <Typography variant="h6">State</Typography>
-      </Grid>
-      <Grid size={3}>
-        <StateSelect state={story.state} onChange={handleStateChange} />
+      <Grid size={12}>
+        <FormSection>
+          <UserStoryDetails
+            story={story}
+            users={props.users}
+            onOwnersChange={handleChangeOwners}
+            onPointsChange={handlePointChange}
+            onStateChange={handleStateChange}
+          />
+        </FormSection>
       </Grid>
 
       <Grid size={12}>
-        <Typography variant="h6">Blockers</Typography>
-      </Grid>
-      <Grid size={12}>
-        <Blockers
-          blockers={story.blockers}
-          onAdd={handleAddBlocker}
-          onUpdate={handleUpdateBlocker}
-          onResolve={handleResolveBlocker}
-          onDelete={handleDeleteBlocker}
-        />
-      </Grid>
-
-      <Grid size={12}>
-        <Typography variant="h6">Description</Typography>
-      </Grid>
-      <Grid size={12}>
-        <Description
-          text={story.description}
-          onChange={handleDescriptionChange}
-        />
+        <FormSection label="Blockers">
+          <Blockers
+            blockers={story.blockers}
+            onAdd={handleAddBlocker}
+            onUpdate={handleUpdateBlocker}
+            onResolve={handleResolveBlocker}
+            onDelete={handleDeleteBlocker}
+          />
+        </FormSection>
       </Grid>
 
       <Grid size={12}>
-        <Typography variant="h6">Labels</Typography>
-      </Grid>
-      <Grid size={12}>
-        <LabelSelect
-          availableLabels={props.labels}
-          selectedLabels={story.labels}
-          onAddNewLabel={handleAddNewLabel}
-          onChange={handleLabelsChange}
-        />
+        <FormSection label="Description">
+          <Description
+            text={story.description}
+            onChange={handleDescriptionChange}
+          />
+        </FormSection>
       </Grid>
 
       <Grid size={12}>
-        <Typography variant="h6">Tasks</Typography>
+        <FormSection label="Labels">
+          <LabelSelect
+            availableLabels={props.labels}
+            selectedLabels={story.labels}
+            onAddNewLabel={handleAddNewLabel}
+            onChange={handleLabelsChange}
+          />
+        </FormSection>
       </Grid>
+
       <Grid size={12}>
-        <Tasks
-          tasks={story.tasks}
-          onAdd={handleAddTask}
-          onDelete={handleDeleteTask}
-          onUpdate={handleUpdateTask}
-          onComplete={handleCompleteTask}
-        />
+        <FormSection label="Tasks">
+          <Tasks
+            tasks={story.tasks}
+            onAdd={handleAddTask}
+            onDelete={handleDeleteTask}
+            onUpdate={handleUpdateTask}
+            onComplete={handleCompleteTask}
+          />
+        </FormSection>
       </Grid>
     </Grid>
   );
