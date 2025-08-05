@@ -21,7 +21,7 @@ const Blockers = ({
     <>
       {blockers.map((blocker, index) => (
         <Blocker
-          key={blocker.description}
+          key={`${index}-${blocker.description}`}
           index={index}
           blocker={blocker}
           onUpdate={onUpdate}

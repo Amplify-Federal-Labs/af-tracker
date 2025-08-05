@@ -2,14 +2,19 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, useParams } from 'react-router';
+import * as React from 'react';
 import ProjectContainer from './index';
 import * as storiesApi from '../../api/stories';
-import type { UserStoriesInProject } from '../../models/userStory';
+import * as projectsApi from '../../api/projects';
+import type { Project } from '../../models/project';
 
-// Mock the stories API module
+// Mock the APIs
 vi.mock('../../api/stories', () => ({
-  getUserStoriesInProject: vi.fn(),
   addUserStoryToProject: vi.fn(),
+}));
+
+vi.mock('../../api/projects', () => ({
+  getProjectById: vi.fn(),
 }));
 
 // Mock the ProjectView component
@@ -44,6 +49,17 @@ vi.mock('react-router', async () => {
   };
 });
 
+// Mock React module to override useContext
+vi.mock('react', async () => {
+  const actual = await vi.importActual<typeof React>('react');
+  return {
+    ...actual,
+    useContext: vi.fn(() => ({
+      user: { id: 'user-1', email: 'user1@test.com' }
+    }))
+  };
+});
+
 describe('ProjectContainer', () => {
   let queryClient: QueryClient;
 
@@ -71,14 +87,22 @@ describe('ProjectContainer', () => {
     );
   };
 
-  const createMockUserStoriesData = (): UserStoriesInProject => ({
+  const createMockProjectData = (): Project => ({
+    id: 'test-project-123',
+    name: 'Test Project',
+    description: 'A test project',
+    users: [
+      { id: 'user-1', email: 'user1@test.com' },
+      { id: 'user-2', email: 'user2@test.com' },
+    ],
+    labels: ['frontend', 'backend', 'maintenance'],
     done: [
       {
         id: 'story-1',
         projectId: 'test-project-123',
         type: 'feature',
         title: 'Done Story 1',
-        requester: { uid: 'user-1', email: 'user1@test.com' },
+        requester: { id: 'user-1', email: 'user1@test.com' },
         owners: [],
         state: 'accepted',
         blockers: [],
@@ -86,9 +110,9 @@ describe('ProjectContainer', () => {
         labels: ['frontend'],
         tasks: [],
         createdAt: new Date('2024-01-01'),
-        createdBy: { uid: 'user-1', email: 'user1@test.com' },
+        createdBy: { id: 'user-1', email: 'user1@test.com' },
         acceptedAt: new Date('2024-01-05'),
-        acceptedBy: { uid: 'user-2', email: 'user2@test.com' },
+        acceptedBy: { id: 'user-2', email: 'user2@test.com' },
       },
     ],
     backlog: [
@@ -97,17 +121,17 @@ describe('ProjectContainer', () => {
         projectId: 'test-project-123',
         type: 'bug',
         title: 'Backlog Story 1',
-        requester: { uid: 'user-1', email: 'user1@test.com' },
-        owners: [{ uid: 'user-2', email: 'user2@test.com' }],
+        requester: { id: 'user-1', email: 'user1@test.com' },
+        owners: [{ id: 'user-2', email: 'user2@test.com' }],
         state: 'started',
         blockers: [],
         description: 'A story in progress',
         labels: ['backend'],
         tasks: [{ description: 'Fix bug', isCompleted: false }],
         createdAt: new Date('2024-01-02'),
-        createdBy: { uid: 'user-1', email: 'user1@test.com' },
+        createdBy: { id: 'user-1', email: 'user1@test.com' },  
         startedAt: new Date('2024-01-03'),
-        startedBy: { uid: 'user-2', email: 'user2@test.com' },
+        startedBy: { id: 'user-2', email: 'user2@test.com' },
       },
     ],
     icebox: [
@@ -116,7 +140,7 @@ describe('ProjectContainer', () => {
         projectId: 'test-project-123',
         type: 'chore',
         title: 'Icebox Story 1',
-        requester: { uid: 'user-1', email: 'user1@test.com' },
+        requester: { id: 'user-1', email: 'user1@test.com' },
         owners: [],
         state: 'unscheduled',
         blockers: [],
@@ -124,46 +148,48 @@ describe('ProjectContainer', () => {
         labels: ['maintenance'],
         tasks: [],
         createdAt: new Date('2024-01-03'),
-        createdBy: { uid: 'user-1', email: 'user1@test.com' },
+        createdBy: { id: 'user-1', email: 'user1@test.com' },
       },
     ],
+    createdAt: new Date('2024-01-01'),
+    createdBy: 'user-1',
   });
 
   it('should display loading state initially', () => {
-    const getUserStoriesInProjectSpy = vi.mocked(storiesApi.getUserStoriesInProject);
+    const getProjectByIdSpy = vi.mocked(projectsApi.getProjectById);
     // Make the promise never resolve to keep loading state
-    getUserStoriesInProjectSpy.mockImplementation(() => new Promise(() => {}));
+    getProjectByIdSpy.mockImplementation(() => new Promise(() => {}));
 
     renderWithProviders(<ProjectContainer />);
 
     expect(screen.getByText('Loading...')).toBeInTheDocument();
-    expect(getUserStoriesInProjectSpy).toHaveBeenCalledWith('test-project-123');
+    expect(getProjectByIdSpy).toHaveBeenCalledWith('test-project-123');
   });
 
   it('should display error state when API call fails', async () => {
-    const getUserStoriesInProjectSpy = vi.mocked(storiesApi.getUserStoriesInProject);
-    getUserStoriesInProjectSpy.mockRejectedValue(new Error('Failed to fetch user stories'));
+    const getProjectByIdSpy = vi.mocked(projectsApi.getProjectById);
+    getProjectByIdSpy.mockRejectedValue(new Error('Failed to fetch project'));
 
     renderWithProviders(<ProjectContainer />);
 
     await waitFor(() => {
-      expect(screen.getByText('Error: Failed to fetch user stories')).toBeInTheDocument();
+      expect(screen.getByText('Error: Failed to fetch project')).toBeInTheDocument();
     });
 
-    expect(getUserStoriesInProjectSpy).toHaveBeenCalledWith('test-project-123');
+    expect(getProjectByIdSpy).toHaveBeenCalledWith('test-project-123');
   });
 
   it('should load and display user stories when API call succeeds', async () => {
-    const mockData = createMockUserStoriesData();
-    const getUserStoriesInProjectSpy = vi.mocked(storiesApi.getUserStoriesInProject);
-    getUserStoriesInProjectSpy.mockResolvedValue(mockData);
+    const mockData = createMockProjectData();
+    const getProjectByIdSpy = vi.mocked(projectsApi.getProjectById);
+    getProjectByIdSpy.mockResolvedValue(mockData);
 
     renderWithProviders(<ProjectContainer />);
 
     // Should show loading initially
     expect(screen.getByText('Loading...')).toBeInTheDocument();
 
-    // Should load user stories and display project view
+    // Should load project and display project view
     await waitFor(() => {
       expect(screen.getByTestId('project-view')).toBeInTheDocument();
     });
@@ -176,17 +202,18 @@ describe('ProjectContainer', () => {
     // Should not show loading anymore
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
 
-    expect(getUserStoriesInProjectSpy).toHaveBeenCalledWith('test-project-123');
+    expect(getProjectByIdSpy).toHaveBeenCalledWith('test-project-123');
   });
 
   it('should handle empty user stories data', async () => {
-    const emptyData: UserStoriesInProject = {
+    const emptyData: Project = {
+      ...createMockProjectData(),
       done: [],
       backlog: [],
       icebox: [],
     };
-    const getUserStoriesInProjectSpy = vi.mocked(storiesApi.getUserStoriesInProject);
-    getUserStoriesInProjectSpy.mockResolvedValue(emptyData);
+    const getProjectByIdSpy = vi.mocked(projectsApi.getProjectById);
+    getProjectByIdSpy.mockResolvedValue(emptyData);
 
     renderWithProviders(<ProjectContainer />);
 
@@ -201,17 +228,17 @@ describe('ProjectContainer', () => {
   });
 
   it('should handle adding a new story successfully', async () => {
-    const mockData = createMockUserStoriesData();
-    const getUserStoriesInProjectSpy = vi.mocked(storiesApi.getUserStoriesInProject);
+    const mockData = createMockProjectData();
+    const getProjectByIdSpy = vi.mocked(projectsApi.getProjectById);
     const addUserStoryToProjectSpy = vi.mocked(storiesApi.addUserStoryToProject);
     
-    getUserStoriesInProjectSpy.mockResolvedValue(mockData);
+    getProjectByIdSpy.mockResolvedValue(mockData);
     addUserStoryToProjectSpy.mockResolvedValue({
       id: 'new-story-1',
       projectId: 'test-project-123',
       type: 'feature',
       title: 'Test Story',
-      requester: { uid: 'user-1', email: 'user1@test.com' },
+      requester: { id: 'user-1', email: 'user1@test.com' },
       owners: [],
       state: 'unscheduled',
       blockers: [],
@@ -219,7 +246,7 @@ describe('ProjectContainer', () => {
       labels: [],
       tasks: [],
       createdAt: new Date(),
-      createdBy: { uid: 'user-1', email: 'user1@test.com' },
+      createdBy: { id: 'user-1', email: 'user1@test.com' },
     });
 
     // Mock the invalidateQueries method
@@ -254,11 +281,11 @@ describe('ProjectContainer', () => {
   });
 
   it('should handle adding story failure gracefully', async () => {
-    const mockData = createMockUserStoriesData();
-    const getUserStoriesInProjectSpy = vi.mocked(storiesApi.getUserStoriesInProject);
+    const mockData = createMockProjectData();
+    const getProjectByIdSpy = vi.mocked(projectsApi.getProjectById);
     const addUserStoryToProjectSpy = vi.mocked(storiesApi.addUserStoryToProject);
     
-    getUserStoriesInProjectSpy.mockResolvedValue(mockData);
+    getProjectByIdSpy.mockResolvedValue(mockData);
     addUserStoryToProjectSpy.mockRejectedValue(new Error('Failed to add story'));
 
     // Mock console.error to avoid noise in tests
@@ -287,9 +314,9 @@ describe('ProjectContainer', () => {
   });
 
   it('should display correct page title with project ID', async () => {
-    const mockData = createMockUserStoriesData();
-    const getUserStoriesInProjectSpy = vi.mocked(storiesApi.getUserStoriesInProject);
-    getUserStoriesInProjectSpy.mockResolvedValue(mockData);
+    const mockData = createMockProjectData();
+    const getProjectByIdSpy = vi.mocked(projectsApi.getProjectById);
+    getProjectByIdSpy.mockResolvedValue(mockData);
 
     renderWithProviders(<ProjectContainer />);
 

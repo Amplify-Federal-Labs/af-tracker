@@ -6,22 +6,22 @@ import type { User } from '../../../models/user';
 
 const mockUsers: User[] = [
   {
-    uid: 'user-1',
+    id: 'user-1',
     name: 'Alice Johnson',
     email: 'alice.johnson@example.com',
   },
   {
-    uid: 'user-2',
+    id: 'user-2',
     name: 'Bob Smith',
     email: 'bob.smith@example.com',
   },
   {
-    uid: 'user-3',
+    id: 'user-3',
     name: 'Charlie Brown',
     email: 'charlie.brown@example.com',
   },
   {
-    uid: 'user-4',
+    id: 'user-4',
     name: 'Diana Wilson',
     email: 'diana.wilson@example.com',
   },
@@ -29,7 +29,7 @@ const mockUsers: User[] = [
 
 const mockOwners: User[] = [
   {
-    uid: 'user-1',
+    id: 'user-1',
     name: 'Alice Johnson',
     email: 'alice.johnson@example.com',
   },
@@ -323,7 +323,7 @@ describe('Owners', () => {
 
     it('should generate correct initials for single-word names', () => {
       const userWithSingleName = {
-        uid: 'user-single',
+        id: 'user-single',
         name: 'Madonna',
         email: 'madonna@example.com',
       };
@@ -335,7 +335,7 @@ describe('Owners', () => {
 
     it('should limit initials to 2 characters for long names', () => {
       const userWithLongName = {
-        uid: 'user-long',
+        id: 'user-long',
         name: 'John Michael Christopher Smith',
         email: 'john@example.com',
       };

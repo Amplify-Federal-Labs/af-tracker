@@ -15,7 +15,7 @@ const Tasks = ({ tasks, onAdd, onUpdate, onComplete, onDelete }: TasksProps) => 
     <>
       {tasks.map((task, index) => (
         <TaskView
-          key={task.description}
+          key={`${index}-${task.description}`}
           index={index}
           task={task}
           onUpdate={onUpdate}
