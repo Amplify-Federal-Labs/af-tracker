@@ -1,31 +1,23 @@
 import { Box } from "@mui/material";
 import type { CreateStoryRequest, UserStory } from "../../models/userStory";
-import AddStoryFab from "../../components/addFab";
+import type { User } from "../../models/user";
 
 interface IceboxProps {
+  projectId: string;
+  user: User;
+  users: User[];
+  labels: string[];
   stories: UserStory[];
-  onAddStory: (story: CreateStoryRequest) => void;
+  onAddNewLabel: (label: string) => void;
+  onSaveStory: (story: CreateStoryRequest) => void;
 }
 
-const Icebox = ({ stories, onAddStory }: IceboxProps) => {
-  const handleAddStory = () => {
-    const request: CreateStoryRequest = {
-      type: "feature",
-      title: "my new user story",
-      description: "this is my description",
-      labels: [],
-      tasks: [],
-    };
-
-    onAddStory(request);
-  };
-
+const Icebox = ({ stories }: IceboxProps) => {
   return (
     <Box component="section" sx={{ p: 2, border: "1px dashed grey" }}>
       {stories.map((story) => (
         <p>{story.title}</p>
       ))}
-      <AddStoryFab onClick={handleAddStory} />
     </Box>
   );
 };

@@ -61,7 +61,7 @@ const AddBlocker = ({ onAdd }: AddBlockerProps) => {
       <Grid size={12}>
         <ButtonBase onClick={handleEdit}>
           <Typography variant="body1" color="secondary">
-            Add a blocker or impediment
+            + Add a blocker or impediment
           </Typography>
         </ButtonBase>
       </Grid>

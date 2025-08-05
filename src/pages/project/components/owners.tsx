@@ -1,8 +1,6 @@
 import {
   Box,
   Button,
-  Avatar,
-  AvatarGroup,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -13,6 +11,7 @@ import { Add as AddIcon } from '@mui/icons-material';
 import { useState } from 'react';
 import type { User } from '../../../models/user';
 import UserSelect from './userSelect';
+import UserAvatars from '../../../components/userAvatars';
 
 interface OwnersProps {
   owners: User[];
@@ -36,7 +35,7 @@ const Owners = ({ owners, users, onChange, disabled = false }: OwnersProps) => {
 
   const handleUserSelect = (selectedUser: User) => {
     // Add the selected user to the owners list if not already present
-    const isUserAlreadyOwner = owners.some(owner => owner.uid === selectedUser.uid);
+    const isUserAlreadyOwner = owners.some(owner => owner.id === selectedUser.id);
     if (!isUserAlreadyOwner) {
       const updatedOwners = [...owners, selectedUser];
       onChange(updatedOwners);
@@ -44,19 +43,9 @@ const Owners = ({ owners, users, onChange, disabled = false }: OwnersProps) => {
     handleCloseDialog();
   };
 
-  // Generate initials for avatar
-  const getInitials = (name: string): string => {
-    return name
-      .split(' ')
-      .map(part => part.charAt(0))
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
-  };
-
   // Filter out users who are already owners
   const availableUsers = users.filter(user => 
-    !owners.some(owner => owner.uid === user.uid)
+    !owners.some(owner => owner.id === user.id)
   );
 
   return (
@@ -80,21 +69,7 @@ const Owners = ({ owners, users, onChange, disabled = false }: OwnersProps) => {
       ) : (
         // Show owner avatars with plus icon
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <AvatarGroup max={4} sx={{ '& .MuiAvatar-root': { width: 32, height: 32 } }}>
-            {owners.map((owner) => (
-              <Avatar
-                key={owner.uid}
-                sx={{
-                  bgcolor: 'primary.main',
-                  fontSize: '0.75rem',
-                }}
-                title={owner.name}
-              >
-                {getInitials(owner.name)}
-              </Avatar>
-            ))}
-          </AvatarGroup>
-          
+          <UserAvatars users={owners} />          
           <IconButton
             size="small"
             onClick={handleOpenDialog}

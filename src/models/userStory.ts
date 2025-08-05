@@ -49,6 +49,15 @@ interface UserStoriesInProject {
     icebox: UserStory[]
 }
 
+interface ProjectViewModel {
+    id: string,
+    users: User[],
+    labels: string[],
+    name: string,
+    done: UserStory[];
+    backlog: UserStory[];
+    icebox: UserStory[]
+}
 
 interface CreateStoryRequest {
     type: StoryType;
@@ -58,4 +67,4 @@ interface CreateStoryRequest {
     tasks: Task[];
 }
 
-export type { Impediment, Task, UserStory, StoryType, StoryState, UserStoriesInProject, CreateStoryRequest };
+export type { ProjectViewModel, Impediment, Task, UserStory, StoryType, StoryState, UserStoriesInProject, CreateStoryRequest };
