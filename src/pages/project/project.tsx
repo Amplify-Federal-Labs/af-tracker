@@ -1,4 +1,4 @@
-import { FormControlLabel, Stack, Switch } from "@mui/material";
+import { Box, FormControlLabel, Stack, Switch } from "@mui/material";
 import { useState } from "react";
 import Done from "./done";
 import Backlog from "./backlog";
@@ -69,8 +69,8 @@ const ProjectView = ({
 
   return (
     <>
-      <Stack>
-        <Stack direction={"row"}>
+      <Stack spacing={2}>
+        <Stack direction={"row"} spacing={2}>
           <FormControlLabel
             control={
               <Switch
@@ -104,21 +104,43 @@ const ProjectView = ({
           direction={"row"}
           sx={{
             justifyContent: "space-evenly",
-            alignItems: "flex-start",
+            alignItems: "stretch",
           }}
         >
-          {showDone && <Done stories={done} />}
-          {showBacklog && <Backlog stories={backlog} />}
+          {showDone && (
+            <Box
+              component="section"
+              flexGrow={1}
+              sx={{ p: 2, border: "1px dashed grey" }}
+            >
+              <Done stories={done} />
+            </Box>
+          )}
+          {showBacklog && (
+            <Box
+              component="section"
+              flexGrow={1}
+              sx={{ p: 2, border: "1px dashed grey" }}
+            >
+              <Backlog stories={backlog} />
+            </Box>
+          )}
           {showIcebox && (
-            <Icebox
-              projectId={projectId}
-              user={user}
-              users={users}
-              labels={labels}
-              onAddNewLabel={onAddNewLabel}
-              onSaveStory={onAddStory}
-              stories={icebox}
-            />
+            <Box
+              component="section"
+              flexGrow={1}
+              sx={{ p: 2, border: "1px dashed grey" }}
+            >
+              <Icebox
+                projectId={projectId}
+                user={user}
+                users={users}
+                labels={labels}
+                onAddNewLabel={onAddNewLabel}
+                onSaveStory={onAddStory}
+                stories={icebox}
+              />
+            </Box>
           )}
         </Stack>
       </Stack>

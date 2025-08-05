@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import type { CreateStoryRequest, UserStory } from "../../models/userStory";
 import type { User } from "../../models/user";
 
@@ -14,11 +13,11 @@ interface IceboxProps {
 
 const Icebox = ({ stories }: IceboxProps) => {
   return (
-    <Box component="section" sx={{ p: 2, border: "1px dashed grey" }}>
+    <>
       {stories.map((story) => (
         <p>{story.title}</p>
       ))}
-    </Box>
+    </>
   );
 };
 

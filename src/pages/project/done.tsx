@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import type { UserStory } from "../../models/userStory";
 
 interface DoneProps {
@@ -7,9 +6,9 @@ interface DoneProps {
 
 const Done = ({ stories }: DoneProps) => {
   return (
-    <Box component="section" sx={{ p: 2, border: "1px" }}>
+    <>
       { stories.map(story => <p>{story.title}</p>)}
-    </Box>
+    </>
   );
 };
 
