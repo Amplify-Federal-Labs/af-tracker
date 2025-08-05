@@ -2,6 +2,7 @@ import * as React from 'react';
 
 export interface Session {
   user: {
+    uid?: string;
     name?: string;
     email?: string;
     image?: string;

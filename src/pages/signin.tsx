@@ -4,7 +4,7 @@ import { SignInPage } from '@toolpad/core/SignInPage';
 import { Navigate, useNavigate } from 'react-router';
 import { useSession, type Session } from '../SessionContext';
 import { signInWithGoogle, signInWithCredentials } from '../firebase/auth';
-
+import { auth } from '../firebase/firebaseConfig';
 
 export default function SignIn() {
   const { session, setSession, loading } = useSession();
@@ -22,7 +22,16 @@ export default function SignIn() {
     <SignInPage
       providers={[{ id: 'google', name: 'Google' }, { id: 'credentials', name: 'Credentials' }]}
       signIn={async (provider, formData, callbackUrl) => {
-        let result: { success: boolean; user?: { displayName?: string | null; email?: string | null; photoURL?: string | null; } | null; error?: string | null } | undefined;
+        let result: { 
+          success: boolean; 
+          user?: {
+            displayName?: string | null; 
+            email?: string | null; 
+            photoURL?: string | null; 
+          } | null; 
+          error?: string | null 
+        } | undefined;
+
         try {
           if (provider.id === 'google') {
             result = await signInWithGoogle();
@@ -39,9 +48,12 @@ export default function SignIn() {
             result = await signInWithCredentials(email, password);
           }
 
+          const uid = await auth.currentUser?.getIdToken();
+
           if (result?.success && result?.user) {
             const userSession: Session = {
               user: {
+                uid,
                 name: result.user.displayName || '',
                 email: result.user.email || '',
                 image: result.user.photoURL || '',
