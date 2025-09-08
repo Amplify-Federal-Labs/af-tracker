@@ -1,4 +1,4 @@
-import { Box, Dialog, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import type { UserStory } from "../../models/userStory";
 import UserStoryForm from "./userStoryForm";
 import type { User } from "../../models/user";
@@ -19,9 +19,9 @@ const EditStoryDialog = (props: EditStoryDialogProps) => {
   };
 
   return (
-    <Dialog open={props.open} fullWidth>
+    <Dialog open={props.open} maxWidth="md">
       <DialogTitle>User Story</DialogTitle>
-      <Box padding={2}>
+      <DialogContent>
         <UserStoryForm
           story={props.story}
           users={props.users}
@@ -30,7 +30,7 @@ const EditStoryDialog = (props: EditStoryDialogProps) => {
           onSave={handleSave}
           onAddNewLabel={props.onAddNewLabel}
         />
-      </Box>
+      </DialogContent>
     </Dialog>
   );
 };
