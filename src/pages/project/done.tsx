@@ -1,4 +1,5 @@
 import type { UserStory } from "../../models/userStory";
+import StoryList from "./storyList";
 
 interface DoneProps {
   stories: UserStory[]
@@ -6,9 +7,7 @@ interface DoneProps {
 
 const Done = ({ stories }: DoneProps) => {
   return (
-    <>
-      { stories.map(story => <p>{story.title}</p>)}
-    </>
+    <StoryList stories={stories} />
   );
 };
 
