@@ -9,14 +9,8 @@ import {
   Stack,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
-import {
-  BugReport as BugIcon,
-  Build as ChoreIcon,
-  Palette as DesignIcon,
-  Star as FeatureIcon,
-  Rocket as ReleaseIcon,
-} from '@mui/icons-material';
 import type { StoryType } from '../../../models/userStory';
+import { STORY_TYPE_OPTIONS } from '../../../shared/constants.tsx';
 
 interface StoryTypeSelectProps {
   value: StoryType;
@@ -29,43 +23,6 @@ interface StoryTypeSelectProps {
   required?: boolean;
 }
 
-const STORY_TYPE_OPTIONS: Array<{
-  value: StoryType;
-  label: string;
-  icon: React.ReactElement;
-  description: string;
-}> = [
-  {
-    value: 'feature',
-    label: 'Feature',
-    icon: <FeatureIcon />,
-    description: 'New functionality development',
-  },
-  {
-    value: 'design',
-    label: 'Design',
-    icon: <DesignIcon />,
-    description: 'UI/UX design tasks',
-  },
-  {
-    value: 'bug',
-    label: 'Bug',
-    icon: <BugIcon />,
-    description: 'Bug fixes and defect resolution',
-  },
-  {
-    value: 'chore',
-    label: 'Chore',
-    icon: <ChoreIcon />,
-    description: 'Maintenance and technical tasks',
-  },
-  {
-    value: 'release',
-    label: 'Release',
-    icon: <ReleaseIcon />,
-    description: 'Release preparation and deployment',
-  },
-];
 
 const StoryTypeSelect = ({
   value,
@@ -95,8 +52,8 @@ const StoryTypeSelect = ({
         label={label}
         aria-describedby={helperText ? 'story-type-helper-text' : undefined}
       >
-        {STORY_TYPE_OPTIONS.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
+        {Array.from(STORY_TYPE_OPTIONS.entries()).map(([value, option]) => (
+          <MenuItem key={value} value={value}>
             <Stack direction="row">
                 <ListItemIcon sx={{ minWidth: 40 }}>
                 {option.icon}

@@ -1,5 +1,6 @@
 import type { CreateStoryRequest, UserStory } from "../../models/userStory";
 import type { User } from "../../models/user";
+import StoryList from "./storyList";
 
 interface IceboxProps {
   projectId: string;
@@ -13,11 +14,7 @@ interface IceboxProps {
 
 const Icebox = ({ stories }: IceboxProps) => {
   return (
-    <>
-      {stories.map((story) => (
-        <p>{story.title}</p>
-      ))}
-    </>
+    <StoryList stories={stories} />
   );
 };
 

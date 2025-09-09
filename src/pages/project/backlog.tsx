@@ -1,4 +1,5 @@
 import type { UserStory } from "../../models/userStory";
+import StoryList from "./storyList";
 
 interface BacklogProps {
   stories: UserStory[]
@@ -6,9 +7,7 @@ interface BacklogProps {
 
 const Backlog = ({ stories }: BacklogProps) => {
   return (
-    <>
-      { stories.map(story => <p>{story.title}</p>)}
-    </>
+    <StoryList stories={stories} />
   );
 };
 
