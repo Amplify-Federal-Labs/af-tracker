@@ -4,9 +4,10 @@ import { STORY_TYPE_OPTIONS } from "../../shared/constants";
 
 interface StoryListProps {
     stories: UserStory[]
+    onSelect: (story: UserStory) => void;
 }
 
-const StoryList = ({ stories }: StoryListProps) => {
+const StoryList = ({ stories, onSelect }: StoryListProps) => {
     return (
         <List dense>
             {stories.map((story) => {
@@ -14,7 +15,7 @@ const StoryList = ({ stories }: StoryListProps) => {
                     <ListItem
                         key={story.id}
                     >
-                        <ListItemButton>
+                        <ListItemButton onClick={() => onSelect(story)}>
                             {STORY_TYPE_OPTIONS.get(story.type)?.icon}
                             <ListItemText primary={story.title} />
                         </ListItemButton>
