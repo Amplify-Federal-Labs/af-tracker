@@ -3,11 +3,10 @@ import { useState } from "react";
 import Done from "./done";
 import Backlog from "./backlog";
 import Icebox from "./icebox";
-import type { CreateStoryRequest, UserStory } from "../../models/userStory";
+import type { UserStory } from "../../models/userStory";
 import type { User } from "../../models/user";
 import AddStoryFab from "../../components/addFab";
 import EditStoryDialog from "./editStoryDialog";
-import { v4 } from "uuid";
 
 interface ProjectViewProps {
   projectId: string;
@@ -18,7 +17,7 @@ interface ProjectViewProps {
   backlog: UserStory[];
   icebox: UserStory[];
   onAddNewLabel: (label: string) => void;
-  onAddStory: (story: CreateStoryRequest) => void;
+  onSaveStory: (story: UserStory) => void;
 }
 
 const ProjectView = ({
@@ -30,16 +29,13 @@ const ProjectView = ({
   backlog,
   icebox,
   onAddNewLabel,
-  onAddStory,
+  onSaveStory
 }: ProjectViewProps) => {
   const [showDone, setShowDone] = useState(true);
   const [showBacklog, setShowBacklog] = useState(true);
   const [showIcebox, setShowIcebox] = useState(true);
   const [openAddStoryDialog, setOpenAddStoryDialog] = useState(false);
-
-  // Consider adding a default prop somewhere
-  const newStory: UserStory = {
-    id: v4(),
+  const [storyToEdit, setStoryToEdit] = useState<UserStory>({
     projectId: projectId,
     type: "feature",
     requester: user,
@@ -52,14 +48,34 @@ const ProjectView = ({
     tasks: [],
     createdAt: new Date(),
     createdBy: user,
-  };
+  })
 
-  const handleOpenEditStoryDialog = () => {
+  const handleAddStory = () => {
+    setStoryToEdit({
+      projectId: projectId,
+      type: "feature",
+      requester: user,
+      title: "",
+      owners: [],
+      state: "unscheduled",
+      blockers: [],
+      description: "",
+      labels: [],
+      tasks: [],
+      createdAt: new Date(),
+      createdBy: user,
+    });
+    
     setOpenAddStoryDialog(true);
-  };
+  }
+
+  const handleSelectStory = (story: UserStory) => {
+    setStoryToEdit(story);
+    setOpenAddStoryDialog(true);
+  }
 
   const handleSaveStory = (story: UserStory) => {
-    onAddStory(story);
+    onSaveStory(story);
     setOpenAddStoryDialog(false);
   };
 
@@ -136,18 +152,18 @@ const ProjectView = ({
                 user={user}
                 users={users}
                 labels={labels}
-                onAddNewLabel={onAddNewLabel}
-                onSaveStory={onAddStory}
                 stories={icebox}
+                onAddNewLabel={onAddNewLabel}
+                onSelectStory={handleSelectStory}
               />
             </Box>
           )}
         </Stack>
       </Stack>
-      <AddStoryFab onClick={handleOpenEditStoryDialog} />
+      <AddStoryFab onClick={handleAddStory} />
       <EditStoryDialog
         open={openAddStoryDialog}
-        story={newStory}
+        story={storyToEdit}
         users={users}
         labels={labels}
         onAddNewLabel={onAddNewLabel}

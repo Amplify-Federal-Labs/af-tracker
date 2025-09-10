@@ -1,4 +1,4 @@
-import type { CreateStoryRequest, UserStory } from "../../models/userStory";
+import type { UserStory } from "../../models/userStory";
 import type { User } from "../../models/user";
 import StoryList from "./storyList";
 
@@ -9,12 +9,12 @@ interface IceboxProps {
   labels: string[];
   stories: UserStory[];
   onAddNewLabel: (label: string) => void;
-  onSaveStory: (story: CreateStoryRequest) => void;
+  onSelectStory: (story: UserStory) => void;
 }
 
-const Icebox = ({ stories }: IceboxProps) => {
+const Icebox = ({ stories, onSelectStory }: IceboxProps) => {
   return (
-    <StoryList stories={stories} />
+    <StoryList stories={stories} onSelect={onSelectStory} />
   );
 };
 

@@ -2,8 +2,8 @@ import { PageContainer } from "@toolpad/core/PageContainer";
 import { useParams } from "react-router";
 import ProjectView from "./project";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { addUserStoryToProject } from "../../api/stories";
-import type { CreateStoryRequest } from "../../models/userStory";
+import { saveUserStory } from "../../api/stories";
+import type { UserStory } from "../../models/userStory";
 import { v4 } from "uuid";
 import { getProjectById } from "../../api/projects";
 import { useContext } from "react";
@@ -34,10 +34,9 @@ const ProjectContainer = () => {
     return <span>Error: {error.message}</span>;
   }
 
-  const handleAddStory = async (request: CreateStoryRequest) => {
-    // TODO: call the backedn to create story and refresh cache
+  const handleSaveStory = async (story: UserStory) => {
     try {
-      await addUserStoryToProject(projectId, request);
+      await saveUserStory(projectId, story);
       await queryClient.invalidateQueries({ queryKey: ["projects", projectId] });
     } catch (error) {
       console.error("Failed to add story:", error);
@@ -57,7 +56,7 @@ const ProjectContainer = () => {
         backlog={data.backlog}
         icebox={data.icebox}
         onAddNewLabel={handleAddNewLabel}
-        onAddStory={handleAddStory}
+        onSaveStory={handleSaveStory}
       />
     </PageContainer>
   );
