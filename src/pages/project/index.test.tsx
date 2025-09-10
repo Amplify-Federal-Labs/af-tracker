@@ -10,7 +10,7 @@ import type { Project } from '../../models/project';
 
 // Mock the APIs
 vi.mock('../../api/stories', () => ({
-  addUserStoryToProject: vi.fn(),
+  saveUserStory: vi.fn(),
 }));
 
 vi.mock('../../api/projects', () => ({
@@ -19,14 +19,14 @@ vi.mock('../../api/projects', () => ({
 
 // Mock the ProjectView component
 vi.mock('./project', () => ({
-  default: vi.fn(({ done, backlog, icebox, onAddStory }) => (
+  default: vi.fn(({ done, backlog, icebox, onSaveStory }) => (
     <div data-testid="project-view">
       <div data-testid="done-count">{done.length}</div>
       <div data-testid="backlog-count">{backlog.length}</div>
       <div data-testid="icebox-count">{icebox.length}</div>
       <button 
         data-testid="add-story-btn" 
-        onClick={() => onAddStory({
+        onClick={() => onSaveStory({
           type: 'feature',
           title: 'Test Story',
           description: 'Test Description',
@@ -230,10 +230,10 @@ describe('ProjectContainer', () => {
   it('should handle adding a new story successfully', async () => {
     const mockData = createMockProjectData();
     const getProjectByIdSpy = vi.mocked(projectsApi.getProjectById);
-    const addUserStoryToProjectSpy = vi.mocked(storiesApi.addUserStoryToProject);
+    const saveUserStorySpy = vi.mocked(storiesApi.saveUserStory);
     
     getProjectByIdSpy.mockResolvedValue(mockData);
-    addUserStoryToProjectSpy.mockResolvedValue({
+    saveUserStorySpy.mockResolvedValue({
       id: 'new-story-1',
       projectId: 'test-project-123',
       type: 'feature',
@@ -265,7 +265,7 @@ describe('ProjectContainer', () => {
 
     // Wait for the add story API call
     await waitFor(() => {
-      expect(addUserStoryToProjectSpy).toHaveBeenCalledWith('test-project-123', {
+      expect(saveUserStorySpy).toHaveBeenCalledWith('test-project-123', {
         type: 'feature',
         title: 'Test Story',
         description: 'Test Description',
@@ -283,10 +283,10 @@ describe('ProjectContainer', () => {
   it('should handle adding story failure gracefully', async () => {
     const mockData = createMockProjectData();
     const getProjectByIdSpy = vi.mocked(projectsApi.getProjectById);
-    const addUserStoryToProjectSpy = vi.mocked(storiesApi.addUserStoryToProject);
+    const saveUserStorySpy = vi.mocked(storiesApi.saveUserStory);
     
     getProjectByIdSpy.mockResolvedValue(mockData);
-    addUserStoryToProjectSpy.mockRejectedValue(new Error('Failed to add story'));
+    saveUserStorySpy.mockRejectedValue(new Error('Failed to add story'));
 
     // Mock console.error to avoid noise in tests
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -304,7 +304,7 @@ describe('ProjectContainer', () => {
 
     // Wait for the add story API call to fail
     await waitFor(() => {
-      expect(addUserStoryToProjectSpy).toHaveBeenCalled();
+      expect(saveUserStorySpy).toHaveBeenCalled();
     });
 
     // Should log the error
