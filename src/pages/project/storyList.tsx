@@ -17,6 +17,7 @@ const StoryList = ({ stories, onSelect }: StoryListProps) => {
                     >
                         <ListItemButton onClick={() => onSelect(story)}>
                             {STORY_TYPE_OPTIONS.get(story.type)?.icon}
+                            <ListItemText primary={story.storyId} />
                             <ListItemText primary={story.title} />
                         </ListItemButton>
                     </ListItem>
