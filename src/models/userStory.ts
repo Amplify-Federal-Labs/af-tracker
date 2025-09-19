@@ -18,6 +18,7 @@ type StoryState = "unscheduled" | "unstarted" | "started"
 
 interface UserStory {
     id?: string;
+    storyId?: string;
     projectId: string;
     type: StoryType;
     title: string;
