@@ -14,7 +14,11 @@ interface IceboxProps {
 
 const Icebox = ({ stories, onSelectStory }: IceboxProps) => {
   return (
-    <StoryList stories={stories} onSelect={onSelectStory} />
+    <StoryList 
+      label="icebox" 
+      stories={stories.sort((a, b) => a.index - b.index)} 
+      onSelect={onSelectStory} 
+    />
   );
 };
 

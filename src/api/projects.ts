@@ -28,6 +28,7 @@ const addProject = async (project: CreateProjectRequest): Promise<Project> => {
 }
 
 const getProjectById = async (projectId: string): Promise<Project> => {
+  console.log('getting project by id');
   const idToken = await auth.currentUser?.getIdToken();
   const response = await api.get<Project>(`/projects/${projectId}`, {
     headers: {
