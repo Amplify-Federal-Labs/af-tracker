@@ -7,6 +7,7 @@ import type { UserStory } from "../../models/userStory";
 import type { User } from "../../models/user";
 import AddStoryFab from "../../components/addFab";
 import EditStoryDialog from "./editStoryDialog";
+import { DragDropContext, type DropResult } from "@hello-pangea/dnd";
 
 interface ProjectViewProps {
   projectId: string;
@@ -18,6 +19,19 @@ interface ProjectViewProps {
   icebox: UserStory[];
   onAddNewLabel: (label: string) => void;
   onSaveStory: (story: UserStory) => void;
+  onReorderStories: (stories: UserStory[]) => void;
+}
+
+function reorder<TItem>(
+  list: TItem[],
+  startIndex: number,
+  endIndex: number,
+): TItem[] {
+  const result = [...list];
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
 }
 
 const ProjectView = ({
@@ -29,13 +43,16 @@ const ProjectView = ({
   backlog,
   icebox,
   onAddNewLabel,
-  onSaveStory
+  onSaveStory,
+  onReorderStories,
 }: ProjectViewProps) => {
   const [showDone, setShowDone] = useState(true);
   const [showBacklog, setShowBacklog] = useState(true);
   const [showIcebox, setShowIcebox] = useState(true);
   const [openAddStoryDialog, setOpenAddStoryDialog] = useState(false);
+
   const [storyToEdit, setStoryToEdit] = useState<UserStory>({
+    index: 0,
     projectId: projectId,
     type: "feature",
     requester: user,
@@ -52,6 +69,7 @@ const ProjectView = ({
 
   const handleAddStory = () => {
     setStoryToEdit({
+      index: 0,
       projectId: projectId,
       type: "feature",
       requester: user,
@@ -83,8 +101,30 @@ const ProjectView = ({
     setOpenAddStoryDialog(false);
   };
 
+  const handleDragEnd = (result: DropResult) => {
+      // dropped outside the list
+      if (!result.destination) {
+          return;
+      }
+
+      if (result.destination.index === result.source.index) {
+        return;
+      }
+
+      const stories = result.source.droppableId == 'done' ? done :
+        result.source.droppableId == 'backlog' ? backlog : icebox; 
+
+      const reorderedStories = reorder<UserStory>(
+          stories,
+          result.source.index,
+          result.destination.index
+      );
+
+      onReorderStories(reorderedStories);
+  };
+
   return (
-    <>
+    <DragDropContext onDragEnd={handleDragEnd}>
       <Stack spacing={2}>
         <Stack direction={"row"} spacing={2}>
           <FormControlLabel
@@ -129,7 +169,14 @@ const ProjectView = ({
               flexGrow={1}
               sx={{ p: 2, border: "1px dashed grey" }}
             >
-              <Done stories={done} />
+              <Done 
+                projectId={projectId}
+                user={user}
+                users={users}
+                labels={labels}
+                stories={done}
+                onSelectStory={handleSelectStory}
+              />
             </Box>
           )}
           {showBacklog && (
@@ -138,7 +185,15 @@ const ProjectView = ({
               flexGrow={1}
               sx={{ p: 2, border: "1px dashed grey" }}
             >
-              <Backlog stories={backlog} />
+              <Backlog
+                projectId={projectId}
+                user={user}
+                users={users}
+                labels={labels}
+                stories={backlog}
+                onAddNewLabel={onAddNewLabel}
+                onSelectStory={handleSelectStory}
+              />
             </Box>
           )}
           {showIcebox && (
@@ -170,7 +225,7 @@ const ProjectView = ({
         onSave={handleSaveStory}
         onCancel={handleCancel}
       />
-    </>
+    </DragDropContext>
   );
 };
 

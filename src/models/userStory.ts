@@ -18,6 +18,7 @@ type StoryState = "unscheduled" | "unstarted" | "started"
 
 interface UserStory {
     id?: string;
+    index: number;
     storyId?: string;
     projectId: string;
     type: StoryType;
@@ -79,4 +80,14 @@ interface UpdateStoryRequest {
     blockers?: Impediment[];
 }
 
-export type { ProjectViewModel, Impediment, Task, UserStory, StoryType, StoryState, UserStoriesInProject, CreateStoryRequest, UpdateStoryRequest };
+export type { 
+    ProjectViewModel, 
+    Impediment, 
+    Task, 
+    UserStory, 
+    StoryType, 
+    StoryState, 
+    UserStoriesInProject, 
+    CreateStoryRequest, 
+    UpdateStoryRequest
+};

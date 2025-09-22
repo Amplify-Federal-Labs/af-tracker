@@ -80,6 +80,7 @@ export default function App() {
       authentication={AUTHENTICATION}
     >
       <SessionContext.Provider value={sessionContextValue}>
+        
         <Outlet />
       </SessionContext.Provider>
     </ReactRouterAppProvider>

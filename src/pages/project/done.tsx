@@ -1,13 +1,23 @@
 import type { UserStory } from "../../models/userStory";
 import StoryList from "./storyList";
+import type { User } from "../../models/user";
 
 interface DoneProps {
-  stories: UserStory[]
+  projectId: string;
+  user: User;
+  users: User[];
+  labels: string[];
+  stories: UserStory[];
+  onSelectStory: (story: UserStory) => void;
 }
 
-const Done = ({ stories }: DoneProps) => {
+const Done = ({ stories, onSelectStory }: DoneProps) => {
   return (
-    <StoryList stories={stories} />
+    <StoryList 
+      label="done"
+      stories={stories.sort((a, b) => a.index - b.index)} 
+      onSelect={onSelectStory} 
+    />
   );
 };
 
