@@ -12,12 +12,5 @@ interface Project {
     labels: string[];
 }
 
-interface CreateProjectRequest {
-    name: string;
-    description: string;
-    initialVelocity: number;
-    iterationLength: IterationLength,
-    memberIds: string[]
-}
 
 export type { Project, CreateProjectRequest };

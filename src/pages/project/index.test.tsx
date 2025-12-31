@@ -6,7 +6,7 @@ import * as React from 'react';
 import ProjectContainer from './index';
 import * as storiesApi from '../../api/stories';
 import * as projectsApi from '../../api/projects';
-import type { Project } from '../../models/project';
+import type { Project } from '../../viewModels/project';
 
 // Mock the APIs
 vi.mock('../../api/stories', () => ({

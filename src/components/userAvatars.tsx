@@ -1,5 +1,5 @@
 import { Avatar, AvatarGroup } from "@mui/material";
-import type { User } from "../models/user";
+import type { User } from "../viewModels/user";
 
 interface UserAvatarsProps {
   users: User[];

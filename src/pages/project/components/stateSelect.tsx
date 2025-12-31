@@ -7,7 +7,7 @@ import {
   Chip,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
-import type { StoryState } from '../../../models/userStory';
+import type { StoryState } from '../../../viewModels/userStory';
 
 interface StateSelectProps {
   state: StoryState;

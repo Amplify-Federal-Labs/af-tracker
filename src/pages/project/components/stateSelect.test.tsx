@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import StateSelect from './stateSelect';
-import type { StoryState } from '../../../models/userStory';
+import type { StoryState } from '../../../viewModels/userStory';
 
 describe('StateSelect', () => {
   const defaultProps = {

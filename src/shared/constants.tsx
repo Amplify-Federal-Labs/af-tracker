@@ -6,7 +6,7 @@ import {
   Star as FeatureIcon,
   Rocket as ReleaseIcon,
 } from '@mui/icons-material';
-import type { StoryType } from '../models/userStory';
+import type { StoryType } from '../viewModels/userStory';
 
 export const STORY_TYPE_OPTIONS: Map<StoryType, {
   label: string;

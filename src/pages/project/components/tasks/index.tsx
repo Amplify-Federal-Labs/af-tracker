@@ -1,4 +1,4 @@
-import type { Task } from "../../../../models/userStory";
+import type { Task } from "../../../../viewModels/userStory";
 import AddTask from "./addTask";
 import TaskView from "./task";
 

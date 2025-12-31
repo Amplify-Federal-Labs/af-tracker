@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
-import type { StoryState, UserStory } from "../../../models/userStory";
-import type { User } from "../../../models/user";
+import type { StoryState, UserStory } from "../../../viewModels/userStory";
+import type { User } from "../../../viewModels/user";
 import Owners from "./owners";
 import PointsSelect from "./pointsSelect";
 import StateSelect from "./stateSelect";

@@ -1,32 +1,36 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Box } from '@mui/material';
+import { DragDropContext } from '@hello-pangea/dnd';
+import { fn } from 'storybook/test';
 import StoryList from '../../pages/project/storyList';
-import type { UserStory, User } from '../../models/userStory';
+import type { UserStory } from '../../viewModels/userStory';
+import type { User } from '../../viewModels/user';
 
 // Mock user data
 const mockUser: User = {
   id: '1',
   name: 'John Doe',
   email: 'john.doe@example.com',
-  image: 'https://via.placeholder.com/32'
+  avatarUrl: 'https://via.placeholder.com/32'
 };
 
 const mockUser2: User = {
   id: '2',
   name: 'Jane Smith',
   email: 'jane.smith@example.com',
-  image: 'https://via.placeholder.com/32'
+  avatarUrl: 'https://via.placeholder.com/32'
 };
 
 // Mock story data
 const createMockStory = (overrides: Partial<UserStory>): UserStory => ({
   id: '1',
-  projectId: 'project-1',
+  index: 0,
   type: 'feature',
   title: 'Sample User Story',
   requester: mockUser,
   owners: [mockUser],
-  points: 3,
+  estimate: '3',
+  location: 'backlog',
   state: 'unstarted',
   blockers: [],
   description: 'This is a sample user story description.',
@@ -49,17 +53,31 @@ const meta = {
       },
     },
   },
+  args: {
+    label: 'backlog',
+    onSelect: fn(),
+  },
   decorators: [
     (Story) => (
-      <Box sx={{ maxWidth: 400, margin: 'auto' }}>
-        <Story />
-      </Box>
+      <DragDropContext onDragEnd={() => {}}>
+        <Box sx={{ maxWidth: 400, margin: 'auto' }}>
+          <Story />
+        </Box>
+      </DragDropContext>
     ),
   ],
   argTypes: {
+    label: {
+      description: 'The label/id for the droppable area',
+      control: 'text',
+    },
     stories: {
       description: 'Array of user stories to display',
       control: 'object',
+    },
+    onSelect: {
+      description: 'Callback function when a story is selected',
+      action: 'onSelect',
     },
   },
 } satisfies Meta<typeof StoryList>;

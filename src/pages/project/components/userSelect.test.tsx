@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserSelect from './userSelect';
-import type { User } from '../../../models/user';
+import type { User } from '../../../viewModels/user';
 
 const mockUsers: User[] = [
   {

@@ -1,6 +1,6 @@
 import { Button, ButtonBase, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import type { Task } from "../../../../models/userStory";
+import type { Task } from "../../../../viewModels/userStory";
 
 interface AddTaskProps {
   onAdd: (blocker: Task) => void;

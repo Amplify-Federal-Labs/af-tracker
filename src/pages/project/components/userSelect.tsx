@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { Search as SearchIcon, Person as PersonIcon } from '@mui/icons-material';
 import { useState, useMemo } from 'react';
-import type { User } from '../../../models/user';
+import type { User } from '../../../viewModels/user';
 
 interface UserSelectProps {
   users: User[];

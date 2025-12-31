@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import Icebox from '../../pages/project/icebox';
-import type { UserStory } from '../../models/userStory';
-import type { User } from '../../models/user';
+import type { UserStory } from '../../viewModels/userStory';
+import type { User } from '../../viewModels/user';
 
 // Mock user data
 const mockUser: User = {
@@ -26,13 +26,14 @@ const mockDeveloper: User = {
 // Helper function to create mock UserStory
 const createMockUserStory = (overrides: Partial<UserStory> = {}): UserStory => ({
   id: `story-${Math.random().toString(36).substr(2, 9)}`,
-  projectId: 'project-456',
+  index: 0,
   type: 'feature',
   title: 'Sample User Story',
   requester: mockRequester,
   owners: [mockUser],
-  points: 3,
-  state: 'unscheduled',
+  estimate: '3',
+  location: 'icebox',
+  state: 'unstarted',
   blockers: [],
   description: 'As a user, I want to be able to create user stories so that I can track work items.',
   labels: ['frontend', 'ui'],
@@ -68,8 +69,9 @@ const meta = {
     user: mockUser,
     users: [mockUser, mockRequester, mockDeveloper],
     labels: ['bug', 'feature', 'enhancement', 'documentation', 'design', 'performance'],
+    stories: [],
     onAddNewLabel: fn(),
-    onSaveStory: fn(),
+    onSelectStory: fn(),
   },
   argTypes: {
     projectId: {
@@ -96,9 +98,9 @@ const meta = {
       description: 'Callback function called when a new label is added',
       action: 'onAddNewLabel',
     },
-    onSaveStory: {
-      description: 'Callback function called when a story is saved',
-      action: 'onSaveStory',
+    onSelectStory: {
+      description: 'Callback function called when a story is selected',
+      action: 'onSelectStory',
     },
   },
 } satisfies Meta<typeof Icebox>;
@@ -150,35 +152,35 @@ export const MultipleStories: Story = {
         type: 'feature',
         description: 'As a user, I want to be able to log in securely.',
         labels: ['authentication', 'security'],
-        points: 5,
+        estimate: '5',
       }),
       createMockUserStory({
         title: 'Fix login form validation',
         type: 'bug',
         description: 'Login form accepts invalid email formats.',
         labels: ['bug', 'validation'],
-        points: 2,
+        estimate: '2',
       }),
       createMockUserStory({
         title: 'Design new dashboard layout',
         type: 'design',
         description: 'Create wireframes and mockups for the new dashboard.',
         labels: ['design', 'ui/ux'],
-        points: 3,
+        estimate: '3',
       }),
       createMockUserStory({
         title: 'Update dependencies',
         type: 'chore',
         description: 'Update all npm packages to latest versions.',
         labels: ['maintenance'],
-        points: 1,
+        estimate: '1',
       }),
       createMockUserStory({
         title: 'Release version 2.0',
         type: 'release',
         description: 'Deploy version 2.0 with new features.',
         labels: ['release', 'deployment'],
-        points: 8,
+        estimate: '8',
       }),
     ],
   },
@@ -203,7 +205,7 @@ export const ManyStories: Story = {
           ['frontend', 'backend', 'ui', 'api', 'database'][index % 5],
           ['high-priority', 'medium-priority', 'low-priority', 'urgent', 'nice-to-have'][index % 5],
         ],
-        points: (index % 8) + 1,
+        estimate: String((index % 8) + 1) as '1' | '2' | '3' | '5' | '8',
       })
     ),
   },
@@ -225,7 +227,7 @@ export const ComplexStories: Story = {
         type: 'feature',
         description: 'As a user, I want to search through content using advanced filters and sorting options so that I can quickly find relevant information.',
         labels: ['search', 'filters', 'performance', 'frontend', 'backend'],
-        points: 13,
+        estimate: '8',
         owners: [mockUser, mockDeveloper],
         tasks: [
           { description: 'Design search UI', isCompleted: false },
@@ -245,7 +247,7 @@ export const ComplexStories: Story = {
         type: 'bug',
         description: 'Security researchers found a vulnerability that allows privilege escalation.',
         labels: ['security', 'critical', 'authentication'],
-        points: 8,
+        estimate: '8',
         owners: [mockDeveloper],
         tasks: [
           { description: 'Reproduce the vulnerability', isCompleted: false },

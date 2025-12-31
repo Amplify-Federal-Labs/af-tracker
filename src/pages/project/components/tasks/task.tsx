@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { Task } from "../../../../models/userStory";
+import type { Task } from "../../../../viewModels/userStory";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
 

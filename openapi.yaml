@@ -822,6 +822,7 @@ components:
         - id
         - name
         - email
+        - role
       properties:
         id:
           type: string
@@ -837,6 +838,8 @@ components:
           type: string
           format: uri
           description: URL to user's avatar image
+        role:
+          $ref: '#/components/schemas/UserRole'
 
     CreateProjectRequest:
       type: object
@@ -1256,3 +1259,16 @@ components:
         - FourWeeks
       default: TwoWeeks
       description: Length of project iteration/sprint
+
+    UserRole:
+      type: string
+      enum:
+        - siteAdmin
+        - projectAdmin
+        - member
+      default: member
+      description: |
+        User role for access control:
+        - siteAdmin (Level 3): Highest privilege, has all permissions
+        - projectAdmin (Level 2): Can manage projects, has all member permissions
+        - member (Level 1): Basic user permissions (default)

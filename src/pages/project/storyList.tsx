@@ -1,5 +1,5 @@
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import type { UserStory } from "../../models/userStory";
+import type { UserStory } from "../../viewModels/userStory";
 import { STORY_TYPE_OPTIONS } from "../../shared/constants";
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 

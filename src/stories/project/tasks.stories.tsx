@@ -3,7 +3,7 @@ import { fn } from "storybook/test";
 import { useState } from "react";
 import { Box, Paper, Typography } from "@mui/material";
 import Tasks from "../../pages/project/components/tasks";
-import type { Task } from "../../models/userStory";
+import type { Task } from "../../viewModels/userStory";
 
 // Helper function to create Task objects from strings
 const createTasksFromStrings = (taskStrings: string[]): Task[] => {

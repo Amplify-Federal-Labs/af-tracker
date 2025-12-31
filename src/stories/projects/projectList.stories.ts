@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { v4 } from "uuid";
 import { fn } from 'storybook/test';
 import ProjectList from '../../pages/projects/projectList';
-import type { Project } from '../../models/project';
+import type { Project } from '../../viewModels/project';
 
 const meta = {
   title: 'Projects/ProjectList',

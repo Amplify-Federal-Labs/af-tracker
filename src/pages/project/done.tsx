@@ -1,6 +1,6 @@
-import type { UserStory } from "../../models/userStory";
+import type { UserStory } from "../../viewModels/userStory";
 import StoryList from "./storyList";
-import type { User } from "../../models/user";
+import type { User } from "../../viewModels/user";
 
 interface DoneProps {
   projectId: string;

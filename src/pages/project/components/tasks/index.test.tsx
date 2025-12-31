@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Tasks from "./index";
-import type { Task } from "../../../../models/userStory";
+import type { Task } from "../../../../viewModels/userStory";
 
 // Mock the child components to isolate testing
 vi.mock("./task", () => ({

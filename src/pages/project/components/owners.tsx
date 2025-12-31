@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { useState } from 'react';
-import type { User } from '../../../models/user';
+import type { User } from '../../../viewModels/user';
 import UserSelect from './userSelect';
 import UserAvatars from '../../../components/userAvatars';
 

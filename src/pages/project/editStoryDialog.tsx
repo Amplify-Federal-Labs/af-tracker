@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import type { UserStory } from "../../models/userStory";
+import type { UserStory } from "../../viewModels/userStory";
 import UserStoryForm from "./userStoryForm";
-import type { User } from "../../models/user";
+import type { User } from "../../viewModels/user";
 
 interface EditStoryDialogProps {
   open: boolean;

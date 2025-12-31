@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import type { Project } from "../../models/project";
+import type { Project } from "../../viewModels/project";
 import ProjectCard from "./projectCard";
 import AddProjectFab from "../../components/addFab";
 import ProjectDetailDialog from "./projectDetailDialog";

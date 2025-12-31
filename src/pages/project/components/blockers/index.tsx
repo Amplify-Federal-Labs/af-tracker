@@ -1,11 +1,11 @@
-import type { Impediment } from "../../../../models/userStory";
+import type { Blocker } from "../../../../viewModels/userStory";
 import AddBlocker from "./addBlocker";
 import Blocker from "./blocker";
 
 interface BlockersProps {
-  blockers: Impediment[];
-  onAdd: (blocker: Impediment) => void;
-  onUpdate: (index: number, blocker: Impediment) => void;
+  blockers: Blocker[];
+  onAdd: (blocker: Blocker) => void;
+  onUpdate: (index: number, blocker: Blocker) => void;
   onResolve: (index: number) => void;
   onDelete: (index: number) => void;
 }

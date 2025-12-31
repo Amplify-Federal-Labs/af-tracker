@@ -1,5 +1,5 @@
 import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
-import type { Project } from "../../models/project";
+import type { Project } from "../../viewModels/project";
 
 interface ProjectCardProps {
   project: Project;

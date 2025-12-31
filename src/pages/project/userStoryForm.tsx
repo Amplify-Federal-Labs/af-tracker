@@ -1,14 +1,14 @@
 import { Button, Grid, TextField } from "@mui/material";
 import { useState } from "react";
 import type {
-  Impediment,
+  Blocker,
   StoryState,
   StoryType,
   Task,
   UserStory,
-} from "../../models/userStory";
+} from "../../viewModels/userStory";
 import StoryTypeSelect from "./components/storyTypeSelect";
-import type { User } from "../../models/user";
+import type { User } from "../../viewModels/user";
 import UserStoryDetails from "./components/userStoryDetails";
 import Blockers from "./components/blockers";
 import Description from "./components/description";
@@ -67,7 +67,7 @@ const UserStoryForm = (props: UserStoryFormProps) => {
     });
   };
 
-  const handleAddBlocker = (blocker: Impediment) => {
+  const handleAddBlocker = (blocker: Blocker) => {
     const updatedBlockers = story.blockers.concat([blocker]);
     setStory({
       ...story,
@@ -75,7 +75,7 @@ const UserStoryForm = (props: UserStoryFormProps) => {
     });
   };
 
-  const handleUpdateBlocker = (indexToUpdate: number, blocker: Impediment) => {
+  const handleUpdateBlocker = (indexToUpdate: number, blocker: Blocker) => {
     setStory({
       ...story,
       blockers: story.blockers.map((x, index) => {

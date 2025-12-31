@@ -6,15 +6,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { Impediment } from "../../../../models/userStory";
+import type { Blocker } from "../../../../viewModels/userStory";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
 import { useState } from "react";
 
 interface BlockerProps {
   index: number;
-  blocker: Impediment;
-  onUpdate: (index: number, blocker: Impediment) => void;
+  blocker: Blocker;
+  onUpdate: (index: number, blocker: Blocker) => void;
   onResolve: (index: number) => void;
   onDelete: (index: number) => void;
 }

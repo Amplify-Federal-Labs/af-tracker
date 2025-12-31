@@ -1,5 +1,5 @@
-import type { UserStory } from "../../models/userStory";
-import type { User } from "../../models/user";
+import type { UserStory } from "../../viewModels/userStory";
+import type { User } from "../../viewModels/user";
 import StoryList from "./storyList";
 
 interface IceboxProps {

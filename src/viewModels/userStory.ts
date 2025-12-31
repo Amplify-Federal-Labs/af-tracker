@@ -1,6 +1,7 @@
 import type { User } from "./user";
+import type { StoryPoint } from '../DTOs';
 
-interface Impediment {
+interface Blocker {
     description: string;
     isResolved: boolean;
     resolvedDate?: Date;
@@ -20,15 +21,14 @@ interface UserStory {
     id?: string;
     index: number;
     storyId?: string;
-    projectId: string;
     type: StoryType;
     title: string;
     requester: User;
     owners: User[];
-    points?: number;
+    estimate?: StoryPoint;
     location: StoryLocation;
     state: StoryState;
-    blockers: Impediment[];
+    blockers: Blocker[];
     description: string;
     labels: string[];
     tasks: Task[];
@@ -79,14 +79,14 @@ interface UpdateStoryRequest {
     description?: string;
     labels?: string[];
     tasks?: Task[];
-    points?: number;
+    estimate?: StoryPoint;
     owners?: User[];
-    blockers?: Impediment[];
+    blockers?: Blocker[];
 }
 
 export type {
     ProjectViewModel,
-    Impediment,
+    Blocker,
     Task,
     UserStory,
     StoryType,

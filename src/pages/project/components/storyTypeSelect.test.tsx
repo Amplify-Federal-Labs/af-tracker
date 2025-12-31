@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import StoryTypeSelect from './storyTypeSelect';
-import type { StoryType } from '../../../models/userStory';
+import type { StoryType } from '../../../viewModels/userStory';
 
 describe('StoryTypeSelect', () => {
   const defaultProps = {

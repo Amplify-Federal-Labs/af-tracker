@@ -9,7 +9,7 @@ import {
   Stack,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
-import type { StoryType } from '../../../models/userStory';
+import type { StoryType } from '../../../viewModels/userStory';
 import { STORY_TYPE_OPTIONS } from '../../../shared/constants.tsx';
 
 interface StoryTypeSelectProps {

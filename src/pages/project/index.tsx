@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import ProjectView from "./project";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getStoriesForProject, saveUserStory, reorderUserStories } from "../../api/stories";
-import type { UserStory } from "../../models/userStory";
+import type { UserStory } from "../../viewModels/userStory";
 import { v4 } from "uuid";
 import { getProjectById } from "../../api/projects";
 import { useContext, useMemo } from "react";

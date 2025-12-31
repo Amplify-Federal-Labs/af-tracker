@@ -1,9 +1,9 @@
 import { Button, ButtonBase, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import type { Impediment } from "../../../../models/userStory";
+import type { Blocker } from "../../../../viewModels/userStory";
 
 interface AddBlockerProps {
-  onAdd: (blocker: Impediment) => void;
+  onAdd: (blocker: Blocker) => void;
 }
 
 const AddBlocker = ({ onAdd }: AddBlockerProps) => {
@@ -12,7 +12,7 @@ const AddBlocker = ({ onAdd }: AddBlockerProps) => {
 
   const handleEdit = () => setEditMode(true);
   const handleSave = (description: string) => {
-    const blocker: Impediment = {
+    const blocker: Blocker = {
       description,
       isResolved: false,
     };

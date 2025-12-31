@@ -3,7 +3,7 @@ import { PageContainer } from "@toolpad/core/PageContainer";
 import { getProjects, addProject } from "../../api";
 import ProjectList from "./projectList";
 import { useNavigate } from "react-router";
-import type { Project } from "../../models/project";
+import type { Project } from "../../viewModels/project";
 
 const ProjectListContainer = () => {
   const queryClient = useQueryClient();

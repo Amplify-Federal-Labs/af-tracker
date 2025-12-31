@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Blockers from "./index";
-import type { Impediment } from "../../../../models/userStory";
+import type { Blocker } from "../../../../viewModels/userStory";
 
 // Mock the child components to isolate testing
 vi.mock("./blocker", () => ({
@@ -14,8 +14,8 @@ vi.mock("./blocker", () => ({
     onDelete,
   }: {
     index: number;
-    blocker: Impediment;
-    onUpdate: (index: number, blocker: Impediment) => void;
+    blocker: Blocker;
+    onUpdate: (index: number, blocker: Blocker) => void;
     onResolve: (index: number) => void;
     onDelete: (index: number) => void;
   }) => (
@@ -41,7 +41,7 @@ vi.mock("./blocker", () => ({
 }));
 
 vi.mock("./addBlocker", () => ({
-  default: ({ onAdd }: { onAdd: (blocker: Impediment) => void }) => (
+  default: ({ onAdd }: { onAdd: (blocker: Blocker) => void }) => (
     <div data-testid="add-blocker">
       <button
         data-testid="add-button"
@@ -53,7 +53,7 @@ vi.mock("./addBlocker", () => ({
   ),
 }));
 
-const mockBlockers: Impediment[] = [
+const mockBlockers: Blocker[] = [
   {
     description: "First blocker",
     isResolved: false,
@@ -307,7 +307,7 @@ describe("Blockers", () => {
 
   describe("Edge cases", () => {
     it("should handle blockers with same descriptions", () => {
-      const duplicateBlockers: Impediment[] = [
+      const duplicateBlockers: Blocker[] = [
         { description: "Same description", isResolved: false },
         { description: "Same description", isResolved: true },
       ];
@@ -319,7 +319,7 @@ describe("Blockers", () => {
     });
 
     it("should handle blockers with empty descriptions", () => {
-      const emptyDescriptionBlockers: Impediment[] = [
+      const emptyDescriptionBlockers: Blocker[] = [
         { description: "", isResolved: false },
       ];
 
@@ -332,7 +332,7 @@ describe("Blockers", () => {
     });
 
     it("should handle very long blocker lists", () => {
-      const manyBlockers: Impediment[] = Array.from(
+      const manyBlockers: Blocker[] = Array.from(
         { length: 100 },
         (_, i) => ({
           description: `Blocker ${i + 1}`,
@@ -350,7 +350,7 @@ describe("Blockers", () => {
     it("should maintain correct indices with many blockers", async () => {
       const user = userEvent.setup();
       const mockOnDelete = vi.fn();
-      const manyBlockers: Impediment[] = Array.from({ length: 10 }, (_, i) => ({
+      const manyBlockers: Blocker[] = Array.from({ length: 10 }, (_, i) => ({
         description: `Blocker ${i + 1}`,
         isResolved: false,
       }));

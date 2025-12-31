@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import UserStoryForm from '../../pages/project/userStoryForm';
-import type { UserStory } from '../../models/userStory';
-import type { User } from '../../models/user';
+import type { UserStory } from '../../viewModels/userStory';
+import type { User } from '../../viewModels/user';
 
 // Mock user data
 const mockUser: User = {
