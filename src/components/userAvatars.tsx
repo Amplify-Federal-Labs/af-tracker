@@ -26,7 +26,7 @@ const UserAvatars = ({ users }: UserAvatarsProps) => {
       sx={{ "& .MuiAvatar-root": { width: 32, height: 32 } }}
     >
       {users.map((user) => {
-        if (user.image) {
+        if (user.avatarUrl) {
           return (
             <Avatar
               key={user.id}
@@ -35,7 +35,7 @@ const UserAvatars = ({ users }: UserAvatarsProps) => {
                 fontSize: "0.75rem",
               }}
               title={user.name!}
-              src={user.image}
+              src={user.avatarUrl}
             />
           );
         } else {

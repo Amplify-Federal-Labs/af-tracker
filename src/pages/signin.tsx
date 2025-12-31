@@ -5,6 +5,7 @@ import { Navigate, useNavigate } from 'react-router';
 import { useSession, type Session } from '../SessionContext';
 import { signInWithGoogle, signInWithCredentials } from '../firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
+import { addUser } from '../api/users';
 
 export default function SignIn() {
   const { session, setSession, loading } = useSession();
@@ -51,6 +52,9 @@ export default function SignIn() {
           const uid = await auth.currentUser?.getIdToken();
 
           if (result?.success && result?.user) {
+            // Save the user in the backend
+            await addUser();
+
             const userSession: Session = {
               user: {
                 uid,

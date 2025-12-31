@@ -13,8 +13,8 @@ interface Task {
 }
 
 type StoryType = "feature" | "design" | "bug" | "chore" | "release";
-type StoryState = "unscheduled" | "unstarted" | "started"
-    | "finished" | "accepted" | "rejected";
+type StoryLocation = "icebox" | "backlog";
+type StoryState = "unstarted" | "started" | "finished" | "delivered" | "accepted" | "rejected" | "done";
 
 interface UserStory {
     id?: string;
@@ -26,6 +26,7 @@ interface UserStory {
     requester: User;
     owners: User[];
     points?: number;
+    location: StoryLocation;
     state: StoryState;
     blockers: Impediment[];
     description: string;
@@ -41,6 +42,9 @@ interface UserStory {
     acceptedBy?: User;
     rejectedAt?: Date;
     rejectedBy?: User;
+    deliveredAt?: Date;
+    doneAt?: Date;
+    code?: string;
 }
 
 interface UserStoriesInProject {
@@ -80,14 +84,15 @@ interface UpdateStoryRequest {
     blockers?: Impediment[];
 }
 
-export type { 
-    ProjectViewModel, 
-    Impediment, 
-    Task, 
-    UserStory, 
-    StoryType, 
-    StoryState, 
-    UserStoriesInProject, 
-    CreateStoryRequest, 
+export type {
+    ProjectViewModel,
+    Impediment,
+    Task,
+    UserStory,
+    StoryType,
+    StoryLocation,
+    StoryState,
+    UserStoriesInProject,
+    CreateStoryRequest,
     UpdateStoryRequest
 };

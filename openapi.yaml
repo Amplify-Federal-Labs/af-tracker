@@ -1,72 +1,1258 @@
 openapi: 3.0.3
 info:
-  title: Firebase Vite API
-  description: API for managing projects
+  title: AF Tracker API
+  description: |
+    Firebase Functions backend for Agile Project Tracker - a Pivotal Tracker-inspired project management tool.
+
+    ## Story Lifecycle
+
+    **Locations**: Icebox ⟷ Backlog (with constraints)
+    - Stories can move freely from Icebox to Backlog
+    - Stories can only move from Backlog to Icebox when in 'unstarted' state
+
+    **States**: Unstarted → Started → Finished → Delivered → Accepted/Rejected → Done
+    - **Unstarted**: Story created but not yet started
+    - **Started**: Development work in progress (local environment)
+    - **Finished**: Development complete, verified locally
+    - **Delivered**: Verified in integration environment
+    - **Accepted**: Approved and accepted by product owner
+    - **Rejected**: Not accepted, needs rework (can restart back to Started)
+    - **Done**: Fully complete and deployed
+
   version: 1.0.0
+  contact:
+    name: AF Tracker Support
+  license:
+    name: Proprietary
+
 servers:
-  - url: http://localhost:3000
-    description: Development server
+  - url: https://us-central1-af-tracker-716c0.cloudfunctions.net/api
+    description: Production server
+  - url: http://127.0.0.1:5001/af-tracker-716c0/us-central1/api
+    description: Local development server (Firebase emulator)
+
+tags:
+  - name: Users
+    description: User management operations
+  - name: Projects
+    description: Project CRUD operations
+  - name: Stories
+    description: Story lifecycle and task management
+  - name: Tasks
+    description: Story task operations
+  - name: Blockers
+    description: Story blocker operations
+  - name: Labels
+    description: Label management
+  - name: Comments
+    description: Story comments
+  - name: Attachments
+    description: File attachments
+  - name: Owners
+    description: Story owner management
+
+security:
+  - BearerAuth: []
+
 paths:
-  /api/projects:
+  /users:
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      description: Creates a new user using authenticated user data from JWT token
+      operationId: createUser
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '500':
+          description: Internal server error
+
     get:
-      summary: Get all projects
-      description: Returns a list of all projects
+      tags:
+        - Users
+      summary: Get all users
+      description: Retrieves all users in the system
+      operationId: getAllUsers
       responses:
         '200':
-          description: Successful response
+          description: List of users
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Project'
-              example:
-                - id: 1
-                  name: "E-commerce Platform"
-                  description: "A modern e-commerce platform built with React and Node.js"
-                  createdAt: "2024-01-15T10:30:00Z"
-                - id: 2
-                  name: "Task Management App"
-                  description: "A collaborative task management application with real-time updates"
-                  createdAt: "2024-02-20T14:45:00Z"
-                - id: 3
-                  name: "Weather Dashboard"
-                  description: "A weather monitoring dashboard with location-based forecasts"
-                  createdAt: "2024-03-10T09:15:00Z"
+                  $ref: '#/components/schemas/UserResponse'
         '500':
           description: Internal server error
+
+  /projects:
+    post:
+      tags:
+        - Projects
+      summary: Create a new project
+      description: Creates a new agile project with velocity tracking
+      operationId: createProject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+      responses:
+        '201':
+          description: Project created successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Internal server error"
+                $ref: '#/components/schemas/ProjectResponse'
+        '400':
+          description: Invalid request data
+        '500':
+          description: Internal server error
+
+    get:
+      tags:
+        - Projects
+      summary: Get all projects for authenticated user
+      description: Retrieves all projects where the user is a member (excludes soft-deleted)
+      operationId: getUserProjects
+      responses:
+        '200':
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectResponse'
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}:
+    put:
+      tags:
+        - Projects
+      summary: Update a project
+      description: Updates project details
+      operationId: updateProject
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProjectRequest'
+      responses:
+        '200':
+          description: Project updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectResponse'
+        '400':
+          description: Invalid request data
+        '404':
+          description: Project not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags:
+        - Projects
+      summary: Soft delete a project
+      description: Marks a project as deleted without removing it from the database
+      operationId: deleteProject
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '204':
+          description: Project deleted successfully
+        '404':
+          description: Project not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories:
+    post:
+      tags:
+        - Stories
+      summary: Create a new story
+      description: Creates a new user story in the project
+      operationId: createStory
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStoryRequest'
+      responses:
+        '201':
+          description: Story created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponse'
+        '400':
+          description: Invalid request data
+        '404':
+          description: Project not found
+        '500':
+          description: Internal server error
+
+    get:
+      tags:
+        - Stories
+      summary: Get stories for a project
+      description: |
+        Retrieves all stories for a project with optional filters.
+        Supports filtering by owner ID and label.
+      operationId: getProjectStories
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - name: ownerId
+          in: query
+          description: Filter stories by owner user ID
+          required: false
+          schema:
+            type: string
+        - name: label
+          in: query
+          description: Filter stories by label
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of stories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StoryResponse'
+        '404':
+          description: Project not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}:
+    get:
+      tags:
+        - Stories
+      summary: Get story by ID
+      description: Retrieves a specific story
+      operationId: getStoryById
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+      responses:
+        '200':
+          description: Story details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponse'
+        '404':
+          description: Story not found
+        '500':
+          description: Internal server error
+
+    put:
+      tags:
+        - Stories
+      summary: Update a story
+      description: Updates story details (title, description, type, code URL)
+      operationId: updateStory
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStoryRequest'
+      responses:
+        '200':
+          description: Story updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponse'
+        '400':
+          description: Invalid request data
+        '404':
+          description: Story not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/to/{toLocation}:
+    put:
+      tags:
+        - Stories
+      summary: Move story to location
+      description: |
+        Moves a story to a different location (icebox or backlog).
+
+        **Validation**: Stories can only move from backlog to icebox when in 'unstarted' state.
+      operationId: moveStory
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+        - name: toLocation
+          in: path
+          required: true
+          description: Target location for the story
+          schema:
+            $ref: '#/components/schemas/StoryLocation'
+      responses:
+        '200':
+          description: Story moved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponse'
+        '400':
+          description: Invalid move operation (e.g., started story cannot move to icebox)
+        '404':
+          description: Story not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/command/{command}:
+    put:
+      tags:
+        - Stories
+      summary: Execute story command
+      description: |
+        Executes a state transition command on a story.
+
+        **Available commands**:
+        - `start`: Unstarted/Rejected → Started
+        - `finish`: Started → Finished
+        - `deliver`: Finished → Delivered
+        - `accept`: Delivered → Accepted
+        - `reject`: Delivered → Rejected
+        - `restart`: Rejected → Started
+        - `done`: Accepted → Done
+      operationId: executeStoryCommand
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+        - name: command
+          in: path
+          required: true
+          description: State transition command to execute
+          schema:
+            type: string
+            enum: [start, finish, deliver, accept, reject, restart, done]
+      responses:
+        '200':
+          description: Command executed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponse'
+        '400':
+          description: Invalid state transition
+        '404':
+          description: Story not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/estimate:
+    put:
+      tags:
+        - Stories
+      summary: Update story estimate
+      description: Updates the story point estimate
+      operationId: updateStoryEstimate
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EstimateRequest'
+      responses:
+        '200':
+          description: Estimate updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponse'
+        '400':
+          description: Invalid estimate value
+        '404':
+          description: Story not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/tasks:
+    post:
+      tags:
+        - Tasks
+      summary: Add task to story
+      description: Creates a new task for a story
+      operationId: addTask
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskRequest'
+      responses:
+        '200':
+          description: Task added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Invalid task data
+        '404':
+          description: Story not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/tasks/{taskId}:
+    put:
+      tags:
+        - Tasks
+      summary: Update task
+      description: Updates a task description
+      operationId: updateTask
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+        - $ref: '#/components/parameters/TaskId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskRequest'
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Invalid task data
+        '404':
+          description: Task not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags:
+        - Tasks
+      summary: Complete task
+      description: Marks a task as completed
+      operationId: completeTask
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: Task completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404':
+          description: Task not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/blockers:
+    post:
+      tags:
+        - Blockers
+      summary: Add blocker to story
+      description: Creates a new blocker for a story
+      operationId: addBlocker
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockerRequest'
+      responses:
+        '200':
+          description: Blocker added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blocker'
+        '400':
+          description: Invalid blocker data
+        '404':
+          description: Story not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/blockers/{blockerId}:
+    put:
+      tags:
+        - Blockers
+      summary: Update blocker
+      description: Updates a blocker description
+      operationId: updateBlocker
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+        - $ref: '#/components/parameters/BlockerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockerRequest'
+      responses:
+        '200':
+          description: Blocker updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blocker'
+        '400':
+          description: Invalid blocker data
+        '404':
+          description: Blocker not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags:
+        - Blockers
+      summary: Resolve blocker
+      description: Marks a blocker as resolved
+      operationId: resolveBlocker
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+        - $ref: '#/components/parameters/BlockerId'
+      responses:
+        '200':
+          description: Blocker resolved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blocker'
+        '404':
+          description: Blocker not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/labels:
+    post:
+      tags:
+        - Labels
+      summary: Add label to story
+      description: Adds a label to a story (idempotent)
+      operationId: addLabel
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLabelRequest'
+      responses:
+        '200':
+          description: Label added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponse'
+        '400':
+          description: Invalid label data
+        '404':
+          description: Story not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/labels/{label}:
+    delete:
+      tags:
+        - Labels
+      summary: Remove label from story
+      description: Removes a label from a story
+      operationId: removeLabel
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+        - name: label
+          in: path
+          required: true
+          description: Label to remove
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Label removed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponse'
+        '404':
+          description: Story or label not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/comments:
+    post:
+      tags:
+        - Comments
+      summary: Add comment to story
+      description: Adds a comment to a story
+      operationId: addComment
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCommentRequest'
+      responses:
+        '200':
+          description: Comment added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Invalid comment data
+        '404':
+          description: Story not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/attachments:
+    post:
+      tags:
+        - Attachments
+      summary: Upload attachment to story
+      description: |
+        Uploads a file attachment to a story.
+        Uses multipart/form-data with Busboy for file handling.
+      operationId: uploadAttachment
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: File to upload
+      responses:
+        '201':
+          description: Attachment uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+        '400':
+          description: Invalid file or missing data
+        '404':
+          description: Story not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/attachments/{attachmentId}:
+    delete:
+      tags:
+        - Attachments
+      summary: Delete attachment from story
+      description: Removes a file attachment from a story and Firebase Storage
+      operationId: deleteAttachment
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+        - $ref: '#/components/parameters/AttachmentId'
+      responses:
+        '204':
+          description: Attachment deleted successfully
+        '404':
+          description: Attachment not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/owners:
+    post:
+      tags:
+        - Owners
+      summary: Add owner to story
+      description: Adds a user as an owner to a story (for pairing/mobbing)
+      operationId: addOwner
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OwnerRequest'
+      responses:
+        '200':
+          description: Owner added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponse'
+        '400':
+          description: Invalid user ID
+        '404':
+          description: Story or user not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/{storyId}/owners/{ownerId}:
+    delete:
+      tags:
+        - Owners
+      summary: Remove owner from story
+      description: Removes a user from story ownership
+      operationId: removeOwner
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StoryId'
+        - name: ownerId
+          in: path
+          required: true
+          description: ID of the owner to remove
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Owner removed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponse'
+        '404':
+          description: Story or owner not found
+        '500':
+          description: Internal server error
+
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Firebase Authentication JWT token
+
+  parameters:
+    ProjectId:
+      name: projectId
+      in: path
+      required: true
+      description: Unique identifier of the project
+      schema:
+        type: string
+
+    StoryId:
+      name: storyId
+      in: path
+      required: true
+      description: Unique identifier of the story
+      schema:
+        type: string
+
+    TaskId:
+      name: taskId
+      in: path
+      required: true
+      description: Unique identifier of the task
+      schema:
+        type: string
+
+    BlockerId:
+      name: blockerId
+      in: path
+      required: true
+      description: Unique identifier of the blocker
+      schema:
+        type: string
+
+    AttachmentId:
+      name: attachmentId
+      in: path
+      required: true
+      description: Unique identifier of the attachment
+      schema:
+        type: string
+
   schemas:
-    Project:
+    UserResponse:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        name:
+          type: string
+          description: User's display name
+        email:
+          type: string
+          format: email
+          description: User's email address
+        avatarUrl:
+          type: string
+          format: uri
+          description: URL to user's avatar image
+
+    CreateProjectRequest:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+          minLength: 3
+          description: Project name
+        description:
+          type: string
+          minLength: 5
+          description: Project description
+        initialVelocity:
+          type: number
+          default: 10
+          description: Initial velocity for the project
+        iterationLength:
+          $ref: '#/components/schemas/IterationLength'
+        memberIds:
+          type: array
+          items:
+            type: string
+          default: []
+          description: Array of user IDs to add as project members
+
+    UpdateProjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 3
+          description: Updated project name
+        description:
+          type: string
+          minLength: 5
+          description: Updated project description
+        initialVelocity:
+          type: number
+          description: Updated velocity
+        iterationLength:
+          $ref: '#/components/schemas/IterationLength'
+
+    ProjectResponse:
       type: object
       required:
         - id
         - name
         - description
-        - createdAt
+        - averageVelocity
+        - iterationLength
+        - members
+        - labels
       properties:
         id:
-          type: integer
-          description: Unique identifier for the project
-          example: 1
+          type: string
+          description: Unique project identifier
         name:
           type: string
-          description: Name of the project
-          example: "E-commerce Platform"
+          description: Project name
         description:
           type: string
-          description: Description of the project
-          example: "A modern e-commerce platform built with React and Node.js"
+          description: Project description
+        averageVelocity:
+          type: number
+          description: Project's average velocity
+        iterationLength:
+          $ref: '#/components/schemas/IterationLength'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponse'
+          description: Project team members
+        labels:
+          type: array
+          items:
+            type: string
+          description: Available labels for the project
+
+    CreateStoryRequest:
+      type: object
+      required:
+        - type
+        - title
+        - description
+      properties:
+        type:
+          $ref: '#/components/schemas/StoryType'
+        title:
+          type: string
+          minLength: 3
+          description: Story title
+        description:
+          type: string
+          description: Detailed story description
+        tasks:
+          type: array
+          items:
+            type: string
+          default: []
+          description: Initial task descriptions
+        labels:
+          type: array
+          items:
+            type: string
+          default: []
+          description: Initial labels
+
+    UpdateStoryRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/StoryType'
+        title:
+          type: string
+          minLength: 3
+          description: Updated story title
+        description:
+          type: string
+          description: Updated story description
+        code:
+          type: string
+          format: uri
+          description: URL to related code (PR, branch, etc.)
+
+    StoryResponse:
+      type: object
+      required:
+        - id
+        - type
+        - title
+        - description
+        - tasks
+        - blockers
+        - labels
+        - comments
+        - location
+        - state
+        - createdAt
+        - requestor
+        - owners
+      properties:
+        id:
+          type: string
+          description: Unique story identifier
+        type:
+          $ref: '#/components/schemas/StoryType'
+        title:
+          type: string
+          description: Story title
+        description:
+          type: string
+          description: Story description
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+          description: Story tasks
+        blockers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Blocker'
+          description: Story blockers
+        labels:
+          type: array
+          items:
+            type: string
+          description: Story labels
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+          description: Story comments
+        location:
+          $ref: '#/components/schemas/StoryLocation'
+        state:
+          $ref: '#/components/schemas/StoryState'
+        estimate:
+          $ref: '#/components/schemas/StoryPoint'
         createdAt:
           type: string
           format: date-time
-          description: Project creation timestamp
-          example: "2024-01-15T10:30:00Z"
+          description: Story creation timestamp
+        startedAt:
+          type: string
+          format: date-time
+          description: When story was started
+        deliveredAt:
+          type: string
+          format: date-time
+          description: When story was delivered
+        acceptedAt:
+          type: string
+          format: date-time
+          description: When story was accepted
+        rejectedAt:
+          type: string
+          format: date-time
+          description: When story was rejected
+        doneAt:
+          type: string
+          format: date-time
+          description: When story was marked done
+        requestor:
+          $ref: '#/components/schemas/UserResponse'
+        code:
+          type: string
+          format: uri
+          description: URL to related code
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponse'
+          description: Story owners (for pairing/mobbing)
+
+    Task:
+      type: object
+      required:
+        - id
+        - description
+        - isCompleted
+      properties:
+        id:
+          type: string
+          description: Unique task identifier
+        description:
+          type: string
+          description: Task description
+        isCompleted:
+          type: boolean
+          description: Task completion status
+
+    TaskRequest:
+      type: object
+      required:
+        - description
+      properties:
+        description:
+          type: string
+          minLength: 5
+          description: Task description
+
+    Blocker:
+      type: object
+      required:
+        - id
+        - description
+        - isResolved
+      properties:
+        id:
+          type: string
+          description: Unique blocker identifier
+        description:
+          type: string
+          description: Blocker description
+        isResolved:
+          type: boolean
+          description: Blocker resolution status
+
+    BlockerRequest:
+      type: object
+      required:
+        - description
+      properties:
+        description:
+          type: string
+          minLength: 5
+          description: Blocker description
+
+    Comment:
+      type: object
+      required:
+        - user
+        - text
+        - createdAt
+      properties:
+        user:
+          $ref: '#/components/schemas/UserResponse'
+        text:
+          type: string
+          description: Comment text
+        createdAt:
+          type: string
+          format: date-time
+          description: Comment creation timestamp
+
+    CreateCommentRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          minLength: 5
+          description: Comment text
+
+    CreateLabelRequest:
+      type: object
+      required:
+        - label
+      properties:
+        label:
+          type: string
+          minLength: 3
+          description: Label text
+
+    EstimateRequest:
+      type: object
+      properties:
+        estimate:
+          $ref: '#/components/schemas/StoryPoint'
+
+    Attachment:
+      type: object
+      required:
+        - id
+        - uploadedBy
+        - fileName
+        - fileSize
+        - mimeType
+        - url
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique attachment identifier
+        uploadedBy:
+          type: string
+          description: User ID who uploaded the file
+        fileName:
+          type: string
+          description: Original file name
+        fileSize:
+          type: number
+          description: File size in bytes
+        mimeType:
+          type: string
+          description: File MIME type
+        url:
+          type: string
+          format: uri
+          description: Public URL to the file
+
+    OwnerRequest:
+      type: object
+      required:
+        - userId
+      properties:
+        userId:
+          type: string
+          description: User ID to add as owner
+
+    StoryType:
+      type: string
+      enum:
+        - feature
+        - bug
+        - chore
+        - release
+      description: Type of story
+
+    StoryLocation:
+      type: string
+      enum:
+        - icebox
+        - backlog
+      description: |
+        Story location. Stories can move from icebox to backlog freely.
+        Stories can only move from backlog to icebox when in 'unstarted' state.
+
+    StoryState:
+      type: string
+      enum:
+        - unstarted
+        - started
+        - finished
+        - delivered
+        - accepted
+        - rejected
+        - done
+      description: |
+        Story workflow state:
+        - unstarted: Created but not started
+        - started: Work in progress (local)
+        - finished: Complete, verified locally
+        - delivered: Verified in integration
+        - accepted: Approved by product owner
+        - rejected: Needs rework
+        - done: Fully complete and deployed
+
+    StoryPoint:
+      type: string
+      enum:
+        - '0'
+        - '1'
+        - '2'
+        - '3'
+        - '5'
+        - '8'
+      description: |
+        Story point estimate:
+        - 0: ~2 hours
+        - 1: ~4 hours
+        - 2: ~6 hours
+        - 3: ~8 hours
+        - 5: ~1-2 days
+        - 8: ~3-4 days
+
+    IterationLength:
+      type: string
+      enum:
+        - OneWeek
+        - TwoWeeks
+        - ThreeWeeks
+        - FourWeeks
+      default: TwoWeeks
+      description: Length of project iteration/sprint

@@ -1,14 +1,33 @@
 import axios, { type AxiosResponse } from "axios";
 import { auth } from "../firebase/firebaseConfig";
-import type { 
-  CreateStoryRequest, 
-  UpdateStoryRequest, 
-  UserStory 
+import type {
+  CreateStoryRequest,
+  UpdateStoryRequest,
+  UserStory
 } from "../models/userStory";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_BASE_URL || 'http://127.0.0.1:5001/af-tracker-716c0/us-central1/api'
+  baseURL: import.meta.env.VITE_BACKEND_BASE_URL || 'http://127.0.0.1:5001/af-tracker-716c0/us-central1/api/v2'
 });
+
+const getStoriesForProject = async (projectId: string, ownerId?: string, label?: string): Promise<UserStory[]> => {
+  const idToken = await auth.currentUser?.getIdToken();
+
+  const params = new URLSearchParams();
+  if (ownerId) params.append('ownerId', ownerId);
+  if (label) params.append('label', label);
+
+  const response = await api.get<UserStory[]>(
+    `/projects/${projectId}/stories${params.toString() ? `?${params.toString()}` : ''}`,
+    {
+      headers: {
+        Authorization: `Bearer ${idToken}`
+      }
+    }
+  );
+
+  return response.data;
+};
 
 const reorderUserStories = async (projectId: string, userStories: UserStory[]): Promise<void> => {
   const idToken = await auth.currentUser?.getIdToken();
@@ -53,4 +72,4 @@ const saveUserStory = async (projectId: string, request: UserStory): Promise<Use
   return response.data;
 }
 
-export { saveUserStory, reorderUserStories };
+export { getStoriesForProject, saveUserStory, reorderUserStories };
