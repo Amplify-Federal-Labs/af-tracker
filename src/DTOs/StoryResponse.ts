@@ -102,7 +102,7 @@ export interface StoryResponse {
   /**
    * User who requested/created the story
    */
-  requestor: UserResponse;
+  requester: UserResponse;
 
   /**
    * URL to related code (PR, branch, etc.) - optional

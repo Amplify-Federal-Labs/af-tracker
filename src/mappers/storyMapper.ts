@@ -51,11 +51,9 @@ export function mapStoryResponseToUserStory(
     id: dto.id,
     storyNumber: dto.storyNumber,
     index,
-    storyId: dto.id,
-    // projectId dropped - not needed in ViewModel
     type: dto.type,
     title: dto.title,
-    requester: mapUserResponseToUser(dto.requestor), // DTO 'requestor' → ViewModel 'requester'
+    requester: mapUserResponseToUser(dto.requester),
     owners: dto.owners.map(mapUserResponseToUser),
     estimate: dto.estimate, // Direct mapping, both use StoryPoint type
     location: dto.location,
@@ -65,7 +63,7 @@ export function mapStoryResponseToUserStory(
     labels: dto.labels,
     tasks: dto.tasks.map(mapTask),
     createdAt: new Date(dto.createdAt),
-    createdBy: mapUserResponseToUser(dto.requestor),
+    createdBy: mapUserResponseToUser(dto.requester),
     startedAt: parseDate(dto.startedAt),
     startedBy: undefined, // Not provided by backend DTO
     finishedAt: parseDate(dto.deliveredAt),

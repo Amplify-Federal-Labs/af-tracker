@@ -982,7 +982,7 @@ components:
         - location
         - state
         - createdAt
-        - requestor
+        - requester
         - owners
       properties:
         id:
@@ -1049,7 +1049,7 @@ components:
           type: string
           format: date-time
           description: When story was marked done
-        requestor:
+        requester:
           $ref: '#/components/schemas/UserResponse'
         code:
           type: string
