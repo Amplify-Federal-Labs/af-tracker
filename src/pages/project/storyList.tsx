@@ -32,7 +32,7 @@ const StoryList = ({label, stories, onSelect}: StoryListProps) => {
                                                     <ListItemIcon>
                                                         {STORY_TYPE_OPTIONS.get(story.type)?.icon}
                                                     </ListItemIcon>
-                                                    <ListItemText primary={story.storyId} />
+                                                    <ListItemText primary={story.storyNumber} />
                                                     <ListItemText primary={story.title} />
                                                 </ListItemButton>
                                             </ListItem>

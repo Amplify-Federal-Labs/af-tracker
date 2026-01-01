@@ -49,6 +49,7 @@ export function mapStoryResponseToUserStory(
 ): UserStory {
   return {
     id: dto.id,
+    storyNumber: dto.storyNumber,
     index,
     storyId: dto.id,
     // projectId dropped - not needed in ViewModel

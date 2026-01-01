@@ -971,6 +971,7 @@ components:
       type: object
       required:
         - id
+        - storyNumber
         - type
         - title
         - description
@@ -987,6 +988,9 @@ components:
         id:
           type: string
           description: Unique story identifier
+        storyNumber:
+          type: string
+          description: Human-readable story identifier
         type:
           $ref: '#/components/schemas/StoryType'
         title:

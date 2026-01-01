@@ -1,8 +1,8 @@
-import { StoryType, StoryLocation, StoryState, StoryPoint } from './types';
-import { UserResponse } from './UserResponse';
-import { Task } from './Task';
-import { Blocker } from './Blocker';
-import { Comment } from './Comment';
+import type { StoryType, StoryLocation, StoryState, StoryPoint } from './types';
+import type { UserResponse } from './UserResponse';
+import type { Task } from './Task';
+import type { Blocker } from './Blocker';
+import type { Comment } from './Comment';
 
 /**
  * Story Response DTO
@@ -13,6 +13,11 @@ export interface StoryResponse {
    * Unique story identifier
    */
   id: string;
+
+  /**
+   * Human-readable story identifier
+   */
+  storyNumber: string;
 
   /**
    * Story type classification

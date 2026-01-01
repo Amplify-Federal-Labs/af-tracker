@@ -13,4 +13,4 @@ interface Project {
 }
 
 
-export type { Project, CreateProjectRequest };
+export type { Project };

@@ -19,8 +19,8 @@ type StoryState = "unstarted" | "started" | "finished" | "delivered" | "accepted
 
 interface UserStory {
     id?: string;
+    storyNumber?: string;
     index: number;
-    storyId?: string;
     type: StoryType;
     title: string;
     requester: User;
