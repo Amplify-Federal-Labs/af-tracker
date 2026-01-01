@@ -183,7 +183,9 @@ paths:
       tags:
         - Stories
       summary: Create a new story
-      description: Creates a new user story in the project
+      description: |
+        Creates a new user story in the project.
+        New stories are automatically positioned at the end of the icebox.
       operationId: createStory
       parameters:
         - $ref: '#/components/parameters/ProjectId'
@@ -213,10 +215,20 @@ paths:
       summary: Get stories for a project
       description: |
         Retrieves all stories for a project with optional filters.
-        Supports filtering by owner ID and label.
+        Supports filtering by location, owner ID, and label.
+
+        **Ordering**: When location filter is provided, stories are ordered by their position
+        within that location (using fractional indexing), then by creation date.
+        Stories without positions are ordered by creation date.
       operationId: getProjectStories
       parameters:
         - $ref: '#/components/parameters/ProjectId'
+        - name: location
+          in: query
+          description: Filter stories by location (icebox or backlog)
+          required: false
+          schema:
+            $ref: '#/components/schemas/StoryLocation'
         - name: ownerId
           in: query
           description: Filter stories by owner user ID
@@ -303,6 +315,8 @@ paths:
         Moves a story to a different location (icebox or backlog).
 
         **Validation**: Stories can only move from backlog to icebox when in 'unstarted' state.
+
+        **Positioning**: When a story is moved, it is automatically positioned at the end of the target location.
       operationId: moveStory
       parameters:
         - $ref: '#/components/parameters/ProjectId'
@@ -324,6 +338,96 @@ paths:
           description: Invalid move operation (e.g., started story cannot move to icebox)
         '404':
           description: Story not found
+        '500':
+          description: Internal server error
+
+  /projects/{projectId}/stories/reorder:
+    put:
+      tags:
+        - Stories
+      summary: Reorder stories within a location
+      description: |
+        Reorders stories within a specific location (icebox or backlog) using fractional indexing.
+
+        **How it works**:
+        - Provide the complete ordered list of story IDs in the desired order
+        - All story IDs must belong to the specified location
+        - The backend calculates fractional indices to maintain the order
+        - Returns updated stories in the new order
+
+        **Fractional Indexing**:
+        - Enables efficient concurrent reordering without conflicts
+        - No need to reindex all stories when inserting between two positions
+        - Supports ~15 levels of subdivision between any two stories
+        - Ideal for collaborative environments with multiple users
+
+        **Example Request**:
+        ```json
+        {
+          "location": "icebox",
+          "storyIds": ["story-3", "story-1", "story-2"]
+        }
+        ```
+
+        **Frontend Usage**:
+        1. Fetch stories with location filter: `GET /projects/{projectId}/stories?location=icebox`
+        2. User drags and drops stories to reorder
+        3. Send complete ordered list of story IDs to this endpoint
+        4. Backend updates positions and returns stories in new order
+        5. Update UI with returned stories (now correctly ordered)
+      operationId: reorderStories
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReorderStoriesRequest'
+            examples:
+              reorderIcebox:
+                summary: Reorder three stories in icebox
+                value:
+                  location: "icebox"
+                  storyIds: ["story-c", "story-a", "story-b"]
+              reorderBacklog:
+                summary: Reorder stories in backlog
+                value:
+                  location: "backlog"
+                  storyIds: ["story-1", "story-3", "story-2", "story-4"]
+      responses:
+        '200':
+          description: Stories reordered successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StoryResponse'
+              example:
+                - id: "story-c"
+                  storyNumber: "PROJ-00003"
+                  title: "Story C"
+                  location: "icebox"
+                  positionInIcebox: "a0"
+                - id: "story-a"
+                  storyNumber: "PROJ-00001"
+                  title: "Story A"
+                  location: "icebox"
+                  positionInIcebox: "a1"
+                - id: "story-b"
+                  storyNumber: "PROJ-00002"
+                  title: "Story B"
+                  location: "icebox"
+                  positionInIcebox: "a2"
+        '400':
+          description: |
+            Invalid request:
+            - Story IDs array is empty
+            - Story ID not found in specified location
+            - Duplicate story IDs in request
+        '404':
+          description: Project not found
         '500':
           description: Internal server error
 
@@ -1060,6 +1164,20 @@ components:
           items:
             $ref: '#/components/schemas/UserResponse'
           description: Story owners (for pairing/mobbing)
+        positionInIcebox:
+          type: string
+          description: |
+            Fractional index position when story is in icebox.
+            Lexicographically-ordered string (e.g., "a0", "a1", "a2").
+            Used for maintaining custom order within icebox.
+          example: "a1V"
+        positionInBacklog:
+          type: string
+          description: |
+            Fractional index position when story is in backlog.
+            Lexicographically-ordered string (e.g., "b0", "b1", "b2").
+            Used for maintaining custom order within backlog.
+          example: "b2G"
 
     Task:
       type: object
@@ -1197,6 +1315,24 @@ components:
         userId:
           type: string
           description: User ID to add as owner
+
+    ReorderStoriesRequest:
+      type: object
+      required:
+        - location
+        - storyIds
+      properties:
+        location:
+          $ref: '#/components/schemas/StoryLocation'
+        storyIds:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          description: |
+            Complete ordered list of story IDs in the desired order.
+            All story IDs must exist and belong to the specified location.
+          example: ["story-uuid-3", "story-uuid-1", "story-uuid-2"]
 
     StoryType:
       type: string

@@ -20,7 +20,6 @@ type StoryState = "unstarted" | "started" | "finished" | "delivered" | "accepted
 interface UserStory {
     id?: string;
     storyNumber?: string;
-    index: number;
     type: StoryType;
     title: string;
     requester: User;
@@ -45,6 +44,8 @@ interface UserStory {
     deliveredAt?: Date;
     doneAt?: Date;
     code?: string;
+    positionInIcebox?: string;
+    positionInBacklog?: string;
 }
 
 interface UserStoriesInProject {

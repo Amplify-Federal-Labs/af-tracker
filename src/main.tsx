@@ -33,7 +33,6 @@ const router = createBrowserRouter([
             path: "projects/:projectId/*",
             Component: ProjectContainer,
           },
-
           {
             path: "employees/:employeeId?/*",
             Component: EmployeesCrudPage,

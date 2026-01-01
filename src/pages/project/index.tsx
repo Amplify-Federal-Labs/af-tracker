@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import ProjectView from "./project";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getStoriesForProject, saveUserStory, reorderUserStories } from "../../api/stories";
-import type { UserStory } from "../../viewModels/userStory";
+import type { UserStory, StoryLocation } from "../../viewModels/userStory";
 import { v4 } from "uuid";
 import { getProjectById } from "../../api/projects";
 import { useContext, useMemo } from "react";
@@ -25,7 +25,7 @@ const ProjectContainer = () => {
   // Fetch stories
   const { isPending: isStoriesPending, isError: isStoriesError, data: storiesData, error: storiesError } = useQuery({
     queryKey: ['stories', projectId],
-    queryFn: () => getStoriesForProject(projectId),
+    queryFn: () => getStoriesForProject(projectId, undefined, undefined, 'icebox'),
     enabled: !!projectId,
   });
 
@@ -69,10 +69,11 @@ const ProjectContainer = () => {
 
   // TODO: Call backend to add a new label
   const handleAddNewLabel = () => {};
-  // TODO: Call backend to reorder stories, update ordinal
-  const handleReorderStories = async (stories: UserStory[]) => {
+
+  const handleReorderStories = async (stories: UserStory[], location: StoryLocation) => {
     try {
-      await reorderUserStories(projectId, stories);
+      const storyIds = stories.map(story => story.id!);
+      await reorderUserStories(projectId, location, storyIds);
       await queryClient.invalidateQueries({ queryKey: ["stories", projectId] });
     } catch (error) {
       console.error("Failed to reorder stories:", error);

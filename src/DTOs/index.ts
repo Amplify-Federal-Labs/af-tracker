@@ -29,6 +29,7 @@ export type { CreateProjectRequest } from './CreateProjectRequest';
 export type { UpdateProjectRequest } from './UpdateProjectRequest';
 export type { CreateStoryRequest } from './CreateStoryRequest';
 export type { UpdateStoryRequest } from './UpdateStoryRequest';
+export type { ReorderStoriesRequest } from './ReorderStoriesRequest';
 export type { TaskRequest } from './TaskRequest';
 export type { BlockerRequest } from './BlockerRequest';
 export type { CreateCommentRequest } from './CreateCommentRequest';

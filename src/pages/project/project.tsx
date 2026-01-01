@@ -3,7 +3,7 @@ import { useState } from "react";
 import Done from "./done";
 import Backlog from "./backlog";
 import Icebox from "./icebox";
-import type { UserStory } from "../../viewModels/userStory";
+import type { UserStory, StoryLocation } from "../../viewModels/userStory";
 import type { User } from "../../viewModels/user";
 import AddStoryFab from "../../components/addFab";
 import EditStoryDialog from "./editStoryDialog";
@@ -19,7 +19,7 @@ interface ProjectViewProps {
   icebox: UserStory[];
   onAddNewLabel: (label: string) => void;
   onSaveStory: (story: UserStory) => void;
-  onReorderStories: (stories: UserStory[]) => void;
+  onReorderStories: (stories: UserStory[], location: StoryLocation) => void;
 }
 
 function reorder<TItem>(
@@ -52,13 +52,12 @@ const ProjectView = ({
   const [openAddStoryDialog, setOpenAddStoryDialog] = useState(false);
 
   const [storyToEdit, setStoryToEdit] = useState<UserStory>({
-    index: 0,
-    projectId: projectId,
     type: "feature",
     requester: user,
     title: "",
     owners: [],
-    state: "unscheduled",
+    location: "icebox",
+    state: "unstarted",
     blockers: [],
     description: "",
     labels: [],
@@ -69,13 +68,12 @@ const ProjectView = ({
 
   const handleAddStory = () => {
     setStoryToEdit({
-      index: 0,
-      projectId: projectId,
       type: "feature",
       requester: user,
       title: "",
       owners: [],
-      state: "unscheduled",
+      location: "icebox",
+      state: "unstarted",
       blockers: [],
       description: "",
       labels: [],
@@ -83,7 +81,7 @@ const ProjectView = ({
       createdAt: new Date(),
       createdBy: user,
     });
-    
+
     setOpenAddStoryDialog(true);
   }
 
@@ -111,8 +109,20 @@ const ProjectView = ({
         return;
       }
 
-      const stories = result.source.droppableId == 'done' ? done :
-        result.source.droppableId == 'backlog' ? backlog : icebox; 
+      const droppableId = result.source.droppableId;
+
+      // Don't reorder done stories
+      if (droppableId === 'done') {
+        return;
+      }
+
+      const location: StoryLocation = droppableId as StoryLocation;
+      const stories = droppableId === 'backlog' ? backlog : icebox;
+
+      console.log("Preordered stories:", stories);
+
+      console.log('result.source.index', result.source.index);
+      console.log('result.destination.index', result.destination.index);
 
       const reorderedStories = reorder<UserStory>(
           stories,
@@ -120,7 +130,9 @@ const ProjectView = ({
           result.destination.index
       );
 
-      onReorderStories(reorderedStories);
+      console.log("Reordered stories:", reorderedStories);
+
+      onReorderStories(reorderedStories, location);
   };
 
   return (

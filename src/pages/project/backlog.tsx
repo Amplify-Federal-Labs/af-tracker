@@ -14,10 +14,10 @@ interface BacklogProps {
 
 const Backlog = ({ stories, onSelectStory }: BacklogProps) => {
   return (
-    <StoryList 
-      label="backlog"  
-      stories={stories.sort((a, b) => a.index - b.index)} 
-      onSelect={onSelectStory} 
+    <StoryList
+      label="backlog"
+      stories={stories}
+      onSelect={onSelectStory}
     />
   );
 };

@@ -113,4 +113,18 @@ export interface StoryResponse {
    * Story owners (for pairing/mobbing)
    */
   owners: UserResponse[];
+
+  /**
+   * Fractional index position when story is in icebox
+   * Lexicographically-ordered string (e.g., "a0", "a1", "a2")
+   * Used for maintaining custom order within icebox
+   */
+  positionInIcebox?: string;
+
+  /**
+   * Fractional index position when story is in backlog
+   * Lexicographically-ordered string (e.g., "b0", "b1", "b2")
+   * Used for maintaining custom order within backlog
+   */
+  positionInBacklog?: string;
 }

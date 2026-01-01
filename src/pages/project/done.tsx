@@ -15,7 +15,7 @@ const Done = ({ stories, onSelectStory }: DoneProps) => {
   return (
     <StoryList 
       label="done"
-      stories={stories.sort((a, b) => a.index - b.index)} 
+      stories={stories} 
       onSelect={onSelectStory} 
     />
   );

@@ -40,17 +40,14 @@ function mapBlocker(blocker: import('../DTOs').Blocker): Blocker {
 /**
  * Maps StoryResponse DTO to UserStory ViewModel
  * @param dto - StoryResponse from backend API
- * @param index - UI ordering index (default: 0)
  * @returns UserStory ViewModel for UI components
  */
 export function mapStoryResponseToUserStory(
-  dto: StoryResponse,
-  index: number = 0
+  dto: StoryResponse
 ): UserStory {
   return {
     id: dto.id,
     storyNumber: dto.storyNumber,
-    index,
     type: dto.type,
     title: dto.title,
     requester: mapUserResponseToUser(dto.requester),
@@ -75,5 +72,7 @@ export function mapStoryResponseToUserStory(
     deliveredAt: parseDate(dto.deliveredAt),
     doneAt: parseDate(dto.doneAt),
     code: dto.code,
+    positionInIcebox: dto.positionInIcebox,
+    positionInBacklog: dto.positionInBacklog,
   };
 }
