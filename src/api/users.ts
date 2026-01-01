@@ -20,7 +20,7 @@ const getUsers = async (): Promise<User[]> => {
 
 const addUser = async (): Promise<User> => {
   const idToken = await auth.currentUser?.getIdToken();
-  const response = await api.post<UserResponse>('/users', {
+  const response = await api.post<UserResponse>('/users', undefined, {
     headers: {
       Authorization: `Bearer ${idToken}`
     }
