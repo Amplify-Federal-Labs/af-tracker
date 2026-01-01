@@ -220,7 +220,7 @@ describe('ProjectContainer', () => {
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
 
     expect(getProjectByIdSpy).toHaveBeenCalledWith('test-project-123');
-    expect(getStoriesForProjectSpy).toHaveBeenCalledWith('test-project-123');
+    expect(getStoriesForProjectSpy).toHaveBeenCalledWith('test-project-123', undefined, undefined, 'icebox');
   });
 
   it('should handle empty user stories data', async () => {
