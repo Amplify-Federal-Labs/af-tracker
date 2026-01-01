@@ -254,9 +254,6 @@ describe('ProjectContainer', () => {
     getStoriesForProjectSpy.mockResolvedValue(mockStoriesData);
     saveUserStorySpy.mockResolvedValue({
       id: 'new-story-1',
-      index: 3,
-      storyId: 'STORY-4',
-      projectId: 'test-project-123',
       type: 'feature',
       title: 'Test Story',
       requester: { id: 'user-1', email: 'user1@test.com', name: 'User 1' },
