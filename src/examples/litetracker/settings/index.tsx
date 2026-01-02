@@ -13,13 +13,13 @@ const SettingsContainer = styled(Box)({
   height: '100%',
 });
 
-const ContentArea = styled(Box)({
+const ContentArea = styled(Box)(({ theme }) => ({
   flexGrow: 1,
   marginLeft: SETTINGS_SIDEBAR_WIDTH,
   height: '100%',
   overflow: 'auto',
-  backgroundColor: '#F5F5F5',
-});
+  backgroundColor: theme.palette.background.default,
+}));
 
 const SettingsTab = () => {
   const [activeView, setActiveView] = useState('project-settings');

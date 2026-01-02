@@ -53,7 +53,7 @@ const SettingsSidebar = ({ activeView = 'project-settings', onViewChange }: Sett
               py: 1.5,
               px: 2,
               '&.Mui-selected': {
-                backgroundColor: 'rgba(82, 106, 132, 0.3)',
+                backgroundColor: 'action.selected',
               },
             }}
           >

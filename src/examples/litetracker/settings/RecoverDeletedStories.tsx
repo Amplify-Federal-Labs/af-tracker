@@ -11,42 +11,42 @@ const SettingsContent = styled(Box)(({ theme }) => ({
   maxWidth: 1200,
 }));
 
-const PageTitle = styled(Typography)({
+const PageTitle = styled(Typography)(({ theme }) => ({
   fontSize: 32,
   fontWeight: 700,
-  color: 'grey.900',
+  color: theme.palette.text.primary,
   marginBottom: 16,
-});
+}));
 
-const BackLink = styled(Link)({
+const BackLink = styled(Link)(({ theme }) => ({
   fontSize: 18,
-  color: 'primary.main',
+  color: theme.palette.primary.main,
   textDecoration: 'none',
   marginBottom: 32,
   display: 'inline-block',
   '&:hover': {
     textDecoration: 'underline',
   },
-});
+}));
 
-const WarningBox = styled(Alert)({
+const WarningBox = styled(Alert)(({ theme }) => ({
   marginBottom: 32,
-  backgroundColor: '#E3F2FD',
-  border: '1px solid #2196F3',
+  backgroundColor: theme.palette.info.light,
+  border: `1px solid ${theme.palette.info.main}`,
   borderRadius: 4,
   '& .MuiAlert-message': {
     fontSize: 14,
-    color: 'grey.900',
+    color: theme.palette.text.primary,
   },
-});
+}));
 
 const SectionTitle = styled(Typography)(({ theme }) => ({
   fontSize: 24,
   fontWeight: 700,
-  color: 'grey.900',
+  color: theme.palette.text.primary,
   marginBottom: theme.spacing(2),
   paddingBottom: theme.spacing(1),
-  borderBottom: '2px solid #E0E0E0',
+  borderBottom: `2px solid ${theme.palette.divider}`,
 }));
 
 const EmptyState = styled(Box)(({ theme }) => ({

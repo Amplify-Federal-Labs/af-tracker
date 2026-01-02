@@ -217,7 +217,7 @@ const KanbanColumn = ({
             ref={provided.innerRef}
             {...provided.droppableProps}
             sx={{
-              backgroundColor: snapshot.isDraggingOver ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+              backgroundColor: snapshot.isDraggingOver ? 'action.hover' : 'transparent',
             }}
           >
             {showForm && (

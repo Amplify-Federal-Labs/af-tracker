@@ -10,24 +10,40 @@ import MembersTab from './litetracker/members';
 import IntegrationsTab from './litetracker/integrations';
 import SettingsTab from './litetracker/settings';
 
+// Define route paths relative to /demo
+const ROUTE_PATHS = {
+  STORIES: '',
+  ANALYTICS: 'analytics',
+  MEMBERS: 'members',
+  INTEGRATIONS: 'integrations',
+  SETTINGS: 'settings',
+} as const;
+
+// Full paths for navigation (used in navigate and location comparison)
+const FULL_ROUTES = {
+  STORIES: '/demo',
+  ANALYTICS: '/demo/analytics',
+  MEMBERS: '/demo/members',
+  INTEGRATIONS: '/demo/integrations',
+  SETTINGS: '/demo/settings',
+} as const;
+
+const tabToRoute = [
+  FULL_ROUTES.STORIES,
+  FULL_ROUTES.ANALYTICS,
+  FULL_ROUTES.MEMBERS,
+  FULL_ROUTES.INTEGRATIONS,
+  FULL_ROUTES.SETTINGS,
+] as const;
+
 const LiteTrackerDemo = () => {
   const [visibleColumns, setVisibleColumns] = useState<string[]>(['current-iteration', 'backlog', 'icebox']);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Map routes to tab indices
-  const routeToTab: Record<string, number> = {
-    '/': 0,
-    '/analytics': 1,
-    '/members': 2,
-    '/integrations': 3,
-    '/settings': 4,
-  };
-
-  const tabToRoute: string[] = ['/', '/analytics', '/members', '/integrations', '/settings'];
-
-  const currentTab = routeToTab[location.pathname] ?? 0;
+  const tabIndex = tabToRoute.indexOf(location.pathname as typeof tabToRoute[number]);
+  const currentTab = tabIndex === -1 ? 0 : tabIndex;
 
   const handleToggleView = (viewId: string) => {
     setVisibleColumns((prev) => {
@@ -57,7 +73,7 @@ const LiteTrackerDemo = () => {
       <LiteTrackerLayout activeTab={currentTab} onTabChange={handleTabChange}>
         <Routes>
           <Route
-            path="/"
+            path={ROUTE_PATHS.STORIES}
             element={
               <StoriesTab
                 visibleColumns={visibleColumns}
@@ -68,10 +84,10 @@ const LiteTrackerDemo = () => {
               />
             }
           />
-          <Route path="/analytics" element={<AnalyticsTab />} />
-          <Route path="/members" element={<MembersTab />} />
-          <Route path="/integrations" element={<IntegrationsTab />} />
-          <Route path="/settings" element={<SettingsTab />} />
+          <Route path={ROUTE_PATHS.ANALYTICS} element={<AnalyticsTab />} />
+          <Route path={ROUTE_PATHS.MEMBERS} element={<MembersTab />} />
+          <Route path={ROUTE_PATHS.INTEGRATIONS} element={<IntegrationsTab />} />
+          <Route path={ROUTE_PATHS.SETTINGS} element={<SettingsTab />} />
         </Routes>
       </LiteTrackerLayout>
     </ThemeProvider>

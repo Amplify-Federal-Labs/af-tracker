@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     Component: App,
     children: [
       {
-        path: "/old",
+        path: "/",
         Component: Layout,
         children: [
           {
@@ -44,11 +44,11 @@ const router = createBrowserRouter([
         path: "/sign-in",
         Component: SignInPage,
       },
+      {
+        path: "/demo/*",
+        Component: LiteTrackerDemo,
+      },
     ],
-  },
-  {
-    path: "/*",
-    Component: LiteTrackerDemo,
   },
 ]);
 

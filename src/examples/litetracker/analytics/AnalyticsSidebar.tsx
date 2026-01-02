@@ -66,7 +66,7 @@ const AnalyticsSidebar = ({ activeView = 'project-overview', onViewChange }: Ana
               '&.Mui-selected': {
                 borderLeft: '4px solid',
                 borderLeftColor: 'primary.main',
-                backgroundColor: 'rgba(82, 106, 132, 0.15)',
+                backgroundColor: 'action.selected',
               },
             }}
           >

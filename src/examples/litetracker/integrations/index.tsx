@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-const PlaceholderContainer = styled(Box)({
+const IntegrationsContainer = styled(Box)({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -17,9 +17,9 @@ const PlaceholderText = styled(Typography)(({ theme }) => ({
 
 const IntegrationsTab = () => {
   return (
-    <PlaceholderContainer>
+    <IntegrationsContainer>
       <PlaceholderText>Integrations</PlaceholderText>
-    </PlaceholderContainer>
+    </IntegrationsContainer>
   );
 };
 

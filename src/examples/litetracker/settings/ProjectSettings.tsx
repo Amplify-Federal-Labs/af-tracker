@@ -24,10 +24,10 @@ const Section = styled(Box)(({ theme }) => ({
 const SectionTitle = styled(Typography)(({ theme }) => ({
   fontSize: 18,
   fontWeight: 500,
-  color: 'grey.900',
+  color: theme.palette.text.primary,
   marginBottom: theme.spacing(2),
   paddingBottom: theme.spacing(1),
-  borderBottom: '2px solid #E0E0E0',
+  borderBottom: `2px solid ${theme.palette.divider}`,
 }));
 
 const FormRow = styled(Box)(({ theme }) => ({
@@ -37,59 +37,80 @@ const FormRow = styled(Box)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-const FormLabel = styled(Typography)({
+const FormLabel = styled(Typography)(({ theme }) => ({
   fontSize: 14,
   fontWeight: 500,
-  color: 'grey.900',
+  color: theme.palette.text.primary,
   minWidth: 200,
   textAlign: 'right',
-});
+}));
 
-const StyledTextField = styled(TextField)({
-  backgroundColor: '#FFFFFF',
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  backgroundColor: 'transparent',
+  '& .MuiOutlinedInput-root': {
+    backgroundColor: 'transparent',
+    '& fieldset': {
+      borderColor: theme.palette.divider,
+    },
+    '&:hover fieldset': {
+      borderColor: theme.palette.text.secondary,
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: theme.palette.primary.main,
+    },
+  },
   '& .MuiInputBase-input': {
-    color: 'grey.900',
+    color: theme.palette.text.primary,
     fontSize: 14,
   },
-});
+}));
 
-const StyledSelect = styled(Select)({
-  backgroundColor: '#FFFFFF',
-  color: 'grey.900',
+const StyledSelect = styled(Select)(({ theme }) => ({
+  backgroundColor: 'transparent',
+  color: theme.palette.text.primary,
   fontSize: 14,
-});
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.divider,
+  },
+  '&:hover .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.text.secondary,
+  },
+  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.primary.main,
+  },
+}));
 
-const HelpText = styled(Typography)({
+const HelpText = styled(Typography)(({ theme }) => ({
   fontSize: 13,
-  color: 'grey.700',
+  color: theme.palette.text.secondary,
   marginLeft: 216,
-});
+}));
 
 const ActionButtons = styled(Box)(({ theme }) => ({
   display: 'flex',
   gap: theme.spacing(2),
   marginTop: theme.spacing(4),
   paddingTop: theme.spacing(2),
-  borderTop: '1px solid #E0E0E0',
+  borderTop: `1px solid ${theme.palette.divider}`,
 }));
 
-const SaveButton = styled(Button)({
-  backgroundColor: '#4CAF50',
-  color: '#FFFFFF',
+const SaveButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.success.main,
+  color: theme.palette.common.white,
   textTransform: 'none',
   padding: '8px 24px',
   fontSize: 14,
   '&:hover': {
-    backgroundColor: '#45a049',
+    backgroundColor: theme.palette.success.dark,
   },
-});
+}));
 
-const CancelButton = styled(Button)({
-  color: 'text.disabled',
+const CancelButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.text.secondary,
   textTransform: 'none',
   padding: '8px 24px',
   fontSize: 14,
-});
+}));
 
 const ProjectSettings = () => {
   const [projectTitle, setProjectTitle] = useState('Tracker Tracker');
@@ -120,7 +141,7 @@ const ProjectSettings = () => {
         </FormRow>
         <FormRow>
           <FormLabel>Project ID</FormLabel>
-          <Typography sx={{ fontSize: 14, color: 'grey.900' }}>753</Typography>
+          <Typography sx={{ fontSize: 14, color: 'text.primary' }}>753</Typography>
         </FormRow>
         <FormRow>
           <FormLabel>Enable Tasks</FormLabel>
@@ -132,7 +153,7 @@ const ProjectSettings = () => {
               />
             }
             label="Allows tasks to be added to stories."
-            sx={{ margin: 0, '& .MuiFormControlLabel-label': { fontSize: 14, color: 'grey.900' } }}
+            sx={{ margin: 0, '& .MuiFormControlLabel-label': { fontSize: 14, color: 'text.primary' } }}
           />
         </FormRow>
       </Section>
@@ -176,7 +197,7 @@ const ProjectSettings = () => {
               <MenuItem value="3">3</MenuItem>
               <MenuItem value="4">4</MenuItem>
             </StyledSelect>
-            <Typography sx={{ fontSize: 14, color: 'grey.900' }}>weeks</Typography>
+            <Typography sx={{ fontSize: 14, color: 'text.primary' }}>weeks</Typography>
           </Box>
         </FormRow>
         <FormRow>
@@ -272,7 +293,7 @@ const ProjectSettings = () => {
                 />
               }
               label="Enable priority field in stories."
-              sx={{ margin: 0, '& .MuiFormControlLabel-label': { fontSize: 14, color: 'grey.900' } }}
+              sx={{ margin: 0, '& .MuiFormControlLabel-label': { fontSize: 14, color: 'text.primary' } }}
             />
           </Box>
         </FormRow>
@@ -310,27 +331,27 @@ const ProjectSettings = () => {
               />
             }
             label="Check to enable. Cannot be disabled after."
-            sx={{ margin: 0, '& .MuiFormControlLabel-label': { fontSize: 14, color: 'grey.900' } }}
+            sx={{ margin: 0, '& .MuiFormControlLabel-label': { fontSize: 14, color: 'text.primary' } }}
           />
         </FormRow>
         <FormRow>
           <FormLabel>Delete Project</FormLabel>
           <Box>
-            <Typography component="span" sx={{ fontSize: 14, color: 'grey.900', display: 'inline' }}>
+            <Typography component="span" sx={{ fontSize: 14, color: 'text.primary', display: 'inline' }}>
               Deleting this project is an unrecoverable operation that will remove all project data.{' '}
             </Typography>
             <Link href="#" sx={{ fontSize: 14, color: 'error.main' }}>Delete</Link>
-            <Typography component="span" sx={{ fontSize: 14, color: 'grey.900', display: 'inline' }}> this project.</Typography>
+            <Typography component="span" sx={{ fontSize: 14, color: 'text.primary', display: 'inline' }}> this project.</Typography>
           </Box>
         </FormRow>
         <FormRow>
           <FormLabel>Archive Project</FormLabel>
           <Box>
-            <Typography component="span" sx={{ fontSize: 14, color: 'grey.900', display: 'inline' }}>
+            <Typography component="span" sx={{ fontSize: 14, color: 'text.primary', display: 'inline' }}>
               Archiving this project will remove this project from active projects list, but preserve project data.{' '}
             </Typography>
             <Link href="#" sx={{ fontSize: 14 }}>Archive</Link>
-            <Typography component="span" sx={{ fontSize: 14, color: 'grey.900', display: 'inline' }}> this project.</Typography>
+            <Typography component="span" sx={{ fontSize: 14, color: 'text.primary', display: 'inline' }}> this project.</Typography>
           </Box>
         </FormRow>
       </Section>

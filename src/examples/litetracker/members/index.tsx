@@ -7,7 +7,6 @@ import {
   Avatar,
   Typography,
   IconButton,
-  Paper,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { MoreVert } from '@mui/icons-material';
@@ -23,8 +22,10 @@ interface Member {
 
 const MembersContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(4),
-  backgroundColor: '#F5F5F5',
-  minHeight: '100%',
+  backgroundColor: theme.palette.background.default,
+  width: '100%',
+  height: '100%',
+  overflow: 'auto',
 }));
 
 const InviteSection = styled(Box)(({ theme }) => ({
@@ -34,41 +35,60 @@ const InviteSection = styled(Box)(({ theme }) => ({
   alignItems: 'center',
 }));
 
-const EmailInput = styled(TextField)({
+const EmailInput = styled(TextField)(({ theme }) => ({
   flex: 1,
-  backgroundColor: '#FFFFFF',
+  backgroundColor: 'transparent',
   '& .MuiOutlinedInput-root': {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
+    '& fieldset': {
+      borderColor: theme.palette.divider,
+    },
+    '&:hover fieldset': {
+      borderColor: theme.palette.text.secondary,
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: theme.palette.primary.main,
+    },
   },
   '& .MuiInputBase-input': {
-    color: 'grey.900',
+    color: theme.palette.text.primary,
   },
   '& .MuiInputBase-input::placeholder': {
-    color: 'text.disabled',
+    color: theme.palette.text.disabled,
     opacity: 1,
   },
-});
+}));
 
-const RoleSelect = styled(Select)({
+const RoleSelect = styled(Select)(({ theme }) => ({
   minWidth: 200,
-  backgroundColor: '#FFFFFF',
-  color: 'grey.900',
-});
+  backgroundColor: 'transparent',
+  color: theme.palette.text.primary,
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.divider,
+  },
+  '&:hover .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.text.secondary,
+  },
+  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.primary.main,
+  },
+}));
 
 const InviteButton = styled(Button)(({ theme }) => ({
-  backgroundColor: '#526A84',
-  color: 'common.white',
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.primary.contrastText,
   padding: theme.spacing(1.5, 4),
   textTransform: 'none',
   fontSize: 14,
   fontWeight: 500,
   '&:hover': {
-    backgroundColor: '#3D5062',
+    backgroundColor: theme.palette.primary.dark,
   },
 }));
 
-const MembersList = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#FFFFFF',
+const MembersList = styled(Box)(({ theme }) => ({
+  backgroundColor: 'transparent',
+  border: `1px solid ${theme.palette.divider}`,
   borderRadius: theme.spacing(1),
   overflow: 'hidden',
 }));
@@ -77,7 +97,7 @@ const MemberRow = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(2.5, 3),
-  borderBottom: '1px solid #E0E0E0',
+  borderBottom: `1px solid ${theme.palette.divider}`,
   '&:last-child': {
     borderBottom: 'none',
   },
@@ -90,38 +110,38 @@ const MemberInfo = styled(Box)({
   gap: 16,
 });
 
-const MemberAvatar = styled(Avatar)({
-  backgroundColor: '#9E9E9E',
-  color: 'common.white',
+const MemberAvatar = styled(Avatar)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[600],
+  color: theme.palette.common.white,
   width: 48,
   height: 48,
   fontSize: 16,
   fontWeight: 500,
-});
+}));
 
 const MemberDetails = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
 });
 
-const MemberName = styled(Typography)({
+const MemberName = styled(Typography)(({ theme }) => ({
   fontSize: 16,
   fontWeight: 400,
-  color: 'grey.900',
+  color: theme.palette.text.primary,
   marginBottom: 2,
-});
+}));
 
-const MemberEmail = styled(Typography)({
+const MemberEmail = styled(Typography)(({ theme }) => ({
   fontSize: 14,
-  color: 'grey.700',
-});
+  color: theme.palette.text.secondary,
+}));
 
-const MemberRole = styled(Typography)({
+const MemberRole = styled(Typography)(({ theme }) => ({
   fontSize: 16,
   fontWeight: 400,
-  color: 'grey.900',
+  color: theme.palette.text.primary,
   marginRight: 16,
-});
+}));
 
 const MembersTab = () => {
   const [email, setEmail] = useState('');

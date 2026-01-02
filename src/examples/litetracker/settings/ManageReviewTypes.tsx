@@ -13,23 +13,23 @@ const SettingsContent = styled(Box)(({ theme }) => ({
   maxWidth: 900,
 }));
 
-const PageTitle = styled(Typography)({
+const PageTitle = styled(Typography)(({ theme }) => ({
   fontSize: 32,
   fontWeight: 700,
-  color: 'grey.900',
+  color: theme.palette.text.primary,
   marginBottom: 16,
-});
+}));
 
-const BackLink = styled(Link)({
+const BackLink = styled(Link)(({ theme }) => ({
   fontSize: 18,
-  color: 'primary.main',
+  color: theme.palette.primary.main,
   textDecoration: 'none',
   marginBottom: 32,
   display: 'inline-block',
   '&:hover': {
     textDecoration: 'underline',
   },
-});
+}));
 
 const Section = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(4),
@@ -38,10 +38,10 @@ const Section = styled(Box)(({ theme }) => ({
 const SectionTitle = styled(Typography)(({ theme }) => ({
   fontSize: 18,
   fontWeight: 500,
-  color: 'grey.700',
+  color: theme.palette.text.secondary,
   marginBottom: theme.spacing(2),
   paddingBottom: theme.spacing(1),
-  borderBottom: '2px solid #E0E0E0',
+  borderBottom: `2px solid ${theme.palette.divider}`,
 }));
 
 const AddReviewSection = styled(Box)(({ theme }) => ({
@@ -51,87 +51,99 @@ const AddReviewSection = styled(Box)(({ theme }) => ({
   alignItems: 'center',
 }));
 
-const ReviewTypeInput = styled(TextField)({
+const ReviewTypeInput = styled(TextField)(({ theme }) => ({
   flex: 1,
-  backgroundColor: '#FFFFFF',
+  backgroundColor: 'transparent',
+  '& .MuiOutlinedInput-root': {
+    backgroundColor: 'transparent',
+    '& fieldset': {
+      borderColor: theme.palette.divider,
+    },
+    '&:hover fieldset': {
+      borderColor: theme.palette.text.secondary,
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: theme.palette.primary.main,
+    },
+  },
   '& .MuiInputBase-input': {
-    color: 'grey.900',
+    color: theme.palette.text.primary,
     fontSize: 16,
   },
   '& .MuiInputBase-input::placeholder': {
-    color: '#CCCCCC',
+    color: theme.palette.text.disabled,
     opacity: 1,
   },
-});
+}));
 
-const AddButton = styled(Button)({
-  backgroundColor: '#4CAF50',
-  color: '#FFFFFF',
+const AddButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.success.main,
+  color: theme.palette.common.white,
   textTransform: 'none',
   padding: '12px 32px',
   fontSize: 16,
   fontWeight: 500,
   '&:hover': {
-    backgroundColor: '#45a049',
+    backgroundColor: theme.palette.success.dark,
   },
-});
+}));
 
 const ReviewTypeRow = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
   padding: theme.spacing(2, 0),
-  borderBottom: '1px solid #E0E0E0',
+  borderBottom: `1px solid ${theme.palette.divider}`,
 }));
 
-const ReviewTypeName = styled(Typography)({
+const ReviewTypeName = styled(Typography)(({ theme }) => ({
   fontSize: 18,
-  color: 'grey.900',
-});
+  color: theme.palette.text.primary,
+}));
 
 const ActionLinks = styled(Box)(({ theme }) => ({
   display: 'flex',
   gap: theme.spacing(3),
 }));
 
-const ActionLink = styled(Link)({
+const ActionLink = styled(Link)(({ theme }) => ({
   fontSize: 16,
-  color: 'primary.main',
+  color: theme.palette.primary.main,
   textDecoration: 'none',
   cursor: 'pointer',
   '&:hover': {
     textDecoration: 'underline',
   },
-});
+}));
 
-const InfoBox = styled(Box)({
-  backgroundColor: '#E3F2FD',
-  borderLeft: '4px solid #2196F3',
+const InfoBox = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.info.light,
+  borderLeft: `4px solid ${theme.palette.info.main}`,
   padding: '16px 20px',
   display: 'flex',
   gap: 16,
   alignItems: 'flex-start',
   marginTop: 32,
-});
+}));
 
-const InfoIcon = styled(Box)({
+const InfoIcon = styled(Box)(({ theme }) => ({
   width: 48,
   height: 48,
-  backgroundColor: '#BBDEFB',
+  backgroundColor: theme.palette.info.light,
   borderRadius: '50%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   fontSize: 24,
-  color: 'info.main',
+  color: theme.palette.info.main,
   flexShrink: 0,
-});
+}));
 
-const InfoText = styled(Typography)({
+const InfoText = styled(Typography)(({ theme }) => ({
   fontSize: 14,
-  color: 'grey.900',
+  color: theme.palette.text.primary,
   lineHeight: 1.6,
-});
+}));
 
 interface ReviewType {
   id: string;
@@ -195,7 +207,7 @@ const ManageReviewTypes = () => {
             <ReviewTypeName>{reviewType.name}</ReviewTypeName>
             <ActionLinks>
               <ActionLink>Edit</ActionLink>
-              <Box sx={{ color: 'grey.300' }}>|</Box>
+              <Box sx={{ color: 'text.disabled' }}>|</Box>
               <ActionLink onClick={() => handleHide(reviewType.id)}>Hide</ActionLink>
             </ActionLinks>
           </ReviewTypeRow>
@@ -205,7 +217,7 @@ const ManageReviewTypes = () => {
       {hiddenReviewTypes.length > 0 && (
         <Section>
           <SectionTitle>Hidden Review Types</SectionTitle>
-          <Typography sx={{ fontSize: 14, color: 'grey.700', marginTop: 2 }}>
+          <Typography sx={{ fontSize: 14, color: 'text.secondary', marginTop: 2 }}>
             When a review type is hidden, it is no longer visible in the dropdown, and it
             cannot be added to a story. Existing reviews of that type will not be affected.
           </Typography>
