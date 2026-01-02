@@ -9,6 +9,7 @@ import EmployeesCrudPage from "./pages/employees";
 import SignInPage from "./pages/signin";
 import ProjectListContainer from "./pages/projects";
 import ProjectContainer from "./pages/project";
+import LiteTrackerDemo from "./examples/LiteTrackerDemo";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
     Component: App,
     children: [
       {
-        path: "/",
+        path: "/old",
         Component: Layout,
         children: [
           {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
         Component: SignInPage,
       },
     ],
+  },
+  {
+    path: "/*",
+    Component: LiteTrackerDemo,
   },
 ]);
 
