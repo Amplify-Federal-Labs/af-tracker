@@ -1,4 +1,4 @@
-import { Box, Typography, IconButton, Button, Menu, MenuItem } from '@mui/material';
+import { Box, Typography, Menu, MenuItem } from '@mui/material';
 import { Add, MoreVert, Close } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
@@ -6,6 +6,7 @@ import { Droppable } from '@hello-pangea/dnd';
 import StoryCard from './StoryCard';
 import AddStoryForm from './AddStoryForm';
 import type { MockStory } from '../mockData';
+import { EmptyState, IconButtonSmall, TextButton } from '../design-system';
 
 interface KanbanColumnProps {
   id: string;
@@ -53,26 +54,6 @@ const ColumnActions = styled(Box)({
   gap: 4,
 });
 
-const ColumnIconButton = styled(IconButton)(({ theme }) => ({
-  color: theme.palette.primary.contrastText,
-  padding: 4,
-  '&:hover': {
-    backgroundColor: theme.palette.action.brownHover,
-  },
-}));
-
-const AddStoryButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.primary.contrastText,
-  textTransform: 'none',
-  fontSize: 14,
-  fontWeight: 400,
-  padding: '4px 8px',
-  minWidth: 'auto',
-  '&:hover': {
-    backgroundColor: theme.palette.action.brownHover,
-  },
-}));
-
 const ColumnMetadata = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1, 1.5),
   backgroundColor: theme.palette.primary.main,
@@ -91,20 +72,6 @@ const ColumnContent = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
   flex: 1,
   minHeight: 200,
-}));
-
-const EmptyState = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  minHeight: 200,
-  padding: theme.spacing(3),
-}));
-
-const EmptyStateText = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  textAlign: 'center',
-  fontSize: 14,
 }));
 
 const KanbanColumn = ({
@@ -168,21 +135,22 @@ const KanbanColumn = ({
         <ColumnTitle>{title}</ColumnTitle>
         <ColumnActions>
           {onAddStory && (
-            <AddStoryButton
+            <TextButton
               onClick={handleAddStoryClick}
               startIcon={<Add fontSize="small" />}
               aria-label="Add story"
+              sx={{ color: 'primary.contrastText' }}
             >
               Add Story
-            </AddStoryButton>
+            </TextButton>
           )}
-          <ColumnIconButton
-            size="small"
+          <IconButtonSmall
             aria-label="More options"
             onClick={handleMenuOpen}
+            sx={{ color: 'primary.contrastText' }}
           >
             <MoreVert fontSize="small" />
-          </ColumnIconButton>
+          </IconButtonSmall>
           <Menu
             anchorEl={menuAnchorEl}
             open={Boolean(menuAnchorEl)}
@@ -199,9 +167,13 @@ const KanbanColumn = ({
             <MenuItem onClick={handleSelectAll}>Select all</MenuItem>
             <MenuItem onClick={handleDeselectAll}>Deselect all</MenuItem>
           </Menu>
-          <ColumnIconButton size="small" onClick={handleClose} aria-label="Close column">
+          <IconButtonSmall
+            onClick={handleClose}
+            aria-label="Close column"
+            sx={{ color: 'primary.contrastText' }}
+          >
             <Close fontSize="small" />
-          </ColumnIconButton>
+          </IconButtonSmall>
         </ColumnActions>
       </ColumnHeader>
 
@@ -224,11 +196,7 @@ const KanbanColumn = ({
               <AddStoryForm onClose={handleFormClose} onSave={handleFormSave} />
             )}
             {stories.length === 0 && !showForm ? (
-              <EmptyState>
-                <EmptyStateText>
-                  {emptyMessage || 'No stories in this column'}
-                </EmptyStateText>
-              </EmptyState>
+              <EmptyState message={emptyMessage || 'No stories in this column'} />
             ) : (
               stories.map((story, index) => (
                 <StoryCard

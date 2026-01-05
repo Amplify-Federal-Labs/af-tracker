@@ -11,7 +11,7 @@
  * </StoryCardContainer>
  */
 
-import { Card, CardProps } from '@mui/material';
+import { Card, type CardProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export interface StoryCardContainerProps extends CardProps {

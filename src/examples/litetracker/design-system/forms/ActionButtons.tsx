@@ -8,7 +8,7 @@
  * </ActionButtons>
  */
 
-import { Box, BoxProps } from '@mui/material';
+import { Box, type BoxProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export interface ActionButtonsProps extends BoxProps {

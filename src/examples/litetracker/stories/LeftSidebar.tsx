@@ -1,5 +1,4 @@
 import {
-  Drawer,
   List,
   ListItemButton,
   ListItemIcon,
@@ -8,7 +7,6 @@ import {
   Select,
   MenuItem,
   FormControl,
-  IconButton,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -21,8 +19,8 @@ import {
   LibraryBooks,
   Label,
 } from '@mui/icons-material';
-import { styled } from '@mui/material/styles';
 import { useState } from 'react';
+import { CollapsibleSidebar, IconButtonRegular } from '../design-system';
 
 export const DRAWER_WIDTH = 190;
 export const DRAWER_WIDTH_COLLAPSED = 56;
@@ -34,48 +32,6 @@ interface LeftSidebarProps {
   collapsed?: boolean;
   onToggleCollapse?: () => void;
 }
-
-const SidebarDrawer = styled(Drawer, {
-  shouldForwardProp: (prop) => prop !== 'collapsed',
-})<{ collapsed: boolean }>(({ theme, collapsed }) => ({
-  width: collapsed ? DRAWER_WIDTH_COLLAPSED : DRAWER_WIDTH,
-  flexShrink: 0,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  '& .MuiDrawer-paper': {
-    width: collapsed ? DRAWER_WIDTH_COLLAPSED : DRAWER_WIDTH,
-    boxSizing: 'border-box',
-    marginTop: 50, // Height of top nav
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    overflowX: 'hidden',
-  },
-}));
-
-const SidebarHeader = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(1),
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-start',
-}));
-
-const SidebarFooter = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2, 1),
-  marginTop: 'auto',
-  borderTop: `1px solid ${theme.palette.divider}`,
-}));
-
-const DisplayModeSelect = styled(FormControl)(({ theme }) => ({
-  width: '100%',
-  '& .MuiSelect-select': {
-    fontSize: 12,
-    padding: theme.spacing(1),
-  },
-}));
 
 const navItems = [
   { id: 'my-work', label: 'My Work', icon: <Work /> },
@@ -112,12 +68,25 @@ const LeftSidebar = ({
   const isViewActive = (viewId: string) => activeViews.includes(viewId);
 
   return (
-    <SidebarDrawer variant="permanent" open={open} collapsed={collapsed}>
-      <SidebarHeader>
-        <IconButton size="small" aria-label="Toggle menu" onClick={handleToggleCollapse}>
+    <CollapsibleSidebar
+      width={DRAWER_WIDTH}
+      collapsedWidth={DRAWER_WIDTH_COLLAPSED}
+      collapsed={collapsed}
+      topOffset={50}
+      open={open}
+    >
+      <Box
+        sx={(theme) => ({
+          padding: theme.spacing(1),
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+        })}
+      >
+        <IconButtonRegular size="small" aria-label="Toggle menu" onClick={handleToggleCollapse}>
           <MenuIcon fontSize="small" />
-        </IconButton>
-      </SidebarHeader>
+        </IconButtonRegular>
+      </Box>
 
       <List component="nav">
         {navItems.map((item) => (
@@ -133,8 +102,23 @@ const LeftSidebar = ({
       </List>
 
       {!collapsed && (
-        <SidebarFooter>
-          <DisplayModeSelect size="small">
+        <Box
+          sx={(theme) => ({
+            padding: theme.spacing(2, 1),
+            marginTop: 'auto',
+            borderTop: `1px solid ${theme.palette.divider}`,
+          })}
+        >
+          <FormControl
+            size="small"
+            sx={(theme) => ({
+              width: '100%',
+              '& .MuiSelect-select': {
+                fontSize: 12,
+                padding: theme.spacing(1),
+              },
+            })}
+          >
             <Select
               value={displayMode}
               onChange={(e) => setDisplayMode(e.target.value)}
@@ -144,10 +128,10 @@ const LeftSidebar = ({
               <MenuItem value="compact">Display:Compact</MenuItem>
               <MenuItem value="comfortable">Display:Comfortable</MenuItem>
             </Select>
-          </DisplayModeSelect>
-        </SidebarFooter>
+          </FormControl>
+        </Box>
       )}
-    </SidebarDrawer>
+    </CollapsibleSidebar>
   );
 };
 

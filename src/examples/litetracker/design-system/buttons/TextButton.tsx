@@ -5,12 +5,10 @@
  * <TextButton onClick={handleClick}>Learn More</TextButton>
  */
 
-import { Button, ButtonProps } from '@mui/material';
+import { Button, type ButtonProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-export interface TextButtonProps extends ButtonProps {
-  // Extends all MUI ButtonProps
-}
+export type TextButtonProps = ButtonProps;
 
 const StyledButton = styled(Button)(({ theme }) => ({
   textTransform: 'none',

@@ -7,12 +7,10 @@
  * </IconButtonSmall>
  */
 
-import { IconButton, IconButtonProps } from '@mui/material';
+import { IconButton, type IconButtonProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-export interface IconButtonSmallProps extends Omit<IconButtonProps, 'size'> {
-  // Extends all MUI IconButtonProps except size (forced to small)
-}
+export type IconButtonSmallProps = Omit<IconButtonProps, 'size'>;
 
 const StyledIconButton = styled(IconButton)({
   padding: 4,

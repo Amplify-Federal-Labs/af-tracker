@@ -9,13 +9,11 @@
  * />
  */
 
-import { TextField, TextFieldProps, InputAdornment } from '@mui/material';
+import { TextField, type TextFieldProps, InputAdornment } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 
-export interface SearchFieldProps extends Omit<TextFieldProps, 'variant'> {
-  // Extends all TextFieldProps
-}
+export type SearchFieldProps = Omit<TextFieldProps, 'variant'>;
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   width: 250,

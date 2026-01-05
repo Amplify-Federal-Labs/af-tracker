@@ -1,5 +1,6 @@
-import { Button, Dialog, DialogTitle, TextField, DialogContent, DialogActions, Stack } from "@mui/material";
+import { Dialog, DialogTitle, TextField, DialogContent, DialogActions, Stack } from "@mui/material";
 import { useState } from "react";
+import { PrimaryButton, SecondaryButton } from "../../examples/litetracker/design-system";
 
 interface ProjectDetailDialogProps {
     name: string;
@@ -47,12 +48,11 @@ const ProjectDetailDialog = (props: ProjectDetailDialogProps) => {
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCancel}>Cancel</Button>
-                <Button 
-                    variant="contained"
+                <SecondaryButton onClick={handleCancel}>Cancel</SecondaryButton>
+                <PrimaryButton
                     onClick={handleSave}
                     disabled={!name.trim() || !description.trim()}
-                >Save</Button>
+                >Save</PrimaryButton>
             </DialogActions>
         </Dialog>
     )

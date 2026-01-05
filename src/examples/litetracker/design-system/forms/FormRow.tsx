@@ -13,7 +13,7 @@
  * </FormRow>
  */
 
-import { Box, BoxProps } from '@mui/material';
+import { Box, type BoxProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export interface FormRowProps extends Omit<BoxProps, 'display'> {

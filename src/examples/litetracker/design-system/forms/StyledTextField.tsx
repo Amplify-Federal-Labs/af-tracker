@@ -9,9 +9,9 @@
  * <StyledTextField variant="light" value={title} onChange={handleChange} />
  */
 
-import { TextField, TextFieldProps } from '@mui/material';
+import { TextField, type TextFieldProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { FormFieldVariant } from '../types';
+import { type FormFieldVariant } from '../types';
 
 export interface StyledTextFieldProps extends Omit<TextFieldProps, 'variant'> {
   variant?: FormFieldVariant;

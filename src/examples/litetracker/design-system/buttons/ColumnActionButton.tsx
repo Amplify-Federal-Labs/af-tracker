@@ -5,12 +5,10 @@
  * <ColumnActionButton startIcon={<Add />}>Add</ColumnActionButton>
  */
 
-import { Button, ButtonProps } from '@mui/material';
+import { Button, type ButtonProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-export interface ColumnActionButtonProps extends ButtonProps {
-  // Extends all MUI ButtonProps
-}
+export type ColumnActionButtonProps = ButtonProps;
 
 const StyledButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.contrastText,

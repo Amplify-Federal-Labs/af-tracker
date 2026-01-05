@@ -10,9 +10,9 @@
  * </StyledSelect>
  */
 
-import { Select, SelectProps } from '@mui/material';
+import { Select, type SelectProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { FormFieldVariant } from '../types';
+import { type FormFieldVariant } from '../types';
 
 export interface StyledSelectProps extends Omit<SelectProps, 'variant'> {
   variant?: FormFieldVariant;

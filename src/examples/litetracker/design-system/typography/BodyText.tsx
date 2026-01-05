@@ -5,7 +5,7 @@
  * <BodyText>This is regular body text</BodyText>
  */
 
-import { Typography, TypographyProps } from '@mui/material';
+import { Typography, type TypographyProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export interface BodyTextProps extends TypographyProps {

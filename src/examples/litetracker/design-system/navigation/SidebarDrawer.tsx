@@ -7,7 +7,7 @@
  * </SidebarDrawer>
  */
 
-import { Drawer, DrawerProps } from '@mui/material';
+import { Drawer, type DrawerProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export interface SidebarDrawerProps extends Omit<DrawerProps, 'variant'> {

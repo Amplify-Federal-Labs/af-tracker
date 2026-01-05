@@ -1,25 +1,9 @@
-import { Box } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import SettingsSidebar, { SETTINGS_SIDEBAR_WIDTH } from './SettingsSidebar';
 import ProjectSettings from './ProjectSettings';
 import ManageReviewTypes from './ManageReviewTypes';
 import RecoverDeletedStories from './RecoverDeletedStories';
-import { PlaceholderContainer, PlaceholderText } from "../shared/PlaceHolder";
-
-const SettingsContainer = styled(Box)({
-  display: 'flex',
-  width: '100%',
-  height: '100%',
-});
-
-const ContentArea = styled(Box)(({ theme }) => ({
-  flexGrow: 1,
-  marginLeft: SETTINGS_SIDEBAR_WIDTH,
-  height: '100%',
-  overflow: 'auto',
-  backgroundColor: theme.palette.background.default,
-}));
+import { PageContainer, ContentArea, EmptyState } from '../design-system';
 
 const SettingsTab = () => {
   const [activeView, setActiveView] = useState('project-settings');
@@ -37,21 +21,17 @@ const SettingsTab = () => {
       case 'recover-deleted-stories':
         return <RecoverDeletedStories />;
       default:
-        return (
-          <PlaceholderContainer>
-            <PlaceholderText>Settings - {activeView}</PlaceholderText>
-          </PlaceholderContainer>
-        );
+        return <EmptyState message={`Settings - ${activeView}`} />;
     }
   };
 
   return (
-    <SettingsContainer>
+    <PageContainer>
       <SettingsSidebar activeView={activeView} onViewChange={handleViewChange} />
-      <ContentArea>
+      <ContentArea marginLeft={SETTINGS_SIDEBAR_WIDTH}>
         {renderContent()}
       </ContentArea>
-    </SettingsContainer>
+    </PageContainer>
   );
 };
 

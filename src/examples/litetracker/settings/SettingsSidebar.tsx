@@ -1,10 +1,9 @@
 import {
-  Drawer,
   List,
   ListItemButton,
   ListItemText,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { SidebarDrawer } from '../design-system';
 
 export const SETTINGS_SIDEBAR_WIDTH = 200;
 
@@ -12,18 +11,6 @@ interface SettingsSidebarProps {
   activeView?: string;
   onViewChange?: (view: string) => void;
 }
-
-const SidebarDrawer = styled(Drawer)(({ theme }) => ({
-  width: SETTINGS_SIDEBAR_WIDTH,
-  flexShrink: 0,
-  '& .MuiDrawer-paper': {
-    width: SETTINGS_SIDEBAR_WIDTH,
-    boxSizing: 'border-box',
-    marginTop: 50, // Height of top nav
-    backgroundColor: theme.palette.sidebar.main,
-    borderRight: 'none',
-  },
-}));
 
 const navItems = [
   { id: 'project-settings', label: 'Project Settings' },
@@ -42,7 +29,7 @@ const SettingsSidebar = ({ activeView = 'project-settings', onViewChange }: Sett
   const isViewActive = (viewId: string) => activeView === viewId;
 
   return (
-    <SidebarDrawer variant="permanent">
+    <SidebarDrawer width={SETTINGS_SIDEBAR_WIDTH} topOffset={50}>
       <List component="nav" sx={{ pt: 0 }}>
         {navItems.map((item) => (
           <ListItemButton

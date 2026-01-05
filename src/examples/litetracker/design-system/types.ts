@@ -2,7 +2,8 @@
  * Shared TypeScript interfaces for LiteTracker Design System
  */
 
-import { SxProps, Theme } from '@mui/material/styles';
+import type { Theme } from '@mui/material/styles';
+import type { SxProps } from '@mui/material';
 
 /**
  * Base props extended by all design system components

@@ -5,7 +5,7 @@
  * <PageTitle>Project Settings</PageTitle>
  */
 
-import { Typography, TypographyProps } from '@mui/material';
+import { Typography, type TypographyProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export interface PageTitleProps extends TypographyProps {

@@ -7,10 +7,10 @@
  * <MenuItem variant="dashboard">Dashboard</MenuItem>
  */
 
-import { MenuItem as MuiMenuItem, MenuItemProps as MuiMenuItemProps } from '@mui/material';
+import { MenuItem as MuiMenuItem, type MenuItemProps as MuiMenuItemProps } from '@mui/material';
 import { Add as AddIcon, Home as HomeIcon } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
-import { MenuItemVariant } from '../types';
+import { type MenuItemVariant } from '../types';
 
 export interface MenuItemProps extends Omit<MuiMenuItemProps, 'children'> {
   children: React.ReactNode;

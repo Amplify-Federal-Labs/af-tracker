@@ -6,12 +6,10 @@
  * <PrimaryButton startIcon={<Add />}>Add Story</PrimaryButton>
  */
 
-import { Button, ButtonProps } from '@mui/material';
+import { Button, type ButtonProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-export interface PrimaryButtonProps extends ButtonProps {
-  // Extends all MUI ButtonProps
-}
+export type PrimaryButtonProps = ButtonProps;
 
 const StyledButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,

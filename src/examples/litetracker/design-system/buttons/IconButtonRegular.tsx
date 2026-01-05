@@ -7,12 +7,10 @@
  * </IconButtonRegular>
  */
 
-import { IconButton, IconButtonProps } from '@mui/material';
+import { IconButton, type IconButtonProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-export interface IconButtonRegularProps extends IconButtonProps {
-  // Extends all MUI IconButtonProps
-}
+export type IconButtonRegularProps = IconButtonProps;
 
 const StyledIconButton = styled(IconButton)({
   padding: 6,

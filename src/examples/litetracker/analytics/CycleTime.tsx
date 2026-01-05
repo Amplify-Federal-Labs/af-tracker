@@ -1,10 +1,8 @@
-import { PlaceholderContainer, PlaceholderText } from "../shared/PlaceHolder";
+import { EmptyState } from "../design-system";
 
 const CycleTime = () => {
   return (
-    <PlaceholderContainer>
-      <PlaceholderText>Cycle Time</PlaceholderText>
-    </PlaceholderContainer>
+    <EmptyState message="Cycle Time" />
   );
 };
 

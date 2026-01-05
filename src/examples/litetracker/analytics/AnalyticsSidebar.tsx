@@ -1,5 +1,4 @@
 import {
-  Drawer,
   List,
   ListItemButton,
   ListItemIcon,
@@ -13,7 +12,7 @@ import {
   Flag,
   Assignment,
 } from '@mui/icons-material';
-import { styled } from '@mui/material/styles';
+import { SidebarDrawer } from '../design-system';
 
 export const ANALYTICS_SIDEBAR_WIDTH = 295;
 
@@ -21,18 +20,6 @@ interface AnalyticsSidebarProps {
   activeView?: string;
   onViewChange?: (view: string) => void;
 }
-
-const SidebarDrawer = styled(Drawer)(({ theme }) => ({
-  width: ANALYTICS_SIDEBAR_WIDTH,
-  flexShrink: 0,
-  '& .MuiDrawer-paper': {
-    width: ANALYTICS_SIDEBAR_WIDTH,
-    boxSizing: 'border-box',
-    marginTop: 50, // Height of top nav
-    backgroundColor: theme.palette.sidebar.main,
-    borderRight: 'none',
-  },
-}));
 
 const navItems = [
   { id: 'project-overview', label: 'Project Overview', icon: <Home /> },
@@ -53,7 +40,7 @@ const AnalyticsSidebar = ({ activeView = 'project-overview', onViewChange }: Ana
   const isViewActive = (viewId: string) => activeView === viewId;
 
   return (
-    <SidebarDrawer variant="permanent">
+    <SidebarDrawer width={ANALYTICS_SIDEBAR_WIDTH} topOffset={50}>
       <List component="nav" sx={{ pt: 0 }}>
         {navItems.map((item) => (
           <ListItemButton

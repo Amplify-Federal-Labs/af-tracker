@@ -1,116 +1,24 @@
 import {
   Box,
   Typography,
-  TextField,
-  Select,
   MenuItem,
   Checkbox,
   FormControlLabel,
   Button,
   Link,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { useState } from 'react';
-
-const SettingsContent = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(4),
-  maxWidth: 900,
-}));
-
-const Section = styled(Box)(({ theme }) => ({
-  marginBottom: theme.spacing(4),
-}));
-
-const SectionTitle = styled(Typography)(({ theme }) => ({
-  fontSize: 18,
-  fontWeight: 500,
-  color: theme.palette.text.primary,
-  marginBottom: theme.spacing(2),
-  paddingBottom: theme.spacing(1),
-  borderBottom: `2px solid ${theme.palette.divider}`,
-}));
-
-const FormRow = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  marginBottom: theme.spacing(3),
-  gap: theme.spacing(2),
-}));
-
-const FormLabel = styled(Typography)(({ theme }) => ({
-  fontSize: 14,
-  fontWeight: 500,
-  color: theme.palette.text.primary,
-  minWidth: 200,
-  textAlign: 'right',
-}));
-
-const StyledTextField = styled(TextField)(({ theme }) => ({
-  backgroundColor: 'transparent',
-  '& .MuiOutlinedInput-root': {
-    backgroundColor: 'transparent',
-    '& fieldset': {
-      borderColor: theme.palette.divider,
-    },
-    '&:hover fieldset': {
-      borderColor: theme.palette.text.secondary,
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: theme.palette.primary.main,
-    },
-  },
-  '& .MuiInputBase-input': {
-    color: theme.palette.text.primary,
-    fontSize: 14,
-  },
-}));
-
-const StyledSelect = styled(Select)(({ theme }) => ({
-  backgroundColor: 'transparent',
-  color: theme.palette.text.primary,
-  fontSize: 14,
-  '& .MuiOutlinedInput-notchedOutline': {
-    borderColor: theme.palette.divider,
-  },
-  '&:hover .MuiOutlinedInput-notchedOutline': {
-    borderColor: theme.palette.text.secondary,
-  },
-  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-    borderColor: theme.palette.primary.main,
-  },
-}));
-
-const HelpText = styled(Typography)(({ theme }) => ({
-  fontSize: 13,
-  color: theme.palette.text.secondary,
-  marginLeft: 216,
-}));
-
-const ActionButtons = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(2),
-  marginTop: theme.spacing(4),
-  paddingTop: theme.spacing(2),
-  borderTop: `1px solid ${theme.palette.divider}`,
-}));
-
-const SaveButton = styled(Button)(({ theme }) => ({
-  backgroundColor: theme.palette.success.main,
-  color: theme.palette.common.white,
-  textTransform: 'none',
-  padding: '8px 24px',
-  fontSize: 14,
-  '&:hover': {
-    backgroundColor: theme.palette.success.dark,
-  },
-}));
-
-const CancelButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  textTransform: 'none',
-  padding: '8px 24px',
-  fontSize: 14,
-}));
+import {
+  Section,
+  SectionHeading,
+  FormRow,
+  FormLabel,
+  StyledTextField,
+  StyledSelect,
+  HelpText,
+  ActionButtons,
+  SecondaryButton,
+} from '../design-system';
 
 const ProjectSettings = () => {
   const [projectTitle, setProjectTitle] = useState('Tracker Tracker');
@@ -127,12 +35,13 @@ const ProjectSettings = () => {
   const [bugsAndChoresPoints, setBugsAndChoresPoints] = useState(false);
 
   return (
-    <SettingsContent>
-      <Section>
-        <SectionTitle>General</SectionTitle>
+    <Box sx={{ padding: 4, maxWidth: 900 }}>
+      <Section showBorder>
+        <SectionHeading variant="large" sx={{ mb: 2, pb: 1 }}>General</SectionHeading>
         <FormRow>
           <FormLabel>Project Title</FormLabel>
           <StyledTextField
+            variant="light"
             value={projectTitle}
             onChange={(e) => setProjectTitle(e.target.value)}
             size="small"
@@ -158,11 +67,12 @@ const ProjectSettings = () => {
         </FormRow>
       </Section>
 
-      <Section>
-        <SectionTitle>Iterations and Velocity</SectionTitle>
+      <Section showBorder>
+        <SectionHeading variant="large" sx={{ mb: 2, pb: 1 }}>Iterations and Velocity</SectionHeading>
         <FormRow>
           <FormLabel>Start Iterations On</FormLabel>
           <StyledSelect
+            variant="light"
             value={startIterationsOn}
             onChange={(e) => setStartIterationsOn(e.target.value as string)}
             size="small"
@@ -179,7 +89,7 @@ const ProjectSettings = () => {
         </FormRow>
         <FormRow>
           <FormLabel>Project Time Zone</FormLabel>
-          <StyledSelect size="small" fullWidth defaultValue="">
+          <StyledSelect variant="light" size="small" fullWidth defaultValue="">
             <MenuItem value="">Select timezone...</MenuItem>
           </StyledSelect>
         </FormRow>
@@ -187,6 +97,7 @@ const ProjectSettings = () => {
           <FormLabel>Iteration Length</FormLabel>
           <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
             <StyledSelect
+              variant="light"
               value={iterationLength}
               onChange={(e) => setIterationLength(e.target.value as string)}
               size="small"
@@ -203,6 +114,7 @@ const ProjectSettings = () => {
         <FormRow>
           <FormLabel>Point Scale</FormLabel>
           <StyledSelect
+            variant="light"
             value={pointScale}
             onChange={(e) => setPointScale(e.target.value as string)}
             size="small"
@@ -216,6 +128,7 @@ const ProjectSettings = () => {
         <FormRow>
           <FormLabel>Initial Velocity</FormLabel>
           <StyledTextField
+            variant="light"
             value={initialVelocity}
             onChange={(e) => setInitialVelocity(e.target.value)}
             size="small"
@@ -226,6 +139,7 @@ const ProjectSettings = () => {
         <FormRow>
           <FormLabel>Velocity Strategy</FormLabel>
           <StyledSelect
+            variant="light"
             value={velocityStrategy}
             onChange={(e) => setVelocityStrategy(e.target.value as string)}
             size="small"
@@ -257,8 +171,8 @@ const ProjectSettings = () => {
         </HelpText>
       </Section>
 
-      <Section>
-        <SectionTitle>Access</SectionTitle>
+      <Section showBorder>
+        <SectionHeading variant="large" sx={{ mb: 2, pb: 1 }}>Access</SectionHeading>
         <FormRow>
           <FormLabel>Hide email addresses</FormLabel>
           <Box>
@@ -280,8 +194,8 @@ const ProjectSettings = () => {
         </HelpText>
       </Section>
 
-      <Section>
-        <SectionTitle>Customization</SectionTitle>
+      <Section showBorder>
+        <SectionHeading variant="large" sx={{ mb: 2, pb: 1 }}>Customization</SectionHeading>
         <FormRow>
           <FormLabel>Priority Field</FormLabel>
           <Box>
@@ -302,8 +216,8 @@ const ProjectSettings = () => {
         </HelpText>
       </Section>
 
-      <Section>
-        <SectionTitle>Experimental</SectionTitle>
+      <Section showBorder>
+        <SectionHeading variant="large" sx={{ mb: 2, pb: 1 }}>Experimental</SectionHeading>
         <FormRow>
           <FormLabel>Enable live updates</FormLabel>
           <FormControlLabel
@@ -319,8 +233,8 @@ const ProjectSettings = () => {
         </FormRow>
       </Section>
 
-      <Section>
-        <SectionTitle>Other</SectionTitle>
+      <Section showBorder>
+        <SectionHeading variant="large" sx={{ mb: 2, pb: 1 }}>Other</SectionHeading>
         <FormRow>
           <FormLabel>Bugs and Chores May Be Given Points</FormLabel>
           <FormControlLabel
@@ -357,10 +271,23 @@ const ProjectSettings = () => {
       </Section>
 
       <ActionButtons>
-        <CancelButton>cancel</CancelButton>
-        <SaveButton>Save</SaveButton>
+        <SecondaryButton>cancel</SecondaryButton>
+        <Button
+          sx={(theme) => ({
+            backgroundColor: theme.palette.success.main,
+            color: theme.palette.common.white,
+            textTransform: 'none',
+            padding: '8px 24px',
+            fontSize: 14,
+            '&:hover': {
+              backgroundColor: theme.palette.success.dark,
+            },
+          })}
+        >
+          Save
+        </Button>
       </ActionButtons>
-    </SettingsContent>
+    </Box>
   );
 };
 

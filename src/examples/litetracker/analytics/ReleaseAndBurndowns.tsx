@@ -1,10 +1,8 @@
-import { PlaceholderContainer, PlaceholderText } from "../shared/PlaceHolder";
+import { EmptyState } from "../design-system";
 
 const ReleaseAndBurndowns = () => {
   return (
-    <PlaceholderContainer>
-      <PlaceholderText>Release And Burndowns</PlaceholderText>
-    </PlaceholderContainer>
+    <EmptyState message="Release And Burndowns" />
   );
 };
 

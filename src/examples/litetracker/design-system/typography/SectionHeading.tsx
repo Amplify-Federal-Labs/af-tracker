@@ -7,9 +7,9 @@
  * <SectionHeading variant="small">Description</SectionHeading>
  */
 
-import { Typography, TypographyProps } from '@mui/material';
+import { Typography,type TypographyProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { SectionHeadingVariant } from '../types';
+import { type SectionHeadingVariant } from '../types';
 
 export interface SectionHeadingProps extends Omit<TypographyProps, 'variant'> {
   children: React.ReactNode;

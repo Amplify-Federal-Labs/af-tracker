@@ -5,7 +5,7 @@
  * <Caption>Last updated: 2 hours ago</Caption>
  */
 
-import { Typography, TypographyProps } from '@mui/material';
+import { Typography, type TypographyProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export interface CaptionProps extends TypographyProps {

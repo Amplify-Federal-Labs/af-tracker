@@ -5,12 +5,10 @@
  * <SecondaryButton onClick={handleCancel}>Cancel</SecondaryButton>
  */
 
-import { Button, ButtonProps } from '@mui/material';
+import { Button, type ButtonProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-export interface SecondaryButtonProps extends ButtonProps {
-  // Extends all MUI ButtonProps
-}
+export type SecondaryButtonProps = ButtonProps;
 
 const StyledButton = styled(Button)(({ theme }) => ({
   color: theme.palette.text.secondary,

@@ -1,10 +1,10 @@
+import { IconButtonRegular, TextButton } from './design-system';
 import {
   AppBar,
   Toolbar,
   Tabs,
   Tab,
   TextField,
-  IconButton,
   Box,
   InputAdornment,
   Menu,
@@ -33,22 +33,6 @@ interface TopNavProps {
 const StyledAppBar = styled(AppBar)({
   zIndex: 1300, // Above drawer
 });
-
-const ProjectSelectorButton = styled(Box)(({ theme }) => ({
-  minWidth: 200,
-  marginRight: theme.spacing(3),
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(1, 1.5),
-  color: theme.palette.sidebar.main,
-  fontSize: 14,
-  fontWeight: 500,
-  cursor: 'pointer',
-  borderRadius: 4,
-  '&:hover': {
-    backgroundColor: theme.palette.action.brownHover,
-  },
-}));
 
 const StyledMenu = styled(Menu)(({ theme }) => ({
   '& .MuiPaper-root': {
@@ -124,21 +108,6 @@ const RightSection = styled(Box)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const UserInfo = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  marginLeft: theme.spacing(1),
-  color: theme.palette.sidebar.main,
-  fontSize: 14,
-  fontWeight: 500,
-  cursor: 'pointer',
-  padding: theme.spacing(0.5, 1),
-  borderRadius: 4,
-  '&:hover': {
-    backgroundColor: theme.palette.action.brownHover,
-  },
-}));
-
 const WhatsNew = styled(Box)(({ theme }) => ({
   cursor: 'pointer',
   padding: theme.spacing(0.5, 1),
@@ -176,10 +145,17 @@ const TopNav = ({ projectName = 'Tracker Tracker', activeTab = 0, onTabChange }:
   return (
     <StyledAppBar position="fixed">
       <Toolbar>
-        <ProjectSelectorButton onClick={handleProjectMenuClick}>
+        <TextButton
+          onClick={handleProjectMenuClick}
+          endIcon={open ? <ExpandLess /> : <ExpandMore />}
+          sx={{
+            minWidth: 200,
+            marginRight: 2,
+            color: 'sidebar.main',
+          }}
+        >
           {selectedProject}
-          {open ? <ExpandLess sx={{ ml: 1 }} /> : <ExpandMore sx={{ ml: 1 }} />}
-        </ProjectSelectorButton>
+        </TextButton>
 
         <StyledMenu
           anchorEl={anchorEl}
@@ -207,7 +183,10 @@ const TopNav = ({ projectName = 'Tracker Tracker', activeTab = 0, onTabChange }:
             Example Project
           </ProjectMenuItem>
 
-          <ProjectMenuItem onClick={() => handleProjectSelect('Tracker Tracker')} selected={selectedProject === 'Tracker Tracker'}>
+          <ProjectMenuItem
+            onClick={() => handleProjectSelect('Tracker Tracker')}
+            selected={selectedProject === 'Tracker Tracker'}
+          >
             Tracker Tracker
           </ProjectMenuItem>
 
@@ -242,18 +221,22 @@ const TopNav = ({ projectName = 'Tracker Tracker', activeTab = 0, onTabChange }:
             }}
           />
 
-          <IconButton size="small" color="inherit" aria-label="Help">
+          <IconButtonRegular size="small" color="inherit" aria-label="Help">
             <Help fontSize="small" />
-          </IconButton>
+          </IconButtonRegular>
 
           <WhatsNew>WHAT'S NEW</WhatsNew>
 
           <Box>HELP</Box>
 
-          <UserInfo>
+          <TextButton
+            endIcon={<ExpandMore />}
+            sx={{
+              color: 'sidebar.main',
+            }}
+          >
             SANG YUM
-            <ExpandMore fontSize="small" sx={{ ml: 0.5 }} />
-          </UserInfo>
+          </TextButton>
         </RightSection>
       </Toolbar>
     </StyledAppBar>
@@ -261,3 +244,4 @@ const TopNav = ({ projectName = 'Tracker Tracker', activeTab = 0, onTabChange }:
 };
 
 export default TopNav;
+

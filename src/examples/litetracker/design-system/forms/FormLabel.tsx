@@ -6,7 +6,7 @@
  * <FormLabel minWidth={150}>Type</FormLabel>
  */
 
-import { Typography, TypographyProps } from '@mui/material';
+import { Typography, type TypographyProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export interface FormLabelProps extends TypographyProps {

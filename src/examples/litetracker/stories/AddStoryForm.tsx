@@ -3,17 +3,21 @@ import {
   TextField,
   Select,
   MenuItem,
-  IconButton,
   Avatar,
   Typography,
   Link,
   Checkbox,
   FormControlLabel,
-  Button,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Close, Add } from '@mui/icons-material';
 import { useState } from 'react';
+import {
+  IconButtonSmall,
+  TextButton,
+  PrimaryButton,
+  SecondaryButton,
+} from '../design-system';
 
 const FormContainer = styled(Box)(({ theme }) => ({
   backgroundColor: '#FFFFFF',
@@ -42,14 +46,6 @@ const TitleInput = styled(TextField)(({ theme }) => ({
     '& fieldset': {
       borderColor: theme.palette.grey[300],
     },
-  },
-}));
-
-const CloseButton = styled(IconButton)(({ theme }) => ({
-  padding: theme.spacing(0.5),
-  color: theme.palette.text.disabled,
-  '&:hover': {
-    backgroundColor: theme.palette.grey[100],
   },
 }));
 
@@ -95,19 +91,6 @@ const UserName = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[900],
 }));
 
-const AddButton = styled(IconButton)(({ theme }) => ({
-  width: 24,
-  height: 24,
-  padding: 0,
-  color: theme.palette.text.disabled,
-  border: `1px dashed ${theme.palette.grey[400]}`,
-  borderRadius: 4,
-  '&:hover': {
-    backgroundColor: theme.palette.grey[100],
-    borderColor: theme.palette.text.disabled,
-  },
-}));
-
 const Section = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   paddingTop: theme.spacing(2),
@@ -127,17 +110,6 @@ const DescriptionInput = styled(TextField)(({ theme }) => ({
   '& .MuiInputBase-input': {
     fontSize: 14,
     color: theme.palette.grey[900],
-  },
-}));
-
-const LabelButton = styled(Button)(({ theme }) => ({
-  textTransform: 'none',
-  fontSize: 12,
-  color: theme.palette.primary.main,
-  padding: theme.spacing(0.5, 1),
-  minWidth: 'auto',
-  '&:hover': {
-    backgroundColor: theme.palette.grey[100],
   },
 }));
 
@@ -167,27 +139,6 @@ const ActionButtons = styled(Box)(({ theme }) => ({
   gap: theme.spacing(1),
   justifyContent: 'flex-end',
   marginTop: theme.spacing(2),
-}));
-
-const SaveButton = styled(Button)(({ theme }) => ({
-  backgroundColor: theme.palette.success.main,
-  color: theme.palette.success.contrastText,
-  textTransform: 'none',
-  fontSize: 14,
-  padding: theme.spacing(0.75, 2),
-  '&:hover': {
-    backgroundColor: theme.palette.success.dark,
-  },
-}));
-
-const CancelButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.text.disabled,
-  textTransform: 'none',
-  fontSize: 14,
-  padding: theme.spacing(0.75, 2),
-  '&:hover': {
-    backgroundColor: theme.palette.grey[100],
-  },
 }));
 
 interface AddStoryFormProps {
@@ -235,14 +186,18 @@ const AddStoryForm = ({ onClose, onSave }: AddStoryFormProps) => {
           variant="outlined"
           size="small"
         />
-        <CloseButton onClick={onClose} size="small">
+        <IconButtonSmall onClick={onClose}>
           <Close fontSize="small" />
-        </CloseButton>
+        </IconButtonSmall>
       </FormHeader>
 
       <FormRow>
         <FieldLabel>Type</FieldLabel>
-        <StyledSelect value={type} onChange={(e) => setType(e.target.value)} size="small">
+        <StyledSelect
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          size="small"
+        >
           <MenuItem value="feature">Feature</MenuItem>
           <MenuItem value="bug">Bug</MenuItem>
           <MenuItem value="chore">Chore</MenuItem>
@@ -252,7 +207,11 @@ const AddStoryForm = ({ onClose, onSave }: AddStoryFormProps) => {
 
       <FormRow>
         <FieldLabel>Points</FieldLabel>
-        <StyledSelect value={points} onChange={(e) => setPoints(e.target.value)} size="small">
+        <StyledSelect
+          value={points}
+          onChange={(e) => setPoints(e.target.value)}
+          size="small"
+        >
           <MenuItem value="unestimated">Unestimated</MenuItem>
           <MenuItem value="0">0 points</MenuItem>
           <MenuItem value="1">1 point</MenuItem>
@@ -274,18 +233,29 @@ const AddStoryForm = ({ onClose, onSave }: AddStoryFormProps) => {
       <FormRow>
         <FieldLabel>Owners</FieldLabel>
         <UserSelector>
-          <AddButton size="small">
+          <IconButtonSmall>
             <Add fontSize="small" />
-          </AddButton>
+          </IconButtonSmall>
         </UserSelector>
       </FormRow>
 
       <FollowSection>
         <FormControlLabel
-          control={<Checkbox checked={follow} onChange={(e) => setFollow(e.target.checked)} size="small" />}
+          control={
+            <Checkbox
+              checked={follow}
+              onChange={(e) => setFollow(e.target.checked)}
+              size="small"
+            />
+          }
           label={
             <>
-              <Typography component="span" sx={{ fontSize: 13, color: 'grey.900' }}>Follow this story</Typography>
+              <Typography
+                component="span"
+                sx={{ fontSize: 13, color: 'grey.900' }}
+              >
+                Follow this story
+              </Typography>
               <FollowerCount component="span">(0 followers)</FollowerCount>
             </>
           }
@@ -295,14 +265,16 @@ const AddStoryForm = ({ onClose, onSave }: AddStoryFormProps) => {
               display: 'flex',
               alignItems: 'center',
               gap: 0.5,
-            }
+            },
           }}
         />
       </FollowSection>
 
       <Section>
         <SectionTitle>Blockers</SectionTitle>
-        <Typography sx={{ fontSize: 13, color: 'text.disabled', fontStyle: 'italic' }}>
+        <Typography
+          sx={{ fontSize: 13, color: 'text.disabled', fontStyle: 'italic' }}
+        >
           No blockers
         </Typography>
       </Section>
@@ -322,7 +294,7 @@ const AddStoryForm = ({ onClose, onSave }: AddStoryFormProps) => {
 
       <Section>
         <SectionTitle>Labels</SectionTitle>
-        <LabelButton>+ Add Label</LabelButton>
+        <TextButton>+ Add Label</TextButton>
       </Section>
 
       <Section>
@@ -334,7 +306,9 @@ const AddStoryForm = ({ onClose, onSave }: AddStoryFormProps) => {
 
       <Section>
         <SectionTitle>Tasks</SectionTitle>
-        <Typography sx={{ fontSize: 13, color: 'text.disabled', fontStyle: 'italic' }}>
+        <Typography
+          sx={{ fontSize: 13, color: 'text.disabled', fontStyle: 'italic' }}
+        >
           No tasks
         </Typography>
       </Section>
@@ -351,8 +325,8 @@ const AddStoryForm = ({ onClose, onSave }: AddStoryFormProps) => {
       </Section>
 
       <ActionButtons>
-        <CancelButton onClick={onClose}>Cancel</CancelButton>
-        <SaveButton onClick={handleSave}>Save</SaveButton>
+        <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
+        <PrimaryButton onClick={handleSave}>Save</PrimaryButton>
       </ActionButtons>
     </FormContainer>
   );

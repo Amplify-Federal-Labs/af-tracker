@@ -1,21 +1,7 @@
-import { Box, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+/**
+ * PlaceHolder - Re-exported from design system
+ * This file now uses the design system EmptyState component
+ */
 
-const PlaceholderContainer = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '100%',
-  width: '100%',
-});
-
-const PlaceholderText = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  fontSize: 24,
-  fontWeight: 400,
-}));
-
-export {
-  PlaceholderContainer,
-  PlaceholderText
-}
+export { EmptyState as PlaceholderContainer } from '../design-system';
+export { EmptyState as PlaceholderText } from '../design-system';

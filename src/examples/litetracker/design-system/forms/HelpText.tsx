@@ -6,7 +6,7 @@
  * <HelpText leftMargin={20}>Custom margin help text</HelpText>
  */
 
-import { Typography, TypographyProps } from '@mui/material';
+import { Typography, type TypographyProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export interface HelpTextProps extends TypographyProps {
